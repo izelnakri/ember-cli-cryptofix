@@ -14,7 +14,41 @@ export default [
   generateModuleShim('bip39'),
   generateModuleShim('scryptsy'),
   generateModuleShim('forge'),
-  generateModuleShim('ethereumjs-wallet')
+  {
+    input: `${NPM_PATH}/ethereumjs-wallet/index.js`,
+    output: {
+      file: `vendor/shims/cryptofix/ethereumjs-wallet.js`,
+      format: 'iife',
+      name: '_ethereumjswallet',
+      banner: `(function() {
+    function vendorModule() {
+      'use strict';
+
+      return {
+        'default': (function(){`,
+      footer: `
+          return _ethereumjswallet;
+        })(),
+            __esModule: true,
+          };
+        }
+
+        define('cryptofix/ethereumjs-wallet', [], vendorModule);
+        })();`
+    },
+    plugins: [
+      resolve({ jsnext: true }),
+      commonjs({ include: [
+        'node_modules/scrypt.js/**',
+        'node_modules/scrypt/build/Release/**',
+        'node_modules/**',
+        `${require.resolve('ethereumjs-wallet')}/node_modules/**`
+      ] }),
+      globals(),
+      builtins(),
+      json({ include: ['node_modules/**', `${require.resolve('ethereumjs-wallet')}/../../node_modules/**`] })
+    ]
+  }
 ];
 
 function generateModuleShim(moduleName) {
