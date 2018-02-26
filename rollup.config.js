@@ -15,7 +15,7 @@ export default [
   generateModuleShim('scryptsy'),
   generateModuleShim('forge'),
   {
-    input: `${NPM_PATH}/ethereumjs-wallet/index.js`,
+    input: `tmp/ethereumjs-wallet.js`,
     output: {
       file: `vendor/shims/cryptofix/ethereumjs-wallet.js`,
       format: 'iife',
@@ -37,16 +37,7 @@ export default [
         })();`
     },
     plugins: [
-      resolve({ jsnext: true }),
-      commonjs({ include: [
-        'node_modules/scrypt.js/**',
-        'node_modules/scrypt/build/Release/**',
-        'node_modules/**',
-        `${require.resolve('ethereumjs-wallet')}/node_modules/**`
-      ] }),
-      globals(),
-      builtins(),
-      json({ include: ['node_modules/**', `${require.resolve('ethereumjs-wallet')}/../../node_modules/**`] })
+      resolve({ jsnext: true })
     ]
   }
 ];

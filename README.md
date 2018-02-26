@@ -1,8 +1,7 @@
 ember-cli-cryptofix
 ==============================================================================
 
-[Short description of the addon.]
-
+Ember-cli shimming support for cryptofix libraries. I hope in 2 years I wont need this library anymore.
 Installation
 ------------------------------------------------------------------------------
 
