@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-cryptofix",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -16,7 +16,10 @@
     "build": "ember build",
     "lint:js": "eslint ./*.js addon addon-test-support app config lib server test-support tests",
     "start": "ember serve",
-    "prepublish": "browserify node_modules/bip39/index.js -s BIP39 > tmp/bip39.js && browserify node_modules/ethereumjs-wallet/index.js -s EthereumjsWallet > tmp/ethereumjs-wallet.js && rollup -c"
+    "build:bip39": "browserify node_modules/bip39/index.js -s BIP39 > tmp/bip39.js",
+    "build:forge": "browserify node_modules/node-forge/dist/forge.all.min.js -s forge > tmp/forge.js",
+    "build:ethereumjs-wallet": "browserify node_modules/ethereumjs-wallet/index.js -s EthereumjsWallet > tmp/ethereumjs-wallet.js",
+    "prepublish": "npm run build:bip39 && npm run build:forge && npm run build:ethereumjs-wallet && rollup -c"
   },
   "dependencies": {
     "ember-cli-babel": "^6.6.0"
