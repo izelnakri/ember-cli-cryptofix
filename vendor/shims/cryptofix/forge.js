@@ -14,7 +14,7 @@ var _forge = (function () {
  *
  * Copyright 2011-2016 Digital Bazaar, Inc.
  */
-var forge$2 = {
+var forge = {
   // default options
   options: {
     usePureJavaScript: false
@@ -23,7 +23,7 @@ var forge$2 = {
 
 var global$1 = typeof global !== "undefined" ? global :
             typeof self !== "undefined" ? self :
-            typeof window !== "undefined" ? window : {};
+            typeof window !== "undefined" ? window : {}
 
 // shim for using process in browser
 // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
@@ -185,8 +185,7 @@ function binding(name) {
 function cwd () { return '/' }
 function chdir (dir) {
     throw new Error('process.chdir is not supported');
-}
-function umask() { return 0; }
+}function umask() { return 0; }
 
 // from https://github.com/kumavis/browser-process-hrtime/blob/master/index.js
 var performance = global$1.performance || {};
@@ -263,7 +262,7 @@ var util_1 = createCommonjsModule(function (module) {
 
 
 /* Utilities API */
-var util = module.exports = forge$2.util = forge$2.util || {};
+var util = module.exports = forge.util = forge.util || {};
 
 // define setImmediate and nextTick
 (function() {
@@ -3223,10 +3222,10 @@ util.estimateCores = function(options, callback) {
 
 
 
-var cipher = forge$2.cipher = forge$2.cipher || {};
+var cipher = forge.cipher = forge.cipher || {};
 
 // registered algorithms
-forge$2.cipher.algorithms = forge$2.cipher.algorithms || {};
+forge.cipher.algorithms = forge.cipher.algorithms || {};
 
 /**
  * Creates a cipher object that can be used to encrypt data using the given
@@ -3241,10 +3240,10 @@ forge$2.cipher.algorithms = forge$2.cipher.algorithms || {};
  *
  * @return the cipher.
  */
-forge$2.cipher.createCipher = function(algorithm, key) {
+forge.cipher.createCipher = function(algorithm, key) {
   var api = algorithm;
   if(typeof api === 'string') {
-    api = forge$2.cipher.getAlgorithm(api);
+    api = forge.cipher.getAlgorithm(api);
     if(api) {
       api = api();
     }
@@ -3254,7 +3253,7 @@ forge$2.cipher.createCipher = function(algorithm, key) {
   }
 
   // assume block cipher
-  return new forge$2.cipher.BlockCipher({
+  return new forge.cipher.BlockCipher({
     algorithm: api,
     key: key,
     decrypt: false
@@ -3274,10 +3273,10 @@ forge$2.cipher.createCipher = function(algorithm, key) {
  *
  * @return the cipher.
  */
-forge$2.cipher.createDecipher = function(algorithm, key) {
+forge.cipher.createDecipher = function(algorithm, key) {
   var api = algorithm;
   if(typeof api === 'string') {
-    api = forge$2.cipher.getAlgorithm(api);
+    api = forge.cipher.getAlgorithm(api);
     if(api) {
       api = api();
     }
@@ -3287,7 +3286,7 @@ forge$2.cipher.createDecipher = function(algorithm, key) {
   }
 
   // assume block cipher
-  return new forge$2.cipher.BlockCipher({
+  return new forge.cipher.BlockCipher({
     algorithm: api,
     key: key,
     decrypt: true
@@ -3301,9 +3300,9 @@ forge$2.cipher.createDecipher = function(algorithm, key) {
  * @param name the name of the algorithm.
  * @param algorithm the algorithm API object.
  */
-forge$2.cipher.registerAlgorithm = function(name, algorithm) {
+forge.cipher.registerAlgorithm = function(name, algorithm) {
   name = name.toUpperCase();
-  forge$2.cipher.algorithms[name] = algorithm;
+  forge.cipher.algorithms[name] = algorithm;
 };
 
 /**
@@ -3313,15 +3312,15 @@ forge$2.cipher.registerAlgorithm = function(name, algorithm) {
  *
  * @return the algorithm, if found, null if not.
  */
-forge$2.cipher.getAlgorithm = function(name) {
+forge.cipher.getAlgorithm = function(name) {
   name = name.toUpperCase();
-  if(name in forge$2.cipher.algorithms) {
-    return forge$2.cipher.algorithms[name];
+  if(name in forge.cipher.algorithms) {
+    return forge.cipher.algorithms[name];
   }
   return null;
 };
 
-var BlockCipher = forge$2.cipher.BlockCipher = function(options) {
+var BlockCipher = forge.cipher.BlockCipher = function(options) {
   this.algorithm = options.algorithm;
   this.mode = this.algorithm.mode;
   this.blockSize = this.mode.blockSize;
@@ -3368,8 +3367,8 @@ BlockCipher.prototype.start = function(options) {
   }
   opts.decrypt = this._decrypt;
   this._finish = false;
-  this._input = forge$2.util.createBuffer();
-  this.output = options.output || forge$2.util.createBuffer();
+  this._input = forge.util.createBuffer();
+  this.output = options.output || forge.util.createBuffer();
   this.mode.start(opts);
 };
 
@@ -3455,10 +3454,10 @@ var cipherModes = createCommonjsModule(function (module) {
 
 
 
-forge$2.cipher = forge$2.cipher || {};
+forge.cipher = forge.cipher || {};
 
 // supported cipher modes
-var modes = module.exports = forge$2.cipher.modes = forge$2.cipher.modes || {};
+var modes = module.exports = forge.cipher.modes = forge.cipher.modes || {};
 
 /** Electronic codebook (ECB) (Don't use this; it's not secure) **/
 
@@ -3653,7 +3652,7 @@ modes.cfb = function(options) {
   this._inBlock = null;
   this._outBlock = new Array(this._ints);
   this._partialBlock = new Array(this._ints);
-  this._partialOutput = forge$2.util.createBuffer();
+  this._partialOutput = forge.util.createBuffer();
   this._partialBytes = 0;
 };
 
@@ -3797,7 +3796,7 @@ modes.ofb = function(options) {
   this._ints = this.blockSize / 4;
   this._inBlock = null;
   this._outBlock = new Array(this._ints);
-  this._partialOutput = forge$2.util.createBuffer();
+  this._partialOutput = forge.util.createBuffer();
   this._partialBytes = 0;
 };
 
@@ -3882,7 +3881,7 @@ modes.ctr = function(options) {
   this._ints = this.blockSize / 4;
   this._inBlock = null;
   this._outBlock = new Array(this._ints);
-  this._partialOutput = forge$2.util.createBuffer();
+  this._partialOutput = forge.util.createBuffer();
   this._partialBytes = 0;
 };
 
@@ -3963,7 +3962,7 @@ modes.gcm = function(options) {
   this._ints = this.blockSize / 4;
   this._inBlock = new Array(this._ints);
   this._outBlock = new Array(this._ints);
-  this._partialOutput = forge$2.util.createBuffer();
+  this._partialOutput = forge.util.createBuffer();
   this._partialBytes = 0;
 
   // R is actually this value concatenated with 120 more zero bits, but
@@ -3977,7 +3976,7 @@ modes.gcm.prototype.start = function(options) {
     throw new Error('Invalid IV parameter.');
   }
   // ensure IV is a byte buffer
-  var iv = forge$2.util.createBuffer(options.iv);
+  var iv = forge.util.createBuffer(options.iv);
 
   // no ciphered data processed yet
   this._cipherLength = 0;
@@ -3985,9 +3984,9 @@ modes.gcm.prototype.start = function(options) {
   // default additional data is none
   var additionalData;
   if('additionalData' in options) {
-    additionalData = forge$2.util.createBuffer(options.additionalData);
+    additionalData = forge.util.createBuffer(options.additionalData);
   } else {
-    additionalData = forge$2.util.createBuffer();
+    additionalData = forge.util.createBuffer();
   }
 
   // default tag length is 128 bits
@@ -4001,7 +4000,7 @@ modes.gcm.prototype.start = function(options) {
   this._tag = null;
   if(options.decrypt) {
     // save tag to check later
-    this._tag = forge$2.util.createBuffer(options.tag).getBytes();
+    this._tag = forge.util.createBuffer(options.tag).getBytes();
     if(this._tag.length !== (this._tagLength / 8)) {
       throw new Error('Authentication tag does not match tag length.');
     }
@@ -4050,7 +4049,7 @@ modes.gcm.prototype.start = function(options) {
   this._partialBytes = 0;
 
   // consume authentication data
-  additionalData = forge$2.util.createBuffer(additionalData);
+  additionalData = forge.util.createBuffer(additionalData);
   // save additional data length as a BE 64-bit number
   this._aDataLength = from64To32(additionalData.length() * 8);
   // pad additional data to 128 bit (16 byte) block size
@@ -4187,7 +4186,7 @@ modes.gcm.prototype.afterFinish = function(output, options) {
   }
 
   // handle authentication tag
-  this.tag = forge$2.util.createBuffer();
+  this.tag = forge.util.createBuffer();
 
   // concatenate additional data length with cipher length
   var lengths = this._aDataLength.concat(from64To32(this._cipherLength * 8));
@@ -4404,18 +4403,18 @@ modes.gcm.prototype.generateSubHashTable = function(mid, bits) {
 function transformIV(iv) {
   if(typeof iv === 'string') {
     // convert iv string into byte buffer
-    iv = forge$2.util.createBuffer(iv);
+    iv = forge.util.createBuffer(iv);
   }
 
-  if(forge$2.util.isArray(iv) && iv.length > 4) {
+  if(forge.util.isArray(iv) && iv.length > 4) {
     // convert iv byte array into byte buffer
     var tmp = iv;
-    iv = forge$2.util.createBuffer();
+    iv = forge.util.createBuffer();
     for(var i = 0; i < tmp.length; ++i) {
       iv.putByte(tmp[i]);
     }
   }
-  if(!forge$2.util.isArray(iv)) {
+  if(!forge.util.isArray(iv)) {
     // convert iv byte buffer into 32-bit integer array
     iv = [iv.getInt32(), iv.getInt32(), iv.getInt32(), iv.getInt32()];
   }
@@ -4457,7 +4456,7 @@ function from64To32(num) {
 
 
 /* AES API */
-var aes = forge$2.aes = forge$2.aes || {};
+var aes = forge.aes = forge.aes || {};
 
 /**
  * Deprecated. Instead, use:
@@ -4478,7 +4477,7 @@ var aes = forge$2.aes = forge$2.aes || {};
  *
  * @return the cipher.
  */
-forge$2.aes.startEncrypting = function(key, iv, output, mode) {
+forge.aes.startEncrypting = function(key, iv, output, mode) {
   var cipher = _createCipher({
     key: key,
     output: output,
@@ -4504,7 +4503,7 @@ forge$2.aes.startEncrypting = function(key, iv, output, mode) {
  *
  * @return the cipher.
  */
-forge$2.aes.createEncryptionCipher = function(key, mode) {
+forge.aes.createEncryptionCipher = function(key, mode) {
   return _createCipher({
     key: key,
     output: null,
@@ -4532,7 +4531,7 @@ forge$2.aes.createEncryptionCipher = function(key, mode) {
  *
  * @return the cipher.
  */
-forge$2.aes.startDecrypting = function(key, iv, output, mode) {
+forge.aes.startDecrypting = function(key, iv, output, mode) {
   var cipher = _createCipher({
     key: key,
     output: output,
@@ -4558,7 +4557,7 @@ forge$2.aes.startDecrypting = function(key, iv, output, mode) {
  *
  * @return the cipher.
  */
-forge$2.aes.createDecryptionCipher = function(key, mode) {
+forge.aes.createDecryptionCipher = function(key, mode) {
   return _createCipher({
     key: key,
     output: null,
@@ -4575,7 +4574,7 @@ forge$2.aes.createDecryptionCipher = function(key, mode) {
  *
  * @return the AES algorithm object.
  */
-forge$2.aes.Algorithm = function(name, mode) {
+forge.aes.Algorithm = function(name, mode) {
   if(!init) {
     initialize();
   }
@@ -4603,7 +4602,7 @@ forge$2.aes.Algorithm = function(name, mode) {
  *          decrypt true if the algorithm should be initialized for decryption,
  *            false for encryption.
  */
-forge$2.aes.Algorithm.prototype.initialize = function(options) {
+forge.aes.Algorithm.prototype.initialize = function(options) {
   if(this._init) {
     return;
   }
@@ -4619,19 +4618,19 @@ forge$2.aes.Algorithm.prototype.initialize = function(options) {
   if(typeof key === 'string' &&
     (key.length === 16 || key.length === 24 || key.length === 32)) {
     // convert key string into byte buffer
-    key = forge$2.util.createBuffer(key);
-  } else if(forge$2.util.isArray(key) &&
+    key = forge.util.createBuffer(key);
+  } else if(forge.util.isArray(key) &&
     (key.length === 16 || key.length === 24 || key.length === 32)) {
     // convert key integer array into byte buffer
     tmp = key;
-    key = forge$2.util.createBuffer();
+    key = forge.util.createBuffer();
     for(var i = 0; i < tmp.length; ++i) {
       key.putByte(tmp[i]);
     }
   }
 
   // convert key byte buffer into 32-bit integer array
-  if(!forge$2.util.isArray(key)) {
+  if(!forge.util.isArray(key)) {
     tmp = key;
     key = [];
 
@@ -4646,7 +4645,7 @@ forge$2.aes.Algorithm.prototype.initialize = function(options) {
   }
 
   // key must be an array of 32-bit integers by now
-  if(!forge$2.util.isArray(key) ||
+  if(!forge.util.isArray(key) ||
     !(key.length === 4 || key.length === 6 || key.length === 8)) {
     throw new Error('Invalid key parameter.');
   }
@@ -4668,7 +4667,7 @@ forge$2.aes.Algorithm.prototype.initialize = function(options) {
  *
  * @return the expanded key.
  */
-forge$2.aes._expandKey = function(key, decrypt) {
+forge.aes._expandKey = function(key, decrypt) {
   if(!init) {
     initialize();
   }
@@ -4683,22 +4682,22 @@ forge$2.aes._expandKey = function(key, decrypt) {
  * @param output an array of block-size 32-bit words.
  * @param decrypt true to decrypt, false to encrypt.
  */
-forge$2.aes._updateBlock = _updateBlock;
+forge.aes._updateBlock = _updateBlock;
 
 /** Register AES algorithms **/
 
-registerAlgorithm('AES-ECB', forge$2.cipher.modes.ecb);
-registerAlgorithm('AES-CBC', forge$2.cipher.modes.cbc);
-registerAlgorithm('AES-CFB', forge$2.cipher.modes.cfb);
-registerAlgorithm('AES-OFB', forge$2.cipher.modes.ofb);
-registerAlgorithm('AES-CTR', forge$2.cipher.modes.ctr);
-registerAlgorithm('AES-GCM', forge$2.cipher.modes.gcm);
+registerAlgorithm('AES-ECB', forge.cipher.modes.ecb);
+registerAlgorithm('AES-CBC', forge.cipher.modes.cbc);
+registerAlgorithm('AES-CFB', forge.cipher.modes.cfb);
+registerAlgorithm('AES-OFB', forge.cipher.modes.ofb);
+registerAlgorithm('AES-CTR', forge.cipher.modes.ctr);
+registerAlgorithm('AES-GCM', forge.cipher.modes.gcm);
 
 function registerAlgorithm(name, mode) {
   var factory = function() {
-    return new forge$2.aes.Algorithm(name, mode);
+    return new forge.aes.Algorithm(name, mode);
   };
-  forge$2.cipher.registerAlgorithm(name, factory);
+  forge.cipher.registerAlgorithm(name, factory);
 }
 
 /** AES implementation **/
@@ -5503,9 +5502,9 @@ function _createCipher(options) {
 
   var cipher;
   if(options.decrypt) {
-    cipher = forge$2.cipher.createDecipher(algorithm, options.key);
+    cipher = forge.cipher.createDecipher(algorithm, options.key);
   } else {
-    cipher = forge$2.cipher.createCipher(algorithm, options.key);
+    cipher = forge.cipher.createCipher(algorithm, options.key);
   }
 
   // backwards compatible start API
@@ -5513,7 +5512,7 @@ function _createCipher(options) {
   cipher.start = function(iv, options) {
     // backwards compatibility: support second arg as output buffer
     var output = null;
-    if(options instanceof forge$2.util.ByteBuffer) {
+    if(options instanceof forge.util.ByteBuffer) {
       output = options;
       options = {};
     }
@@ -5536,8 +5535,8 @@ var oids_1 = createCommonjsModule(function (module) {
  */
 
 
-forge$2.pki = forge$2.pki || {};
-var oids = module.exports = forge$2.pki.oids = forge$2.oids = forge$2.oids || {};
+forge.pki = forge.pki || {};
+var oids = module.exports = forge.pki.oids = forge.oids = forge.oids || {};
 
 // set id to name mapping and name to id mapping
 function _IN(id, name) {
@@ -5829,7 +5828,7 @@ var asn1_1 = createCommonjsModule(function (module) {
 
 
 /* ASN.1 API */
-var asn1 = module.exports = forge$2.asn1 = forge$2.asn1 || {};
+var asn1 = module.exports = forge.asn1 = forge.asn1 || {};
 
 /**
  * ASN.1 classes.
@@ -5890,7 +5889,7 @@ asn1.create = function(tagClass, type, constructed, value, options) {
     according to the ASN.1 data type. */
 
   // remove undefined values
-  if(forge$2.util.isArray(value)) {
+  if(forge.util.isArray(value)) {
     var tmp = [];
     for(var i = 0; i < value.length; ++i) {
       if(value[i] !== undefined) {
@@ -5904,7 +5903,7 @@ asn1.create = function(tagClass, type, constructed, value, options) {
     tagClass: tagClass,
     type: type,
     constructed: constructed,
-    composed: constructed || forge$2.util.isArray(value),
+    composed: constructed || forge.util.isArray(value),
     value: value
   };
   if(options && 'bitStringContents' in options) {
@@ -5929,7 +5928,7 @@ asn1.create = function(tagClass, type, constructed, value, options) {
 asn1.copy = function(obj, options) {
   var copy;
 
-  if(forge$2.util.isArray(obj)) {
+  if(forge.util.isArray(obj)) {
     copy = [];
     for(var i = 0; i < obj.length; ++i) {
       copy.push(asn1.copy(obj[i], options));
@@ -5969,8 +5968,8 @@ asn1.copy = function(obj, options) {
  * @return true if the asn1 objects are equal.
  */
 asn1.equals = function(obj1, obj2, options) {
-  if(forge$2.util.isArray(obj1)) {
-    if(!forge$2.util.isArray(obj2)) {
+  if(forge.util.isArray(obj1)) {
+    if(!forge.util.isArray(obj2)) {
       return false;
     }
     if(obj1.length !== obj2.length) {
@@ -6133,7 +6132,7 @@ asn1.fromDer = function(bytes, options) {
 
   // wrap in buffer if needed
   if(typeof bytes === 'string') {
-    bytes = forge$2.util.createBuffer(bytes);
+    bytes = forge.util.createBuffer(bytes);
   }
 
   return _fromDer(bytes, bytes.length(), 0, options);
@@ -6326,13 +6325,13 @@ function _fromDer(bytes, remaining, depth, options) {
  * @return the buffer of bytes.
  */
 asn1.toDer = function(obj) {
-  var bytes = forge$2.util.createBuffer();
+  var bytes = forge.util.createBuffer();
 
   // build the first byte
   var b1 = obj.tagClass | obj.type;
 
   // for storing the ASN.1 value
-  var value = forge$2.util.createBuffer();
+  var value = forge.util.createBuffer();
 
   // use BIT STRING contents if available and data not changed
   var useBitStringContents = false;
@@ -6434,7 +6433,7 @@ asn1.toDer = function(obj) {
 asn1.oidToDer = function(oid) {
   // split OID into individual values
   var values = oid.split('.');
-  var bytes = forge$2.util.createBuffer();
+  var bytes = forge.util.createBuffer();
 
   // first byte is 40 * value1 + value2
   bytes.putByte(40 * parseInt(values[0], 10) + parseInt(values[1], 10));
@@ -6481,7 +6480,7 @@ asn1.derToOid = function(bytes) {
 
   // wrap in buffer if needed
   if(typeof bytes === 'string') {
-    bytes = forge$2.util.createBuffer(bytes);
+    bytes = forge.util.createBuffer(bytes);
   }
 
   // first byte is 40 * value1 + value2
@@ -6762,7 +6761,7 @@ asn1.dateToGeneralizedTime = function(date) {
  * @return the byte buffer.
  */
 asn1.integerToDer = function(x) {
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   if(x >= -0x80 && x < 0x80) {
     return rval.putSignedInt(x, 8);
   }
@@ -6791,7 +6790,7 @@ asn1.integerToDer = function(x) {
 asn1.derToInteger = function(bytes) {
   // wrap in buffer if needed
   if(typeof bytes === 'string') {
-    bytes = forge$2.util.createBuffer(bytes);
+    bytes = forge.util.createBuffer(bytes);
   }
 
   var n = bytes.length() * 8;
@@ -6836,7 +6835,7 @@ asn1.validate = function(obj, v, capture, errors) {
       rval = true;
 
       // handle sub values
-      if(v.value && forge$2.util.isArray(v.value)) {
+      if(v.value && forge.util.isArray(v.value)) {
         var j = 0;
         for(var i = 0; rval && i < v.value.length; ++i) {
           rval = v.value[i].optional || false;
@@ -7046,9 +7045,9 @@ asn1.prettyPrint = function(obj, level, indentation) {
     if(obj.type === asn1.Type.OID) {
       var oid = asn1.derToOid(obj.value);
       rval += oid;
-      if(forge$2.pki && forge$2.pki.oids) {
-        if(oid in forge$2.pki.oids) {
-          rval += ' (' + forge$2.pki.oids[oid] + ') ';
+      if(forge.pki && forge.pki.oids) {
+        if(oid in forge.pki.oids) {
+          rval += ' (' + forge.pki.oids[oid] + ') ';
         }
       }
     }
@@ -7056,13 +7055,13 @@ asn1.prettyPrint = function(obj, level, indentation) {
       try {
         rval += asn1.derToInteger(obj.value);
       } catch(ex) {
-        rval += '0x' + forge$2.util.bytesToHex(obj.value);
+        rval += '0x' + forge.util.bytesToHex(obj.value);
       }
     } else if(obj.type === asn1.Type.BITSTRING) {
       // TODO: shift bits as needed to display without padding
       if(obj.value.length > 1) {
         // remove unused bits field
-        rval += '0x' + forge$2.util.bytesToHex(obj.value.slice(1));
+        rval += '0x' + forge.util.bytesToHex(obj.value.slice(1));
       } else {
         rval += '(none)';
       }
@@ -7079,14 +7078,14 @@ asn1.prettyPrint = function(obj, level, indentation) {
       if(!_nonLatinRegex.test(obj.value)) {
         rval += '(' + obj.value + ') ';
       }
-      rval += '0x' + forge$2.util.bytesToHex(obj.value);
+      rval += '0x' + forge.util.bytesToHex(obj.value);
     } else if(obj.type === asn1.Type.UTF8) {
-      rval += forge$2.util.decodeUtf8(obj.value);
+      rval += forge.util.decodeUtf8(obj.value);
     } else if(obj.type === asn1.Type.PRINTABLESTRING ||
       obj.type === asn1.Type.IA5String) {
       rval += obj.value;
     } else if(_nonLatinRegex.test(obj.value)) {
-      rval += '0x' + forge$2.util.bytesToHex(obj.value);
+      rval += '0x' + forge.util.bytesToHex(obj.value);
     } else if(obj.value.length === 0) {
       rval += '[null]';
     } else {
@@ -7107,8 +7106,8 @@ asn1.prettyPrint = function(obj, level, indentation) {
  */
 
 
-var md = forge$2.md = forge$2.md || {};
-forge$2.md.algorithms = forge$2.md.algorithms || {};
+var md = forge.md = forge.md || {};
+forge.md.algorithms = forge.md.algorithms || {};
 
 var hmac_1 = createCommonjsModule(function (module) {
 /**
@@ -7125,7 +7124,7 @@ var hmac_1 = createCommonjsModule(function (module) {
 
 
 /* HMAC API */
-var hmac = module.exports = forge$2.hmac = forge$2.hmac || {};
+var hmac = module.exports = forge.hmac = forge.hmac || {};
 
 /**
  * Creates an HMAC object that uses the given message digest object.
@@ -7161,8 +7160,8 @@ hmac.create = function() {
       if(typeof md === 'string') {
         // create builtin message digest
         md = md.toLowerCase();
-        if(md in forge$2.md.algorithms) {
-          _md = forge$2.md.algorithms[md].create();
+        if(md in forge.md.algorithms) {
+          _md = forge.md.algorithms[md].create();
         } else {
           throw new Error('Unknown hash algorithm "' + md + '"');
         }
@@ -7178,11 +7177,11 @@ hmac.create = function() {
     } else {
       if(typeof key === 'string') {
         // convert string into byte buffer
-        key = forge$2.util.createBuffer(key);
-      } else if(forge$2.util.isArray(key)) {
+        key = forge.util.createBuffer(key);
+      } else if(forge.util.isArray(key)) {
         // convert byte array into byte buffer
         var tmp = key;
-        key = forge$2.util.createBuffer();
+        key = forge.util.createBuffer();
         for(var i = 0; i < tmp.length; ++i) {
           key.putByte(tmp[i]);
         }
@@ -7199,8 +7198,8 @@ hmac.create = function() {
       // mix key into inner and outer padding
       // ipadding = [0x36 * blocksize] ^ key
       // opadding = [0x5C * blocksize] ^ key
-      _ipadding = forge$2.util.createBuffer();
-      _opadding = forge$2.util.createBuffer();
+      _ipadding = forge.util.createBuffer();
+      _opadding = forge.util.createBuffer();
       keylen = key.length();
       for(var i = 0; i < keylen; ++i) {
         var tmp = key.at(i);
@@ -7271,8 +7270,8 @@ var md5_1 = createCommonjsModule(function (module) {
 
 
 
-var md5 = module.exports = forge$2.md5 = forge$2.md5 || {};
-forge$2.md.md5 = forge$2.md.algorithms.md5 = md5;
+var md5 = module.exports = forge.md5 = forge.md5 || {};
+forge.md.md5 = forge.md.algorithms.md5 = md5;
 
 /**
  * Creates an MD5 message digest object.
@@ -7289,7 +7288,7 @@ md5.create = function() {
   var _state = null;
 
   // input buffer
-  var _input = forge$2.util.createBuffer();
+  var _input = forge.util.createBuffer();
 
   // used for word storage
   var _w = new Array(16);
@@ -7322,7 +7321,7 @@ md5.create = function() {
     for(var i = 0; i < int32s; ++i) {
       md.fullMessageLength.push(0);
     }
-    _input = forge$2.util.createBuffer();
+    _input = forge.util.createBuffer();
     _state = {
       h0: 0x67452301,
       h1: 0xEFCDAB89,
@@ -7346,7 +7345,7 @@ md5.create = function() {
    */
   md.update = function(msg, encoding) {
     if(encoding === 'utf8') {
-      msg = forge$2.util.encodeUtf8(msg);
+      msg = forge.util.encodeUtf8(msg);
     }
 
     // update message length
@@ -7400,7 +7399,7 @@ md5.create = function() {
     must *always* be present, so if the message length is already
     congruent to 448 mod 512, then 512 padding bits must be added. */
 
-    var finalBlock = forge$2.util.createBuffer();
+    var finalBlock = forge.util.createBuffer();
     finalBlock.putBytes(_input.bytes());
 
     // compute remaining size to be digested (include message length size)
@@ -7430,7 +7429,7 @@ md5.create = function() {
       h3: _state.h3
     };
     _update(s2, _w, finalBlock);
-    var rval = forge$2.util.createBuffer();
+    var rval = forge.util.createBuffer();
     rval.putInt32Le(s2.h0);
     rval.putInt32Le(s2.h1);
     rval.putInt32Le(s2.h2);
@@ -7454,7 +7453,7 @@ var _initialized = false;
 function _init() {
   // create padding
   _padding = String.fromCharCode(128);
-  _padding += forge$2.util.fillString(String.fromCharCode(0x00), 64);
+  _padding += forge.util.fillString(String.fromCharCode(0x00), 64);
 
   // g values
   _g = [
@@ -7584,7 +7583,7 @@ var pem_1 = createCommonjsModule(function (module) {
 
 
 // shortcut for pem API
-var pem = module.exports = forge$2.pem = forge$2.pem || {};
+var pem = module.exports = forge.pem = forge.pem || {};
 
 /**
  * Encodes (serializes) the given PEM object.
@@ -7633,7 +7632,7 @@ pem.encode = function(msg, options) {
   }
 
   // add body
-  rval += forge$2.util.encode64(msg.body, options.maxline || 64) + '\r\n';
+  rval += forge.util.encode64(msg.body, options.maxline || 64) + '\r\n';
 
   rval += '-----END ' + msg.type + '-----\r\n';
   return rval;
@@ -7666,7 +7665,7 @@ pem.decode = function(str) {
       contentDomain: null,
       dekInfo: null,
       headers: [],
-      body: forge$2.util.decode64(match[3])
+      body: forge.util.decode64(match[3])
     };
     rval.push(msg);
 
@@ -7820,7 +7819,7 @@ function ltrim(str) {
 
 
 /* DES API */
-var des = forge$2.des = forge$2.des || {};
+var des = forge.des = forge.des || {};
 
 /**
  * Deprecated. Instead, use:
@@ -7842,7 +7841,7 @@ var des = forge$2.des = forge$2.des || {};
  *
  * @return the cipher.
  */
-forge$2.des.startEncrypting = function(key, iv, output, mode) {
+forge.des.startEncrypting = function(key, iv, output, mode) {
   var cipher = _createCipher$1({
     key: key,
     output: output,
@@ -7867,7 +7866,7 @@ forge$2.des.startEncrypting = function(key, iv, output, mode) {
  *
  * @return the cipher.
  */
-forge$2.des.createEncryptionCipher = function(key, mode) {
+forge.des.createEncryptionCipher = function(key, mode) {
   return _createCipher$1({
     key: key,
     output: null,
@@ -7896,7 +7895,7 @@ forge$2.des.createEncryptionCipher = function(key, mode) {
  *
  * @return the cipher.
  */
-forge$2.des.startDecrypting = function(key, iv, output, mode) {
+forge.des.startDecrypting = function(key, iv, output, mode) {
   var cipher = _createCipher$1({
     key: key,
     output: output,
@@ -7921,7 +7920,7 @@ forge$2.des.startDecrypting = function(key, iv, output, mode) {
  *
  * @return the cipher.
  */
-forge$2.des.createDecryptionCipher = function(key, mode) {
+forge.des.createDecryptionCipher = function(key, mode) {
   return _createCipher$1({
     key: key,
     output: null,
@@ -7938,7 +7937,7 @@ forge$2.des.createDecryptionCipher = function(key, mode) {
  *
  * @return the DES algorithm object.
  */
-forge$2.des.Algorithm = function(name, mode) {
+forge.des.Algorithm = function(name, mode) {
   var self = this;
   self.name = name;
   self.mode = new mode({
@@ -7963,12 +7962,12 @@ forge$2.des.Algorithm = function(name, mode) {
  *          decrypt true if the algorithm should be initialized for decryption,
  *            false for encryption.
  */
-forge$2.des.Algorithm.prototype.initialize = function(options) {
+forge.des.Algorithm.prototype.initialize = function(options) {
   if(this._init) {
     return;
   }
 
-  var key = forge$2.util.createBuffer(options.key);
+  var key = forge.util.createBuffer(options.key);
   if(this.name.indexOf('3DES') === 0) {
     if(key.length() !== 24) {
       throw new Error('Invalid Triple-DES key size: ' + key.length() * 8);
@@ -7982,23 +7981,23 @@ forge$2.des.Algorithm.prototype.initialize = function(options) {
 
 /** Register DES algorithms **/
 
-registerAlgorithm$1('DES-ECB', forge$2.cipher.modes.ecb);
-registerAlgorithm$1('DES-CBC', forge$2.cipher.modes.cbc);
-registerAlgorithm$1('DES-CFB', forge$2.cipher.modes.cfb);
-registerAlgorithm$1('DES-OFB', forge$2.cipher.modes.ofb);
-registerAlgorithm$1('DES-CTR', forge$2.cipher.modes.ctr);
+registerAlgorithm$1('DES-ECB', forge.cipher.modes.ecb);
+registerAlgorithm$1('DES-CBC', forge.cipher.modes.cbc);
+registerAlgorithm$1('DES-CFB', forge.cipher.modes.cfb);
+registerAlgorithm$1('DES-OFB', forge.cipher.modes.ofb);
+registerAlgorithm$1('DES-CTR', forge.cipher.modes.ctr);
 
-registerAlgorithm$1('3DES-ECB', forge$2.cipher.modes.ecb);
-registerAlgorithm$1('3DES-CBC', forge$2.cipher.modes.cbc);
-registerAlgorithm$1('3DES-CFB', forge$2.cipher.modes.cfb);
-registerAlgorithm$1('3DES-OFB', forge$2.cipher.modes.ofb);
-registerAlgorithm$1('3DES-CTR', forge$2.cipher.modes.ctr);
+registerAlgorithm$1('3DES-ECB', forge.cipher.modes.ecb);
+registerAlgorithm$1('3DES-CBC', forge.cipher.modes.cbc);
+registerAlgorithm$1('3DES-CFB', forge.cipher.modes.cfb);
+registerAlgorithm$1('3DES-OFB', forge.cipher.modes.ofb);
+registerAlgorithm$1('3DES-CTR', forge.cipher.modes.ctr);
 
 function registerAlgorithm$1(name, mode) {
   var factory = function() {
-    return new forge$2.des.Algorithm(name, mode);
+    return new forge.des.Algorithm(name, mode);
   };
-  forge$2.cipher.registerAlgorithm(name, factory);
+  forge.cipher.registerAlgorithm(name, factory);
 }
 
 /** DES implementation **/
@@ -8257,9 +8256,9 @@ function _createCipher$1(options) {
 
   var cipher;
   if(options.decrypt) {
-    cipher = forge$2.cipher.createDecipher(algorithm, options.key);
+    cipher = forge.cipher.createDecipher(algorithm, options.key);
   } else {
-    cipher = forge$2.cipher.createCipher(algorithm, options.key);
+    cipher = forge.cipher.createCipher(algorithm, options.key);
   }
 
   // backwards compatible start API
@@ -8267,7 +8266,7 @@ function _createCipher$1(options) {
   cipher.start = function(iv, options) {
     // backwards compatibility: support second arg as output buffer
     var output = null;
-    if(options instanceof forge$2.util.ByteBuffer) {
+    if(options instanceof forge.util.ByteBuffer) {
       output = options;
       options = {};
     }
@@ -8300,7 +8299,7 @@ function toByteArray (b64) {
   if (!inited) {
     init$1();
   }
-  var i, j, l, tmp, placeHolders, arr;
+  var i, j, l, tmp, placeHolders, arr;;;;;;
   var len = b64.length;
 
   if (len % 4 > 0) {
@@ -8391,7 +8390,7 @@ function fromByteArray (uint8) {
 }
 
 function read (buffer, offset, isLE, mLen, nBytes) {
-  var e, m;
+  var e, m;;
   var eLen = nBytes * 8 - mLen - 1;
   var eMax = (1 << eLen) - 1;
   var eBias = eMax >> 1;
@@ -8424,7 +8423,7 @@ function read (buffer, offset, isLE, mLen, nBytes) {
 }
 
 function write (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c;
+  var e, m, c;;;
   var eLen = nBytes * 8 - mLen - 1;
   var eMax = (1 << eLen) - 1;
   var eBias = eMax >> 1;
@@ -8481,15 +8480,6 @@ var isArray = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * @license  MIT
- */
-/* eslint-disable no-proto */
-
-
 var INSPECT_MAX_BYTES = 50;
 
 /**
@@ -8520,10 +8510,6 @@ Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
   ? global$1.TYPED_ARRAY_SUPPORT
   : true;
 
-/*
- * Export kMaxLength after typed array support is determined.
- */
-var _kMaxLength = kMaxLength();
 function kMaxLength () {
   return Buffer.TYPED_ARRAY_SUPPORT
     ? 0x7fffffff
@@ -8615,7 +8601,6 @@ Buffer.from = function (value, encodingOrOffset, length) {
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype;
   Buffer.__proto__ = Uint8Array;
-  
 }
 
 function assertSize (size) {
@@ -8776,8 +8761,6 @@ function checked (length) {
   }
   return length | 0
 }
-
-
 Buffer.isBuffer = isBuffer;
 function internalIsBuffer (b) {
   return !!(b != null && b._isBuffer)
@@ -9381,7 +9364,7 @@ function utf8Slice (buf, start, end) {
       : 1;
 
     if (i + bytesPerSequence <= end) {
-      var secondByte, thirdByte, fourthByte, tempCodePoint;
+      var secondByte, thirdByte, fourthByte, tempCodePoint;;;;
 
       switch (bytesPerSequence) {
         case 1:
@@ -10208,7 +10191,7 @@ function asciiToBytes (str) {
 }
 
 function utf16leToBytes (str, units) {
-  var c, hi, lo;
+  var c, hi, lo;;;
   var byteArray = [];
   for (var i = 0; i < str.length; ++i) {
     if ((units -= 2) < 0) break
@@ -10280,10 +10263,10 @@ var require$$1 = ( empty$1 && empty ) || empty$1;
 
 
 
-var pkcs5 = forge$2.pkcs5 = forge$2.pkcs5 || {};
+var pkcs5 = forge.pkcs5 = forge.pkcs5 || {};
 
 var crypto;
-if(forge$2.util.isNodejs && !forge$2.options.usePureJavaScript) {
+if(forge.util.isNodejs && !forge.options.usePureJavaScript) {
   crypto = require$$1;
 }
 
@@ -10303,7 +10286,7 @@ if(forge$2.util.isNodejs && !forge$2.options.usePureJavaScript) {
  * @return the derived key, as a binary-encoded string of bytes, for the
  *           synchronous version (if no callback is specified).
  */
-var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
+var pbkdf2 = forge.pbkdf2 = pkcs5.pbkdf2 = function(
   p, s, c, dkLen, md, callback) {
   if(typeof md === 'function') {
     callback = md;
@@ -10312,7 +10295,7 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
 
   // use native implementation if possible and not disabled, note that
   // some node versions only support SHA-1, others allow digest to be changed
-  if(forge$2.util.isNodejs && !forge$2.options.usePureJavaScript &&
+  if(forge.util.isNodejs && !forge.options.usePureJavaScript &&
     crypto.pbkdf2 && (md === null || typeof md !== 'object') &&
     (crypto.pbkdf2Sync.length > 4 || (!md || md === 'sha1'))) {
     if(typeof md !== 'string') {
@@ -10348,10 +10331,10 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
     md = 'sha1';
   }
   if(typeof md === 'string') {
-    if(!(md in forge$2.md.algorithms)) {
+    if(!(md in forge.md.algorithms)) {
       throw new Error('Unknown hash algorithm: ' + md);
     }
-    md = forge$2.md[md].create();
+    md = forge.md[md].create();
   }
 
   var hLen = md.digestLength;
@@ -10400,7 +10383,7 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
 
     Here, INT(i) is a four-octet encoding of the integer i, most
     significant octet first. */
-  var prf = forge$2.hmac.create();
+  var prf = forge.hmac.create();
   prf.start(md, p);
   var dk = '';
   var xor, u_c, u_c1;
@@ -10411,7 +10394,7 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
       // PRF(P, S || INT(i)) (first iteration)
       prf.start(null, null);
       prf.update(s);
-      prf.update(forge$2.util.int32ToBytes(i));
+      prf.update(forge.util.int32ToBytes(i));
       xor = u_c1 = prf.digest().getBytes();
 
       // PRF(P, u_{c-1}) (other iterations)
@@ -10420,7 +10403,7 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
         prf.update(u_c1);
         u_c = prf.digest().getBytes();
         // F(p, s, c, i)
-        xor = forge$2.util.xorBytes(xor, u_c, hLen);
+        xor = forge.util.xorBytes(xor, u_c, hLen);
         u_c1 = u_c;
       }
 
@@ -10445,7 +10428,7 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
     // PRF(P, S || INT(i)) (first iteration)
     prf.start(null, null);
     prf.update(s);
-    prf.update(forge$2.util.int32ToBytes(i));
+    prf.update(forge.util.int32ToBytes(i));
     xor = u_c1 = prf.digest().getBytes();
 
     // PRF(P, u_{c-1}) (other iterations)
@@ -10459,10 +10442,10 @@ var pbkdf2 = forge$2.pbkdf2 = pkcs5.pbkdf2 = function(
       prf.update(u_c1);
       u_c = prf.digest().getBytes();
       // F(p, s, c, i)
-      xor = forge$2.util.xorBytes(xor, u_c, hLen);
+      xor = forge.util.xorBytes(xor, u_c, hLen);
       u_c1 = u_c;
       ++j;
-      return forge$2.util.setImmediate(inner);
+      return forge.util.setImmediate(inner);
     }
 
     /* 4. Concatenate the blocks and extract the first dkLen octets to
@@ -10492,8 +10475,8 @@ var sha256_1 = createCommonjsModule(function (module) {
 
 
 
-var sha256 = module.exports = forge$2.sha256 = forge$2.sha256 || {};
-forge$2.md.sha256 = forge$2.md.algorithms.sha256 = sha256;
+var sha256 = module.exports = forge.sha256 = forge.sha256 || {};
+forge.md.sha256 = forge.md.algorithms.sha256 = sha256;
 
 /**
  * Creates a SHA-256 message digest object.
@@ -10510,7 +10493,7 @@ sha256.create = function() {
   var _state = null;
 
   // input buffer
-  var _input = forge$2.util.createBuffer();
+  var _input = forge.util.createBuffer();
 
   // used for word storage
   var _w = new Array(64);
@@ -10543,7 +10526,7 @@ sha256.create = function() {
     for(var i = 0; i < int32s; ++i) {
       md.fullMessageLength.push(0);
     }
-    _input = forge$2.util.createBuffer();
+    _input = forge.util.createBuffer();
     _state = {
       h0: 0x6A09E667,
       h1: 0xBB67AE85,
@@ -10571,7 +10554,7 @@ sha256.create = function() {
    */
   md.update = function(msg, encoding) {
     if(encoding === 'utf8') {
-      msg = forge$2.util.encodeUtf8(msg);
+      msg = forge.util.encodeUtf8(msg);
     }
 
     // update message length
@@ -10625,7 +10608,7 @@ sha256.create = function() {
     must *always* be present, so if the message length is already
     congruent to 448 mod 512, then 512 padding bits must be added. */
 
-    var finalBlock = forge$2.util.createBuffer();
+    var finalBlock = forge.util.createBuffer();
     finalBlock.putBytes(_input.bytes());
 
     // compute remaining size to be digested (include message length size)
@@ -10663,7 +10646,7 @@ sha256.create = function() {
       h7: _state.h7
     };
     _update(s2, _w, finalBlock);
-    var rval = forge$2.util.createBuffer();
+    var rval = forge.util.createBuffer();
     rval.putInt32(s2.h0);
     rval.putInt32(s2.h1);
     rval.putInt32(s2.h2);
@@ -10691,7 +10674,7 @@ var _k = null;
 function _init() {
   // create padding
   _padding = String.fromCharCode(128);
-  _padding += forge$2.util.fillString(String.fromCharCode(0x00), 64);
+  _padding += forge.util.fillString(String.fromCharCode(0x00), 64);
 
   // create K table for SHA-256
   _k = [
@@ -10824,13 +10807,13 @@ var prng_1 = createCommonjsModule(function (module) {
 
 
 var _crypto = null;
-if(forge$2.util.isNodejs && !forge$2.options.usePureJavaScript &&
+if(forge.util.isNodejs && !forge.options.usePureJavaScript &&
   !process.versions['node-webkit']) {
   _crypto = require$$1;
 }
 
 /* PRNG API */
-var prng = module.exports = forge$2.prng = forge$2.prng || {};
+var prng = module.exports = forge.prng = forge.prng || {};
 
 /**
  * Creates a new PRNG context.
@@ -10894,7 +10877,7 @@ prng.create = function(plugin) {
     var increment = ctx.plugin.increment;
     var formatKey = ctx.plugin.formatKey;
     var formatSeed = ctx.plugin.formatSeed;
-    var b = forge$2.util.createBuffer();
+    var b = forge.util.createBuffer();
 
     // reset key for every request
     ctx.key = null;
@@ -10918,7 +10901,7 @@ prng.create = function(plugin) {
 
       if(ctx.key === null) {
         // prevent stack overflow
-        return forge$2.util.nextTick(function() {
+        return forge.util.nextTick(function() {
           _reseed(generate);
         });
       }
@@ -10932,7 +10915,7 @@ prng.create = function(plugin) {
       ctx.key = formatKey(cipher(ctx.key, increment(ctx.seed)));
       ctx.seed = formatSeed(cipher(ctx.key, ctx.seed));
 
-      forge$2.util.setImmediate(generate);
+      forge.util.setImmediate(generate);
     }
   };
 
@@ -10953,7 +10936,7 @@ prng.create = function(plugin) {
     // reset key for every request
     ctx.key = null;
 
-    var b = forge$2.util.createBuffer();
+    var b = forge.util.createBuffer();
     while(b.length() < count) {
       // if amount of data generated is greater than 1 MiB, trigger reseed
       if(ctx.generated > 0xfffff) {
@@ -11068,7 +11051,7 @@ prng.create = function(plugin) {
       }
     }
 
-    var b = forge$2.util.createBuffer();
+    var b = forge.util.createBuffer();
     if(getRandomValues) {
       while(b.length() < needed) {
         // max byte length is 65536 before QuotaExceededError is thrown
@@ -11237,8 +11220,8 @@ var random = createCommonjsModule(function (module) {
 (function() {
 
 // forge.random already defined
-if(forge$2.random && forge$2.random.getBytes) {
-  module.exports = forge$2.random;
+if(forge.random && forge.random.getBytes) {
+  module.exports = forge.random;
   return;
 }
 
@@ -11247,10 +11230,10 @@ if(forge$2.random && forge$2.random.getBytes) {
 // the default prng plugin, uses AES-128
 var prng_aes = {};
 var _prng_aes_output = new Array(4);
-var _prng_aes_buffer = forge$2.util.createBuffer();
+var _prng_aes_buffer = forge.util.createBuffer();
 prng_aes.formatKey = function(key) {
   // convert the key into 32-bit integers
-  var tmp = forge$2.util.createBuffer(key);
+  var tmp = forge.util.createBuffer(key);
   key = new Array(4);
   key[0] = tmp.getInt32();
   key[1] = tmp.getInt32();
@@ -11258,11 +11241,11 @@ prng_aes.formatKey = function(key) {
   key[3] = tmp.getInt32();
 
   // return the expanded key
-  return forge$2.aes._expandKey(key, false);
+  return forge.aes._expandKey(key, false);
 };
 prng_aes.formatSeed = function(seed) {
   // convert seed into 32-bit integers
-  var tmp = forge$2.util.createBuffer(seed);
+  var tmp = forge.util.createBuffer(seed);
   seed = new Array(4);
   seed[0] = tmp.getInt32();
   seed[1] = tmp.getInt32();
@@ -11271,7 +11254,7 @@ prng_aes.formatSeed = function(seed) {
   return seed;
 };
 prng_aes.cipher = function(key, seed) {
-  forge$2.aes._updateBlock(key, seed, _prng_aes_output, false);
+  forge.aes._updateBlock(key, seed, _prng_aes_output, false);
   _prng_aes_buffer.putInt32(_prng_aes_output[0]);
   _prng_aes_buffer.putInt32(_prng_aes_output[1]);
   _prng_aes_buffer.putInt32(_prng_aes_output[2]);
@@ -11283,13 +11266,13 @@ prng_aes.increment = function(seed) {
   ++seed[3];
   return seed;
 };
-prng_aes.md = forge$2.md.sha256;
+prng_aes.md = forge.md.sha256;
 
 /**
  * Creates a new PRNG.
  */
 function spawnPrng() {
-  var ctx = forge$2.prng.create(prng_aes);
+  var ctx = forge.prng.create(prng_aes);
 
   /**
    * Gets random bytes. If a native secure crypto API is unavailable, this
@@ -11338,10 +11321,15 @@ if(typeof window !== 'undefined') {
     };
   }
 }
-if(forge$2.options.usePureJavaScript ||
-  (!forge$2.util.isNodejs && !getRandomValues)) {
+if(forge.options.usePureJavaScript ||
+  (!forge.util.isNodejs && !getRandomValues)) {
   // if this is a web worker, do not use weak entropy, instead register to
   // receive strong entropy asynchronously from the main thread
+  if(typeof window === 'undefined' || window.document === undefined) {
+    // FIXME:
+  }
+
+  // get load time entropy
   _ctx.collectInt(+new Date(), 32);
 
   // add some entropy from navigator object
@@ -11382,19 +11370,19 @@ if(forge$2.options.usePureJavaScript ||
 }
 
 /* Random API */
-if(!forge$2.random) {
-  forge$2.random = _ctx;
+if(!forge.random) {
+  forge.random = _ctx;
 } else {
   // extend forge.random with _ctx
   for(var key in _ctx) {
-    forge$2.random[key] = _ctx[key];
+    forge.random[key] = _ctx[key];
   }
 }
 
 // expose spawn PRNG
-forge$2.random.createInstance = spawnPrng;
+forge.random.createInstance = spawnPrng;
 
-module.exports = forge$2.random;
+module.exports = forge.random;
 
 })(typeof(jQuery) !== 'undefined' ? jQuery : null);
 
@@ -11464,7 +11452,7 @@ var ror = function(word, bits) {
 };
 
 /* RC2 API */
-var rc2 = forge$2.rc2 = forge$2.rc2 || {};
+var rc2 = forge.rc2 = forge.rc2 || {};
 
 /**
  * Perform RC2 key expansion as per RFC #2268, section 2.
@@ -11473,9 +11461,9 @@ var rc2 = forge$2.rc2 = forge$2.rc2 || {};
  * @param effKeyBits number of effective key bits (default: 128)
  * @return the expanded RC2 key (ByteBuffer of 128 bytes)
  */
-forge$2.rc2.expandKey = function(key, effKeyBits) {
+forge.rc2.expandKey = function(key, effKeyBits) {
   if(typeof key === 'string') {
-    key = forge$2.util.createBuffer(key);
+    key = forge.util.createBuffer(key);
   }
   effKeyBits = effKeyBits || 128;
 
@@ -11515,7 +11503,7 @@ var createCipher = function(key, bits, encrypt) {
   var i, j, K = [];
 
   /* Expand key and fill into K[] Array */
-  key = forge$2.rc2.expandKey(key, bits);
+  key = forge.rc2.expandKey(key, bits);
   for(i = 0; i < 64; i++) {
     K.push(key.getInt16Le());
   }
@@ -11648,13 +11636,13 @@ var createCipher = function(key, bits, encrypt) {
       if(iv) {
         /* CBC mode */
         if(typeof iv === 'string') {
-          iv = forge$2.util.createBuffer(iv);
+          iv = forge.util.createBuffer(iv);
         }
       }
 
       _finish = false;
-      _input = forge$2.util.createBuffer();
-      _output = output || new forge$2.util.createBuffer();
+      _input = forge.util.createBuffer();
+      _output = output || new forge.util.createBuffer();
       _iv = iv;
 
       cipher.output = _output;
@@ -11752,8 +11740,8 @@ var createCipher = function(key, bits, encrypt) {
  *
  * @return the cipher.
  */
-forge$2.rc2.startEncrypting = function(key, iv, output) {
-  var cipher = forge$2.rc2.createEncryptionCipher(key, 128);
+forge.rc2.startEncrypting = function(key, iv, output) {
+  var cipher = forge.rc2.createEncryptionCipher(key, 128);
   cipher.start(iv, output);
   return cipher;
 };
@@ -11771,7 +11759,7 @@ forge$2.rc2.startEncrypting = function(key, iv, output) {
  *
  * @return the cipher.
  */
-forge$2.rc2.createEncryptionCipher = function(key, bits) {
+forge.rc2.createEncryptionCipher = function(key, bits) {
   return createCipher(key, bits, true);
 };
 
@@ -11789,8 +11777,8 @@ forge$2.rc2.createEncryptionCipher = function(key, bits) {
  *
  * @return the cipher.
  */
-forge$2.rc2.startDecrypting = function(key, iv, output) {
-  var cipher = forge$2.rc2.createDecryptionCipher(key, 128);
+forge.rc2.startDecrypting = function(key, iv, output) {
+  var cipher = forge.rc2.createDecryptionCipher(key, 128);
   cipher.start(iv, output);
   return cipher;
 };
@@ -11808,7 +11796,7 @@ forge$2.rc2.startDecrypting = function(key, iv, output) {
  *
  * @return the cipher.
  */
-forge$2.rc2.createDecryptionCipher = function(key, bits) {
+forge.rc2.createDecryptionCipher = function(key, bits) {
   return createCipher(key, bits, false);
 };
 
@@ -11862,7 +11850,7 @@ Address all questions regarding this license to:
 */
 
 
-var jsbn = forge$2.jsbn = forge$2.jsbn || {};
+var jsbn = forge.jsbn = forge.jsbn || {};
 
 // Bits per digit
 var dbits;
@@ -11872,17 +11860,17 @@ var canary = 0xdeadbeefcafe;
 var j_lm = ((canary&0xffffff)==0xefcafe);
 
 // (public) Constructor
-function BigInteger$2(a,b,c) {
+function BigInteger(a,b,c) {
   this.data = [];
   if(a != null)
     if("number" == typeof a) this.fromNumber(a,b,c);
     else if(b == null && "string" != typeof a) this.fromString(a,256);
     else this.fromString(a,b);
 }
-forge$2.jsbn.BigInteger = BigInteger$2;
+forge.jsbn.BigInteger = BigInteger;
 
 // return new, unset BigInteger
-function nbi() { return new BigInteger$2(null); }
+function nbi() { return new BigInteger(null); }
 
 // am: Compute w_j += (x*this_i), propagate carries,
 // c is initial carry, returns final carry.
@@ -11933,33 +11921,32 @@ function am3(i,x,w,j,c,n) {
 // node.js (no browser)
 if(typeof(navigator) === 'undefined')
 {
-   BigInteger$2.prototype.am = am3;
+   BigInteger.prototype.am = am3;
    dbits = 28;
 } else if(j_lm && (navigator.appName == "Microsoft Internet Explorer")) {
-  BigInteger$2.prototype.am = am2;
+  BigInteger.prototype.am = am2;
   dbits = 30;
 } else if(j_lm && (navigator.appName != "Netscape")) {
-  BigInteger$2.prototype.am = am1;
+  BigInteger.prototype.am = am1;
   dbits = 26;
 } else { // Mozilla/Netscape seems to prefer am3
-  BigInteger$2.prototype.am = am3;
+  BigInteger.prototype.am = am3;
   dbits = 28;
 }
 
-BigInteger$2.prototype.DB = dbits;
-BigInteger$2.prototype.DM = ((1<<dbits)-1);
-BigInteger$2.prototype.DV = (1<<dbits);
+BigInteger.prototype.DB = dbits;
+BigInteger.prototype.DM = ((1<<dbits)-1);
+BigInteger.prototype.DV = (1<<dbits);
 
 var BI_FP = 52;
-BigInteger$2.prototype.FV = Math.pow(2,BI_FP);
-BigInteger$2.prototype.F1 = BI_FP-dbits;
-BigInteger$2.prototype.F2 = 2*dbits-BI_FP;
+BigInteger.prototype.FV = Math.pow(2,BI_FP);
+BigInteger.prototype.F1 = BI_FP-dbits;
+BigInteger.prototype.F2 = 2*dbits-BI_FP;
 
 // Digit conversions
 var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
 var BI_RC = new Array();
-var rr;
-var vv;
+var rr,vv;
 rr = "0".charCodeAt(0);
 for(vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
 rr = "a".charCodeAt(0);
@@ -12027,7 +12014,7 @@ function bnpFromString(s,b) {
     if(sh > 0) this.data[this.t-1] |= ((1<<(this.DB-sh))-1)<<sh;
   }
   this.clamp();
-  if(mi) BigInteger$2.ZERO.subTo(this,this);
+  if(mi) BigInteger.ZERO.subTo(this,this);
 }
 
 // (protected) clamp off excess high words
@@ -12066,7 +12053,7 @@ function bnToString(b) {
 }
 
 // (public) -this
-function bnNegate() { var r = nbi(); BigInteger$2.ZERO.subTo(this,r); return r; }
+function bnNegate() { var r = nbi(); BigInteger.ZERO.subTo(this,r); return r; }
 
 // (public) |this|
 function bnAbs() { return (this.s<0)?this.negate():this; }
@@ -12192,7 +12179,7 @@ function bnpMultiplyTo(a,r) {
   for(i = 0; i < y.t; ++i) r.data[i+x.t] = x.am(0,y.data[i],r,i,0,x.t);
   r.s = 0;
   r.clamp();
-  if(this.s != a.s) BigInteger$2.ZERO.subTo(r,r);
+  if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
 }
 
 // (protected) r = this^2, r != this (HAC 14.16)
@@ -12238,7 +12225,7 @@ function bnpDivRemTo(m,q,r) {
     r.data[r.t++] = 1;
     r.subTo(t,r);
   }
-  BigInteger$2.ONE.dlShiftTo(ys,t);
+  BigInteger.ONE.dlShiftTo(ys,t);
   t.subTo(y,y);	// "negative" y so we can replace sub with am later
   while(y.t < ys) y.data[y.t++] = 0;
   while(--j >= 0) {
@@ -12252,19 +12239,19 @@ function bnpDivRemTo(m,q,r) {
   }
   if(q != null) {
     r.drShiftTo(ys,q);
-    if(ts != ms) BigInteger$2.ZERO.subTo(q,q);
+    if(ts != ms) BigInteger.ZERO.subTo(q,q);
   }
   r.t = ys;
   r.clamp();
   if(nsh > 0) r.rShiftTo(nsh,r);	// Denormalize remainder
-  if(ts < 0) BigInteger$2.ZERO.subTo(r,r);
+  if(ts < 0) BigInteger.ZERO.subTo(r,r);
 }
 
 // (public) this mod a
 function bnMod(a) {
   var r = nbi();
   this.abs().divRemTo(a,null,r);
-  if(this.s < 0 && r.compareTo(BigInteger$2.ZERO) > 0) a.subTo(r,r);
+  if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r,r);
   return r;
 }
 
@@ -12325,7 +12312,7 @@ function montConvert(x) {
   var r = nbi();
   x.abs().dlShiftTo(this.m.t,r);
   r.divRemTo(this.m,null,r);
-  if(x.s < 0 && r.compareTo(BigInteger$2.ZERO) > 0) this.m.subTo(r,r);
+  if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
   return r;
 }
 
@@ -12373,7 +12360,7 @@ function bnpIsEven() { return ((this.t>0)?(this.data[0]&1):this.s) == 0; }
 
 // (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
 function bnpExp(e,z) {
-  if(e > 0xffffffff || e < 1) return BigInteger$2.ONE;
+  if(e > 0xffffffff || e < 1) return BigInteger.ONE;
   var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
   g.copyTo(r);
   while(--i >= 0) {
@@ -12392,34 +12379,34 @@ function bnModPowInt(e,m) {
 }
 
 // protected
-BigInteger$2.prototype.copyTo = bnpCopyTo;
-BigInteger$2.prototype.fromInt = bnpFromInt;
-BigInteger$2.prototype.fromString = bnpFromString;
-BigInteger$2.prototype.clamp = bnpClamp;
-BigInteger$2.prototype.dlShiftTo = bnpDLShiftTo;
-BigInteger$2.prototype.drShiftTo = bnpDRShiftTo;
-BigInteger$2.prototype.lShiftTo = bnpLShiftTo;
-BigInteger$2.prototype.rShiftTo = bnpRShiftTo;
-BigInteger$2.prototype.subTo = bnpSubTo;
-BigInteger$2.prototype.multiplyTo = bnpMultiplyTo;
-BigInteger$2.prototype.squareTo = bnpSquareTo;
-BigInteger$2.prototype.divRemTo = bnpDivRemTo;
-BigInteger$2.prototype.invDigit = bnpInvDigit;
-BigInteger$2.prototype.isEven = bnpIsEven;
-BigInteger$2.prototype.exp = bnpExp;
+BigInteger.prototype.copyTo = bnpCopyTo;
+BigInteger.prototype.fromInt = bnpFromInt;
+BigInteger.prototype.fromString = bnpFromString;
+BigInteger.prototype.clamp = bnpClamp;
+BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
+BigInteger.prototype.drShiftTo = bnpDRShiftTo;
+BigInteger.prototype.lShiftTo = bnpLShiftTo;
+BigInteger.prototype.rShiftTo = bnpRShiftTo;
+BigInteger.prototype.subTo = bnpSubTo;
+BigInteger.prototype.multiplyTo = bnpMultiplyTo;
+BigInteger.prototype.squareTo = bnpSquareTo;
+BigInteger.prototype.divRemTo = bnpDivRemTo;
+BigInteger.prototype.invDigit = bnpInvDigit;
+BigInteger.prototype.isEven = bnpIsEven;
+BigInteger.prototype.exp = bnpExp;
 
 // public
-BigInteger$2.prototype.toString = bnToString;
-BigInteger$2.prototype.negate = bnNegate;
-BigInteger$2.prototype.abs = bnAbs;
-BigInteger$2.prototype.compareTo = bnCompareTo;
-BigInteger$2.prototype.bitLength = bnBitLength;
-BigInteger$2.prototype.mod = bnMod;
-BigInteger$2.prototype.modPowInt = bnModPowInt;
+BigInteger.prototype.toString = bnToString;
+BigInteger.prototype.negate = bnNegate;
+BigInteger.prototype.abs = bnAbs;
+BigInteger.prototype.compareTo = bnCompareTo;
+BigInteger.prototype.bitLength = bnBitLength;
+BigInteger.prototype.mod = bnMod;
+BigInteger.prototype.modPowInt = bnModPowInt;
 
 // "constants"
-BigInteger$2.ZERO = nbv(0);
-BigInteger$2.ONE = nbv(1);
+BigInteger.ZERO = nbv(0);
+BigInteger.ONE = nbv(1);
 
 // jsbn2 lib
 
@@ -12500,7 +12487,7 @@ if(j > 0) {
  this.dMultiply(Math.pow(b,j));
  this.dAddOffset(w,0);
 }
-if(mi) BigInteger$2.ZERO.subTo(this,this);
+if(mi) BigInteger.ZERO.subTo(this,this);
 }
 
 //(protected) alternate constructor
@@ -12511,11 +12498,11 @@ if("number" == typeof b) {
  else {
    this.fromNumber(a,c);
    if(!this.testBit(a-1))  // force MSB set
-     this.bitwiseTo(BigInteger$2.ONE.shiftLeft(a-1),op_or,this);
+     this.bitwiseTo(BigInteger.ONE.shiftLeft(a-1),op_or,this);
    if(this.isEven()) this.dAddOffset(1,0); // force odd
    while(!this.isProbablePrime(b)) {
      this.dAddOffset(2,0);
-     if(this.bitLength() > a) this.subTo(BigInteger$2.ONE.shiftLeft(a-1),this);
+     if(this.bitLength() > a) this.subTo(BigInteger.ONE.shiftLeft(a-1),this);
    }
  }
 } else {
@@ -12655,7 +12642,7 @@ return((this.data[j]&(1<<(n%this.DB)))!=0);
 
 //(protected) this op (1<<n)
 function bnpChangeBit(n,op) {
-var r = BigInteger$2.ONE.shiftLeft(n);
+var r = BigInteger.ONE.shiftLeft(n);
 this.bitwiseTo(r,op,r);
 return r;
 }
@@ -12787,7 +12774,7 @@ function Barrett(m) {
 // setup Barrett
 this.r2 = nbi();
 this.q3 = nbi();
-BigInteger$2.ONE.dlShiftTo(2*m.t,this.r2);
+BigInteger.ONE.dlShiftTo(2*m.t,this.r2);
 this.mu = this.r2.divide(m);
 this.m = m;
 }
@@ -12921,7 +12908,7 @@ return r;
 //(public) 1/this % m (HAC 14.61)
 function bnModInverse(m) {
 var ac = m.isEven();
-if((this.isEven() && ac) || m.signum() == 0) return BigInteger$2.ZERO;
+if((this.isEven() && ac) || m.signum() == 0) return BigInteger.ZERO;
 var u = m.clone(), v = this.clone();
 var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
 while(u.signum() != 0) {
@@ -12951,7 +12938,7 @@ while(u.signum() != 0) {
    d.subTo(b,d);
  }
 }
-if(v.compareTo(BigInteger$2.ONE) != 0) return BigInteger$2.ZERO;
+if(v.compareTo(BigInteger.ONE) != 0) return BigInteger.ZERO;
 if(d.compareTo(m) >= 0) return d.subtract(m);
 if(d.signum() < 0) d.addTo(m,d); else return d;
 if(d.signum() < 0) return d.add(m); else return d;
@@ -12981,7 +12968,7 @@ return x.millerRabin(t);
 
 //(protected) true if probably prime (HAC 4.24, Miller-Rabin)
 function bnpMillerRabin(t) {
-var n1 = this.subtract(BigInteger$2.ONE);
+var n1 = this.subtract(BigInteger.ONE);
 var k = n1.getLowestSetBit();
 if(k <= 0) return false;
 var r = n1.shiftRight(k);
@@ -12990,15 +12977,15 @@ var a;
 for(var i = 0; i < t; ++i) {
  // select witness 'a' at random from between 1 and n1
  do {
-   a = new BigInteger$2(this.bitLength(), prng);
+   a = new BigInteger(this.bitLength(), prng);
  }
- while(a.compareTo(BigInteger$2.ONE) <= 0 || a.compareTo(n1) >= 0);
+ while(a.compareTo(BigInteger.ONE) <= 0 || a.compareTo(n1) >= 0);
  var y = a.modPow(r,this);
- if(y.compareTo(BigInteger$2.ONE) != 0 && y.compareTo(n1) != 0) {
+ if(y.compareTo(BigInteger.ONE) != 0 && y.compareTo(n1) != 0) {
    var j = 1;
    while(j++ < k && y.compareTo(n1) != 0) {
      y = y.modPowInt(2,this);
-     if(y.compareTo(BigInteger$2.ONE) == 0) return false;
+     if(y.compareTo(BigInteger.ONE) == 0) return false;
    }
    if(y.compareTo(n1) != 0) return false;
  }
@@ -13020,63 +13007,54 @@ function bnGetPrng() {
 }
 
 //protected
-BigInteger$2.prototype.chunkSize = bnpChunkSize;
-BigInteger$2.prototype.toRadix = bnpToRadix;
-BigInteger$2.prototype.fromRadix = bnpFromRadix;
-BigInteger$2.prototype.fromNumber = bnpFromNumber;
-BigInteger$2.prototype.bitwiseTo = bnpBitwiseTo;
-BigInteger$2.prototype.changeBit = bnpChangeBit;
-BigInteger$2.prototype.addTo = bnpAddTo;
-BigInteger$2.prototype.dMultiply = bnpDMultiply;
-BigInteger$2.prototype.dAddOffset = bnpDAddOffset;
-BigInteger$2.prototype.multiplyLowerTo = bnpMultiplyLowerTo;
-BigInteger$2.prototype.multiplyUpperTo = bnpMultiplyUpperTo;
-BigInteger$2.prototype.modInt = bnpModInt;
-BigInteger$2.prototype.millerRabin = bnpMillerRabin;
+BigInteger.prototype.chunkSize = bnpChunkSize;
+BigInteger.prototype.toRadix = bnpToRadix;
+BigInteger.prototype.fromRadix = bnpFromRadix;
+BigInteger.prototype.fromNumber = bnpFromNumber;
+BigInteger.prototype.bitwiseTo = bnpBitwiseTo;
+BigInteger.prototype.changeBit = bnpChangeBit;
+BigInteger.prototype.addTo = bnpAddTo;
+BigInteger.prototype.dMultiply = bnpDMultiply;
+BigInteger.prototype.dAddOffset = bnpDAddOffset;
+BigInteger.prototype.multiplyLowerTo = bnpMultiplyLowerTo;
+BigInteger.prototype.multiplyUpperTo = bnpMultiplyUpperTo;
+BigInteger.prototype.modInt = bnpModInt;
+BigInteger.prototype.millerRabin = bnpMillerRabin;
 
 //public
-BigInteger$2.prototype.clone = bnClone;
-BigInteger$2.prototype.intValue = bnIntValue;
-BigInteger$2.prototype.byteValue = bnByteValue;
-BigInteger$2.prototype.shortValue = bnShortValue;
-BigInteger$2.prototype.signum = bnSigNum;
-BigInteger$2.prototype.toByteArray = bnToByteArray;
-BigInteger$2.prototype.equals = bnEquals;
-BigInteger$2.prototype.min = bnMin;
-BigInteger$2.prototype.max = bnMax;
-BigInteger$2.prototype.and = bnAnd;
-BigInteger$2.prototype.or = bnOr;
-BigInteger$2.prototype.xor = bnXor;
-BigInteger$2.prototype.andNot = bnAndNot;
-BigInteger$2.prototype.not = bnNot;
-BigInteger$2.prototype.shiftLeft = bnShiftLeft;
-BigInteger$2.prototype.shiftRight = bnShiftRight;
-BigInteger$2.prototype.getLowestSetBit = bnGetLowestSetBit;
-BigInteger$2.prototype.bitCount = bnBitCount;
-BigInteger$2.prototype.testBit = bnTestBit;
-BigInteger$2.prototype.setBit = bnSetBit;
-BigInteger$2.prototype.clearBit = bnClearBit;
-BigInteger$2.prototype.flipBit = bnFlipBit;
-BigInteger$2.prototype.add = bnAdd;
-BigInteger$2.prototype.subtract = bnSubtract;
-BigInteger$2.prototype.multiply = bnMultiply;
-BigInteger$2.prototype.divide = bnDivide;
-BigInteger$2.prototype.remainder = bnRemainder;
-BigInteger$2.prototype.divideAndRemainder = bnDivideAndRemainder;
-BigInteger$2.prototype.modPow = bnModPow;
-BigInteger$2.prototype.modInverse = bnModInverse;
-BigInteger$2.prototype.pow = bnPow;
-BigInteger$2.prototype.gcd = bnGCD;
-BigInteger$2.prototype.isProbablePrime = bnIsProbablePrime;
-
-//BigInteger interfaces not implemented in jsbn:
-
-//BigInteger(int signum, byte[] magnitude)
-//double doubleValue()
-//float floatValue()
-//int hashCode()
-//long longValue()
-//static BigInteger valueOf(long val)
+BigInteger.prototype.clone = bnClone;
+BigInteger.prototype.intValue = bnIntValue;
+BigInteger.prototype.byteValue = bnByteValue;
+BigInteger.prototype.shortValue = bnShortValue;
+BigInteger.prototype.signum = bnSigNum;
+BigInteger.prototype.toByteArray = bnToByteArray;
+BigInteger.prototype.equals = bnEquals;
+BigInteger.prototype.min = bnMin;
+BigInteger.prototype.max = bnMax;
+BigInteger.prototype.and = bnAnd;
+BigInteger.prototype.or = bnOr;
+BigInteger.prototype.xor = bnXor;
+BigInteger.prototype.andNot = bnAndNot;
+BigInteger.prototype.not = bnNot;
+BigInteger.prototype.shiftLeft = bnShiftLeft;
+BigInteger.prototype.shiftRight = bnShiftRight;
+BigInteger.prototype.getLowestSetBit = bnGetLowestSetBit;
+BigInteger.prototype.bitCount = bnBitCount;
+BigInteger.prototype.testBit = bnTestBit;
+BigInteger.prototype.setBit = bnSetBit;
+BigInteger.prototype.clearBit = bnClearBit;
+BigInteger.prototype.flipBit = bnFlipBit;
+BigInteger.prototype.add = bnAdd;
+BigInteger.prototype.subtract = bnSubtract;
+BigInteger.prototype.multiply = bnMultiply;
+BigInteger.prototype.divide = bnDivide;
+BigInteger.prototype.remainder = bnRemainder;
+BigInteger.prototype.divideAndRemainder = bnDivideAndRemainder;
+BigInteger.prototype.modPow = bnModPow;
+BigInteger.prototype.modInverse = bnModInverse;
+BigInteger.prototype.pow = bnPow;
+BigInteger.prototype.gcd = bnGCD;
+BigInteger.prototype.isProbablePrime = bnIsProbablePrime;
 
 var sha1_1 = createCommonjsModule(function (module) {
 /**
@@ -13090,8 +13068,8 @@ var sha1_1 = createCommonjsModule(function (module) {
 
 
 
-var sha1 = module.exports = forge$2.sha1 = forge$2.sha1 || {};
-forge$2.md.sha1 = forge$2.md.algorithms.sha1 = sha1;
+var sha1 = module.exports = forge.sha1 = forge.sha1 || {};
+forge.md.sha1 = forge.md.algorithms.sha1 = sha1;
 
 /**
  * Creates a SHA-1 message digest object.
@@ -13108,7 +13086,7 @@ sha1.create = function() {
   var _state = null;
 
   // input buffer
-  var _input = forge$2.util.createBuffer();
+  var _input = forge.util.createBuffer();
 
   // used for word storage
   var _w = new Array(80);
@@ -13141,7 +13119,7 @@ sha1.create = function() {
     for(var i = 0; i < int32s; ++i) {
       md.fullMessageLength.push(0);
     }
-    _input = forge$2.util.createBuffer();
+    _input = forge.util.createBuffer();
     _state = {
       h0: 0x67452301,
       h1: 0xEFCDAB89,
@@ -13166,7 +13144,7 @@ sha1.create = function() {
    */
   md.update = function(msg, encoding) {
     if(encoding === 'utf8') {
-      msg = forge$2.util.encodeUtf8(msg);
+      msg = forge.util.encodeUtf8(msg);
     }
 
     // update message length
@@ -13220,7 +13198,7 @@ sha1.create = function() {
     must *always* be present, so if the message length is already
     congruent to 448 mod 512, then 512 padding bits must be added. */
 
-    var finalBlock = forge$2.util.createBuffer();
+    var finalBlock = forge.util.createBuffer();
     finalBlock.putBytes(_input.bytes());
 
     // compute remaining size to be digested (include message length size)
@@ -13255,7 +13233,7 @@ sha1.create = function() {
       h4: _state.h4
     };
     _update(s2, _w, finalBlock);
-    var rval = forge$2.util.createBuffer();
+    var rval = forge.util.createBuffer();
     rval.putInt32(s2.h0);
     rval.putInt32(s2.h1);
     rval.putInt32(s2.h2);
@@ -13277,7 +13255,7 @@ var _initialized = false;
 function _init() {
   // create padding
   _padding = String.fromCharCode(128);
-  _padding += forge$2.util.fillString(String.fromCharCode(0x00), 64);
+  _padding += forge.util.fillString(String.fromCharCode(0x00), 64);
 
   // now initialized
   _initialized = true;
@@ -13452,7 +13430,7 @@ var pkcs1_1 = createCommonjsModule(function (module) {
 
 
 // shortcut for PKCS#1 API
-var pkcs1 = module.exports = forge$2.pkcs1 = forge$2.pkcs1 || {};
+var pkcs1 = module.exports = forge.pkcs1 = forge.pkcs1 || {};
 
 /**
  * Encode the given RSAES-OAEP message (M) using key, with optional label (L)
@@ -13494,7 +13472,7 @@ pkcs1.encode_rsa_oaep = function(key, message, options) {
 
   // default OAEP to SHA-1 message digest
   if(!md) {
-    md = forge$2.md.sha1.create();
+    md = forge.md.sha1.create();
   } else {
     md.start();
   }
@@ -13529,7 +13507,7 @@ pkcs1.encode_rsa_oaep = function(key, message, options) {
   var DB = lHash.getBytes() + PS + '\x01' + message;
 
   if(!seed) {
-    seed = forge$2.random.getBytes(md.digestLength);
+    seed = forge.random.getBytes(md.digestLength);
   } else if(seed.length !== md.digestLength) {
     var error = new Error('Invalid RSAES-OAEP seed. The seed length must ' +
       'match the digest length.');
@@ -13539,10 +13517,10 @@ pkcs1.encode_rsa_oaep = function(key, message, options) {
   }
 
   var dbMask = rsa_mgf1(seed, keyLength - md.digestLength - 1, mgf1Md);
-  var maskedDB = forge$2.util.xorBytes(DB, dbMask, DB.length);
+  var maskedDB = forge.util.xorBytes(DB, dbMask, DB.length);
 
   var seedMask = rsa_mgf1(maskedDB, md.digestLength, mgf1Md);
-  var maskedSeed = forge$2.util.xorBytes(seed, seedMask, seed.length);
+  var maskedSeed = forge.util.xorBytes(seed, seedMask, seed.length);
 
   // return encoded message
   return '\x00' + maskedSeed + maskedDB;
@@ -13594,7 +13572,7 @@ pkcs1.decode_rsa_oaep = function(key, em, options) {
 
   // default OAEP to SHA-1 message digest
   if(md === undefined) {
-    md = forge$2.md.sha1.create();
+    md = forge.md.sha1.create();
   } else {
     md.start();
   }
@@ -13620,10 +13598,10 @@ pkcs1.decode_rsa_oaep = function(key, em, options) {
   var maskedDB = em.substring(1 + md.digestLength);
 
   var seedMask = rsa_mgf1(maskedDB, md.digestLength, mgf1Md);
-  var seed = forge$2.util.xorBytes(maskedSeed, seedMask, maskedSeed.length);
+  var seed = forge.util.xorBytes(maskedSeed, seedMask, maskedSeed.length);
 
   var dbMask = rsa_mgf1(seed, keyLength - md.digestLength - 1, mgf1Md);
-  var db = forge$2.util.xorBytes(maskedDB, dbMask, maskedDB.length);
+  var db = forge.util.xorBytes(maskedDB, dbMask, maskedDB.length);
 
   var lHashPrime = db.substring(0, md.digestLength);
 
@@ -13664,7 +13642,7 @@ pkcs1.decode_rsa_oaep = function(key, em, options) {
 function rsa_mgf1(seed, maskLength, hash) {
   // default to SHA-1 message digest
   if(!hash) {
-    hash = forge$2.md.sha1.create();
+    hash = forge.md.sha1.create();
   }
   var t = '';
   var count = Math.ceil(maskLength / hash.digestLength);
@@ -13695,15 +13673,15 @@ var prime = createCommonjsModule(function (module) {
 (function() {
 
 // forge.prime already defined
-if(forge$2.prime) {
-  module.exports = forge$2.prime;
+if(forge.prime) {
+  module.exports = forge.prime;
   return;
 }
 
 /* PRIME API */
-var prime = module.exports = forge$2.prime = forge$2.prime || {};
+var prime = module.exports = forge.prime = forge.prime || {};
 
-var BigInteger = forge$2.jsbn.BigInteger;
+var BigInteger = forge.jsbn.BigInteger;
 
 // primes are 30k+i for i = 1, 7, 11, 13, 17, 19, 23, 29
 var GCD_30_DELTA = [6, 4, 2, 4, 2, 4, 6, 2];
@@ -13755,7 +13733,7 @@ prime.generateProbablePrime = function(bits, options, callback) {
   algorithm.options = algorithm.options || {};
 
   // create prng with api that matches BigInteger secure random
-  var prng = options.prng || forge$2.random;
+  var prng = options.prng || forge.random;
   var rng = {
     // x is an array to fill with bytes
     nextBytes: function(x) {
@@ -13824,7 +13802,7 @@ function _primeinc(num, bits, rng, deltaIdx, mrTests, maxBlockTime, callback) {
   } while(maxBlockTime < 0 || (+new Date() - start < maxBlockTime));
 
   // keep trying later
-  forge$2.util.setImmediate(function() {
+  forge.util.setImmediate(function() {
     _primeinc(num, bits, rng, deltaIdx, mrTests, maxBlockTime, callback);
   });
 }
@@ -13848,7 +13826,7 @@ function primeincFindPrimeWithWorkers(bits, rng, options, callback) {
   var range = workLoad * 30 / 8;
   var workerScript = options.workerScript || 'forge/prime.worker.js';
   if(numWorkers === -1) {
-    return forge$2.util.estimateCores(function(err, cores) {
+    return forge.util.estimateCores(function(err, cores) {
       if(err) {
         // default to 2
         cores = 2;
@@ -13873,6 +13851,8 @@ function primeincFindPrimeWithWorkers(bits, rng, options, callback) {
       // FIXME: fix path or use blob URLs
       workers[i] = new Worker(workerScript);
     }
+
+    // listen for requests from workers and assign ranges to find prime
     for(var i = 0; i < numWorkers; ++i) {
       workers[i].addEventListener('message', workerMessage);
     }
@@ -13897,7 +13877,6 @@ function primeincFindPrimeWithWorkers(bits, rng, options, callback) {
       if(found) {
         return;
       }
-
       var data = e.data;
       if(data.found) {
         // terminate all workers
@@ -14048,18 +14027,18 @@ function getMillerRabinTests(bits) {
 
 
 if(typeof BigInteger$1 === 'undefined') {
-  var BigInteger$1 = forge$2.jsbn.BigInteger;
+  var BigInteger$1 = forge.jsbn.BigInteger;
 }
 
 // shortcut for asn.1 API
-var asn1$1 = forge$2.asn1;
+var asn1 = forge.asn1;
 
 /*
  * RSA encryption and decryption, see RFC 2313.
  */
-forge$2.pki = forge$2.pki || {};
-var rsa = forge$2.pki.rsa = forge$2.rsa = forge$2.rsa || {};
-var pki$1 = forge$2.pki;
+forge.pki = forge.pki || {};
+var rsa = forge.pki.rsa = forge.rsa = forge.rsa || {};
+var pki = forge.pki;
 
 // for finding primes, which are 30k+i for i = 1, 7, 11, 13, 17, 19, 23, 29
 var GCD_30_DELTA = [6, 4, 2, 4, 2, 4, 6, 2];
@@ -14068,34 +14047,34 @@ var GCD_30_DELTA = [6, 4, 2, 4, 2, 4, 6, 2];
 var privateKeyValidator = {
   // PrivateKeyInfo
   name: 'PrivateKeyInfo',
-  tagClass: asn1$1.Class.UNIVERSAL,
-  type: asn1$1.Type.SEQUENCE,
+  tagClass: asn1.Class.UNIVERSAL,
+  type: asn1.Type.SEQUENCE,
   constructed: true,
   value: [{
     // Version (INTEGER)
     name: 'PrivateKeyInfo.version',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyVersion'
   }, {
     // privateKeyAlgorithm
     name: 'PrivateKeyInfo.privateKeyAlgorithm',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.SEQUENCE,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.SEQUENCE,
     constructed: true,
     value: [{
       name: 'AlgorithmIdentifier.algorithm',
-      tagClass: asn1$1.Class.UNIVERSAL,
-      type: asn1$1.Type.OID,
+      tagClass: asn1.Class.UNIVERSAL,
+      type: asn1.Type.OID,
       constructed: false,
       capture: 'privateKeyOid'
     }]
   }, {
     // PrivateKey
     name: 'PrivateKeyInfo',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.OCTETSTRING,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.OCTETSTRING,
     constructed: false,
     capture: 'privateKey'
   }]
@@ -14105,70 +14084,70 @@ var privateKeyValidator = {
 var rsaPrivateKeyValidator = {
   // RSAPrivateKey
   name: 'RSAPrivateKey',
-  tagClass: asn1$1.Class.UNIVERSAL,
-  type: asn1$1.Type.SEQUENCE,
+  tagClass: asn1.Class.UNIVERSAL,
+  type: asn1.Type.SEQUENCE,
   constructed: true,
   value: [{
     // Version (INTEGER)
     name: 'RSAPrivateKey.version',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyVersion'
   }, {
     // modulus (n)
     name: 'RSAPrivateKey.modulus',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyModulus'
   }, {
     // publicExponent (e)
     name: 'RSAPrivateKey.publicExponent',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyPublicExponent'
   }, {
     // privateExponent (d)
     name: 'RSAPrivateKey.privateExponent',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyPrivateExponent'
   }, {
     // prime1 (p)
     name: 'RSAPrivateKey.prime1',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyPrime1'
   }, {
     // prime2 (q)
     name: 'RSAPrivateKey.prime2',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyPrime2'
   }, {
     // exponent1 (d mod (p-1))
     name: 'RSAPrivateKey.exponent1',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyExponent1'
   }, {
     // exponent2 (d mod (q-1))
     name: 'RSAPrivateKey.exponent2',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyExponent2'
   }, {
     // coefficient ((inverse of q) mod p)
     name: 'RSAPrivateKey.coefficient',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'privateKeyCoefficient'
   }]
@@ -14178,21 +14157,21 @@ var rsaPrivateKeyValidator = {
 var rsaPublicKeyValidator = {
   // RSAPublicKey
   name: 'RSAPublicKey',
-  tagClass: asn1$1.Class.UNIVERSAL,
-  type: asn1$1.Type.SEQUENCE,
+  tagClass: asn1.Class.UNIVERSAL,
+  type: asn1.Type.SEQUENCE,
   constructed: true,
   value: [{
     // modulus (n)
     name: 'RSAPublicKey.modulus',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'publicKeyModulus'
   }, {
     // publicExponent (e)
     name: 'RSAPublicKey.exponent',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.INTEGER,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.INTEGER,
     constructed: false,
     capture: 'publicKeyExponent'
   }]
@@ -14200,35 +14179,35 @@ var rsaPublicKeyValidator = {
 
 // validator for an SubjectPublicKeyInfo structure
 // Note: Currently only works with an RSA public key
-var publicKeyValidator = forge$2.pki.rsa.publicKeyValidator = {
+var publicKeyValidator = forge.pki.rsa.publicKeyValidator = {
   name: 'SubjectPublicKeyInfo',
-  tagClass: asn1$1.Class.UNIVERSAL,
-  type: asn1$1.Type.SEQUENCE,
+  tagClass: asn1.Class.UNIVERSAL,
+  type: asn1.Type.SEQUENCE,
   constructed: true,
   captureAsn1: 'subjectPublicKeyInfo',
   value: [{
     name: 'SubjectPublicKeyInfo.AlgorithmIdentifier',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.SEQUENCE,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.SEQUENCE,
     constructed: true,
     value: [{
       name: 'AlgorithmIdentifier.algorithm',
-      tagClass: asn1$1.Class.UNIVERSAL,
-      type: asn1$1.Type.OID,
+      tagClass: asn1.Class.UNIVERSAL,
+      type: asn1.Type.OID,
       constructed: false,
       capture: 'publicKeyOid'
     }]
   }, {
     // subjectPublicKey
     name: 'SubjectPublicKeyInfo.subjectPublicKey',
-    tagClass: asn1$1.Class.UNIVERSAL,
-    type: asn1$1.Type.BITSTRING,
+    tagClass: asn1.Class.UNIVERSAL,
+    type: asn1.Type.BITSTRING,
     constructed: false,
     value: [{
       // RSAPublicKey
       name: 'SubjectPublicKeyInfo.subjectPublicKey.RSAPublicKey',
-      tagClass: asn1$1.Class.UNIVERSAL,
-      type: asn1$1.Type.SEQUENCE,
+      tagClass: asn1.Class.UNIVERSAL,
+      type: asn1.Type.SEQUENCE,
       constructed: true,
       optional: true,
       captureAsn1: 'rsaPublicKey'
@@ -14256,32 +14235,32 @@ var publicKeyValidator = forge$2.pki.rsa.publicKeyValidator = {
 var emsaPkcs1v15encode = function(md) {
   // get the oid for the algorithm
   var oid;
-  if(md.algorithm in pki$1.oids) {
-    oid = pki$1.oids[md.algorithm];
+  if(md.algorithm in pki.oids) {
+    oid = pki.oids[md.algorithm];
   } else {
     var error = new Error('Unknown message digest algorithm.');
     error.algorithm = md.algorithm;
     throw error;
   }
-  var oidBytes = asn1$1.oidToDer(oid).getBytes();
+  var oidBytes = asn1.oidToDer(oid).getBytes();
 
   // create the digest info
-  var digestInfo = asn1$1.create(
-    asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, []);
-  var digestAlgorithm = asn1$1.create(
-    asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, []);
-  digestAlgorithm.value.push(asn1$1.create(
-    asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false, oidBytes));
-  digestAlgorithm.value.push(asn1$1.create(
-    asn1$1.Class.UNIVERSAL, asn1$1.Type.NULL, false, ''));
-  var digest = asn1$1.create(
-    asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING,
+  var digestInfo = asn1.create(
+    asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, []);
+  var digestAlgorithm = asn1.create(
+    asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, []);
+  digestAlgorithm.value.push(asn1.create(
+    asn1.Class.UNIVERSAL, asn1.Type.OID, false, oidBytes));
+  digestAlgorithm.value.push(asn1.create(
+    asn1.Class.UNIVERSAL, asn1.Type.NULL, false, ''));
+  var digest = asn1.create(
+    asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING,
     false, md.digest().getBytes());
   digestInfo.value.push(digestAlgorithm);
   digestInfo.value.push(digest);
 
   // encode digest info
-  return asn1$1.toDer(digestInfo).getBytes();
+  return asn1.toDer(digestInfo).getBytes();
 };
 
 /**
@@ -14400,7 +14379,7 @@ var _modPow = function(x, key, pub) {
   var r;
   do {
     r = new BigInteger$1(
-      forge$2.util.bytesToHex(forge$2.random.getBytes(key.n.bitLength() / 8)),
+      forge.util.bytesToHex(forge.random.getBytes(key.n.bitLength() / 8)),
       16);
   } while(r.compareTo(key.n) >= 0 || !r.gcd(key.n).equals(BigInteger$1.ONE));
   x = x.multiply(r.modPow(key.e, key.n)).mod(key.n);
@@ -14449,7 +14428,7 @@ var _modPow = function(x, key, pub) {
  *
  * @return the encrypted bytes as a string.
  */
-pki$1.rsa.encrypt = function(m, key, bt) {
+pki.rsa.encrypt = function(m, key, bt) {
   var pub = bt;
   var eb;
 
@@ -14461,7 +14440,7 @@ pki$1.rsa.encrypt = function(m, key, bt) {
     pub = (bt === 0x02);
     eb = _encodePkcs1_v1_5(m, key, bt);
   } else {
-    eb = forge$2.util.createBuffer();
+    eb = forge.util.createBuffer();
     eb.putBytes(m);
   }
 
@@ -14476,13 +14455,13 @@ pki$1.rsa.encrypt = function(m, key, bt) {
   // bytes than k, then prepend zero bytes to fill up ed
   // FIXME: hex conversion inefficient, get BigInteger w/byte strings
   var yhex = y.toString(16);
-  var ed = forge$2.util.createBuffer();
+  var ed = forge.util.createBuffer();
   var zeros = k - Math.ceil(yhex.length / 2);
   while(zeros > 0) {
     ed.putByte(0x00);
     --zeros;
   }
-  ed.putBytes(forge$2.util.hexToBytes(yhex));
+  ed.putBytes(forge.util.hexToBytes(yhex));
   return ed.getBytes();
 };
 
@@ -14504,7 +14483,7 @@ pki$1.rsa.encrypt = function(m, key, bt) {
  *
  * @return the decrypted message as a byte string.
  */
-pki$1.rsa.decrypt = function(ed, key, pub, ml) {
+pki.rsa.decrypt = function(ed, key, pub, ml) {
   // get the length of the modulus in bytes
   var k = Math.ceil(key.n.bitLength() / 8);
 
@@ -14518,7 +14497,7 @@ pki$1.rsa.decrypt = function(ed, key, pub, ml) {
 
   // convert encrypted data into a big integer
   // FIXME: hex conversion inefficient, get BigInteger w/byte strings
-  var y = new BigInteger$1(forge$2.util.createBuffer(ed).toHex(), 16);
+  var y = new BigInteger$1(forge.util.createBuffer(ed).toHex(), 16);
 
   // y must be less than the modulus or it wasn't the result of
   // a previous mod operation (encryption) using that modulus
@@ -14533,13 +14512,13 @@ pki$1.rsa.decrypt = function(ed, key, pub, ml) {
   // prepend zero bytes to fill up eb
   // FIXME: hex conversion inefficient, get BigInteger w/byte strings
   var xhex = x.toString(16);
-  var eb = forge$2.util.createBuffer();
+  var eb = forge.util.createBuffer();
   var zeros = k - Math.ceil(xhex.length / 2);
   while(zeros > 0) {
     eb.putByte(0x00);
     --zeros;
   }
-  eb.putBytes(forge$2.util.hexToBytes(xhex));
+  eb.putBytes(forge.util.hexToBytes(xhex));
 
   if(ml !== false) {
     // legacy, default to PKCS#1 v1.5 padding
@@ -14564,7 +14543,7 @@ pki$1.rsa.decrypt = function(ed, key, pub, ml) {
  *
  * @return the state object to use to generate the key-pair.
  */
-pki$1.rsa.createKeyPairGenerationState = function(bits, e, options) {
+pki.rsa.createKeyPairGenerationState = function(bits, e, options) {
   // TODO: migrate step-based prime generation code to forge.prime
 
   // set default bits
@@ -14575,7 +14554,7 @@ pki$1.rsa.createKeyPairGenerationState = function(bits, e, options) {
 
   // create prng with api that matches BigInteger secure random
   options = options || {};
-  var prng = options.prng || forge$2.random;
+  var prng = options.prng || forge.random;
   var rng = {
     // x is an array to fill with bytes
     nextBytes: function(x) {
@@ -14643,7 +14622,7 @@ pki$1.rsa.createKeyPairGenerationState = function(bits, e, options) {
  *
  * @return true if the key-generation completed, false if not.
  */
-pki$1.rsa.stepKeyPairGenerationState = function(state, n) {
+pki.rsa.stepKeyPairGenerationState = function(state, n) {
   // set default algorithm if not set
   if(!('algorithm' in state)) {
     state.algorithm = 'PRIMEINC';
@@ -14766,11 +14745,11 @@ pki$1.rsa.stepKeyPairGenerationState = function(state, n) {
       // set keys
       var d = state.e.modInverse(state.phi);
       state.keys = {
-        privateKey: pki$1.rsa.setPrivateKey(
+        privateKey: pki.rsa.setPrivateKey(
           state.n, state.e, d, state.p, state.q,
           d.mod(state.p1), d.mod(state.q1),
           state.q.modInverse(state.p)),
-        publicKey: pki$1.rsa.setPublicKey(state.n, state.e)
+        publicKey: pki.rsa.setPublicKey(state.n, state.e)
       };
     }
 
@@ -14813,7 +14792,7 @@ pki$1.rsa.stepKeyPairGenerationState = function(state, n) {
  *
  * @return an object with privateKey and publicKey properties.
  */
-pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
+pki.rsa.generateKeyPair = function(bits, e, options, callback) {
   // (bits), (options), (callback)
   if(arguments.length === 1) {
     if(typeof bits === 'object') {
@@ -14862,7 +14841,7 @@ pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
 
   // if native code is permitted and a callback is given, use native
   // key generation code if available and if parameters are acceptable
-  if(!forge$2.options.usePureJavaScript && callback &&
+  if(!forge.options.usePureJavaScript && callback &&
     bits >= 256 && bits <= 16384 && (e === 0x10001 || e === 3)) {
     if(_detectSubtleCrypto('generateKey') && _detectSubtleCrypto('exportKey')) {
       // use standard native generateKey
@@ -14879,11 +14858,11 @@ pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
         callback(err);
       }).then(function(pkcs8) {
         if(pkcs8) {
-          var privateKey = pki$1.privateKeyFromAsn1(
-            asn1$1.fromDer(forge$2.util.createBuffer(pkcs8)));
+          var privateKey = pki.privateKeyFromAsn1(
+            asn1.fromDer(forge.util.createBuffer(pkcs8)));
           callback(null, {
             privateKey: privateKey,
-            publicKey: pki$1.setRsaPublicKey(privateKey.n, privateKey.e)
+            publicKey: pki.setRsaPublicKey(privateKey.n, privateKey.e)
           });
         }
       });
@@ -14902,11 +14881,11 @@ pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
           'pkcs8', pair.privateKey);
         exportOp.oncomplete = function(e) {
           var pkcs8 = e.target.result;
-          var privateKey = pki$1.privateKeyFromAsn1(
-            asn1$1.fromDer(forge$2.util.createBuffer(pkcs8)));
+          var privateKey = pki.privateKeyFromAsn1(
+            asn1.fromDer(forge.util.createBuffer(pkcs8)));
           callback(null, {
             privateKey: privateKey,
-            publicKey: pki$1.setRsaPublicKey(privateKey.n, privateKey.e)
+            publicKey: pki.setRsaPublicKey(privateKey.n, privateKey.e)
           });
         };
         exportOp.onerror = function(err) {
@@ -14921,9 +14900,9 @@ pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
   }
 
   // use JavaScript implementation
-  var state = pki$1.rsa.createKeyPairGenerationState(bits, e, options);
+  var state = pki.rsa.createKeyPairGenerationState(bits, e, options);
   if(!callback) {
-    pki$1.rsa.stepKeyPairGenerationState(state, 0);
+    pki.rsa.stepKeyPairGenerationState(state, 0);
     return state.keys;
   }
   _generateKeyPair(state, options, callback);
@@ -14937,7 +14916,7 @@ pki$1.rsa.generateKeyPair = function(bits, e, options, callback) {
  *
  * @return the public key.
  */
-pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
+pki.setRsaPublicKey = pki.rsa.setPublicKey = function(n, e) {
   var key = {
     n: n,
     e: e
@@ -14976,7 +14955,7 @@ pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
     } else if(scheme === 'RSA-OAEP' || scheme === 'RSAES-OAEP') {
       scheme = {
         encode: function(m, key) {
-          return forge$2.pkcs1.encode_rsa_oaep(key, m, schemeOptions);
+          return forge.pkcs1.encode_rsa_oaep(key, m, schemeOptions);
         }
       };
     } else if(['RAW', 'NONE', 'NULL', null].indexOf(scheme) !== -1) {
@@ -14987,7 +14966,7 @@ pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
 
     // do scheme-based encoding then rsa encryption
     var e = scheme.encode(data, key, true);
-    return pki$1.rsa.encrypt(e, key, true);
+    return pki.rsa.encrypt(e, key, true);
   };
 
   /**
@@ -15034,7 +15013,7 @@ pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
            // remove padding
            d = _decodePkcs1_v1_5(d, key, true);
            // d is ASN.1 BER-encoded DigestInfo
-           var obj = asn1$1.fromDer(d);
+           var obj = asn1.fromDer(d);
            // compare the given digest to the decrypted one
            return digest === obj.value[1].value;
          }
@@ -15050,7 +15029,7 @@ pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
      }
 
      // do rsa decryption w/o any decoding, then verify -- which does decoding
-     var d = pki$1.rsa.decrypt(signature, key, true, false);
+     var d = pki.rsa.decrypt(signature, key, true, false);
      return scheme.verify(digest, d, key.n.bitLength());
   };
 
@@ -15072,7 +15051,7 @@ pki$1.setRsaPublicKey = pki$1.rsa.setPublicKey = function(n, e) {
  *
  * @return the private key.
  */
-pki$1.setRsaPrivateKey = pki$1.rsa.setPrivateKey = function(
+pki.setRsaPrivateKey = pki.rsa.setPrivateKey = function(
   n, e, d, p, q, dP, dQ, qInv) {
   var key = {
     n: n,
@@ -15106,14 +15085,14 @@ pki$1.setRsaPrivateKey = pki$1.rsa.setPrivateKey = function(
     }
 
     // do rsa decryption w/o any decoding
-    var d = pki$1.rsa.decrypt(data, key, false, false);
+    var d = pki.rsa.decrypt(data, key, false, false);
 
     if(scheme === 'RSAES-PKCS1-V1_5') {
       scheme = { decode: _decodePkcs1_v1_5 };
     } else if(scheme === 'RSA-OAEP' || scheme === 'RSAES-OAEP') {
       scheme = {
         decode: function(d, key) {
-          return forge$2.pkcs1.decode_rsa_oaep(key, d, schemeOptions);
+          return forge.pkcs1.decode_rsa_oaep(key, d, schemeOptions);
         }
       };
     } else if(['RAW', 'NONE', 'NULL', null].indexOf(scheme) !== -1) {
@@ -15168,7 +15147,7 @@ pki$1.setRsaPrivateKey = pki$1.rsa.setPrivateKey = function(
 
     // encode and then encrypt
     var d = scheme.encode(md, key.n.bitLength());
-    return pki$1.rsa.encrypt(d, key, bt);
+    return pki.rsa.encrypt(d, key, bt);
   };
 
   return key;
@@ -15181,22 +15160,22 @@ pki$1.setRsaPrivateKey = pki$1.rsa.setPrivateKey = function(
  *
  * @return the ASN.1 PrivateKeyInfo.
  */
-pki$1.wrapRsaPrivateKey = function(rsaKey) {
+pki.wrapRsaPrivateKey = function(rsaKey) {
   // PrivateKeyInfo
-  return asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+  return asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
     // version (0)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
-      asn1$1.integerToDer(0).getBytes()),
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
+      asn1.integerToDer(0).getBytes()),
     // privateKeyAlgorithm
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
-      asn1$1.create(
-        asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
-        asn1$1.oidToDer(pki$1.oids.rsaEncryption).getBytes()),
-      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.NULL, false, '')
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+      asn1.create(
+        asn1.Class.UNIVERSAL, asn1.Type.OID, false,
+        asn1.oidToDer(pki.oids.rsaEncryption).getBytes()),
+      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.NULL, false, '')
     ]),
     // PrivateKey
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING, false,
-      asn1$1.toDer(rsaKey).getBytes())
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false,
+      asn1.toDer(rsaKey).getBytes())
     ]);
 };
 
@@ -15208,18 +15187,18 @@ pki$1.wrapRsaPrivateKey = function(rsaKey) {
  *
  * @return the private key.
  */
-pki$1.privateKeyFromAsn1 = function(obj) {
+pki.privateKeyFromAsn1 = function(obj) {
   // get PrivateKeyInfo
   var capture = {};
   var errors = [];
-  if(asn1$1.validate(obj, privateKeyValidator, capture, errors)) {
-    obj = asn1$1.fromDer(forge$2.util.createBuffer(capture.privateKey));
+  if(asn1.validate(obj, privateKeyValidator, capture, errors)) {
+    obj = asn1.fromDer(forge.util.createBuffer(capture.privateKey));
   }
 
   // get RSAPrivateKey
   capture = {};
   errors = [];
-  if(!asn1$1.validate(obj, rsaPrivateKeyValidator, capture, errors)) {
+  if(!asn1.validate(obj, rsaPrivateKeyValidator, capture, errors)) {
     var error = new Error('Cannot read private key. ' +
       'ASN.1 object does not contain an RSAPrivateKey.');
     error.errors = errors;
@@ -15230,17 +15209,17 @@ pki$1.privateKeyFromAsn1 = function(obj) {
   // capture.privateKeyVersion
   // FIXME: inefficient, get a BigInteger that uses byte strings
   var n, e, d, p, q, dP, dQ, qInv;
-  n = forge$2.util.createBuffer(capture.privateKeyModulus).toHex();
-  e = forge$2.util.createBuffer(capture.privateKeyPublicExponent).toHex();
-  d = forge$2.util.createBuffer(capture.privateKeyPrivateExponent).toHex();
-  p = forge$2.util.createBuffer(capture.privateKeyPrime1).toHex();
-  q = forge$2.util.createBuffer(capture.privateKeyPrime2).toHex();
-  dP = forge$2.util.createBuffer(capture.privateKeyExponent1).toHex();
-  dQ = forge$2.util.createBuffer(capture.privateKeyExponent2).toHex();
-  qInv = forge$2.util.createBuffer(capture.privateKeyCoefficient).toHex();
+  n = forge.util.createBuffer(capture.privateKeyModulus).toHex();
+  e = forge.util.createBuffer(capture.privateKeyPublicExponent).toHex();
+  d = forge.util.createBuffer(capture.privateKeyPrivateExponent).toHex();
+  p = forge.util.createBuffer(capture.privateKeyPrime1).toHex();
+  q = forge.util.createBuffer(capture.privateKeyPrime2).toHex();
+  dP = forge.util.createBuffer(capture.privateKeyExponent1).toHex();
+  dQ = forge.util.createBuffer(capture.privateKeyExponent2).toHex();
+  qInv = forge.util.createBuffer(capture.privateKeyCoefficient).toHex();
 
   // set private key
-  return pki$1.setRsaPrivateKey(
+  return pki.setRsaPrivateKey(
     new BigInteger$1(n, 16),
     new BigInteger$1(e, 16),
     new BigInteger$1(d, 16),
@@ -15258,35 +15237,35 @@ pki$1.privateKeyFromAsn1 = function(obj) {
  *
  * @return the ASN.1 representation of an RSAPrivateKey.
  */
-pki$1.privateKeyToAsn1 = pki$1.privateKeyToRSAPrivateKey = function(key) {
+pki.privateKeyToAsn1 = pki.privateKeyToRSAPrivateKey = function(key) {
   // RSAPrivateKey
-  return asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+  return asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
     // version (0 = only 2 primes, 1 multiple primes)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
-      asn1$1.integerToDer(0).getBytes()),
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
+      asn1.integerToDer(0).getBytes()),
     // modulus (n)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.n)),
     // publicExponent (e)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.e)),
     // privateExponent (d)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.d)),
     // privateKeyPrime1 (p)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.p)),
     // privateKeyPrime2 (q)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.q)),
     // privateKeyExponent1 (dP)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.dP)),
     // privateKeyExponent2 (dQ)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.dQ)),
     // coefficient (qInv)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.qInv))
   ]);
 };
@@ -15298,14 +15277,14 @@ pki$1.privateKeyToAsn1 = pki$1.privateKeyToRSAPrivateKey = function(key) {
  *
  * @return the public key.
  */
-pki$1.publicKeyFromAsn1 = function(obj) {
+pki.publicKeyFromAsn1 = function(obj) {
   // get SubjectPublicKeyInfo
   var capture = {};
   var errors = [];
-  if(asn1$1.validate(obj, publicKeyValidator, capture, errors)) {
+  if(asn1.validate(obj, publicKeyValidator, capture, errors)) {
     // get oid
-    var oid = asn1$1.derToOid(capture.publicKeyOid);
-    if(oid !== pki$1.oids.rsaEncryption) {
+    var oid = asn1.derToOid(capture.publicKeyOid);
+    if(oid !== pki.oids.rsaEncryption) {
       var error = new Error('Cannot read public key. Unknown OID.');
       error.oid = oid;
       throw error;
@@ -15315,7 +15294,7 @@ pki$1.publicKeyFromAsn1 = function(obj) {
 
   // get RSA params
   errors = [];
-  if(!asn1$1.validate(obj, rsaPublicKeyValidator, capture, errors)) {
+  if(!asn1.validate(obj, rsaPublicKeyValidator, capture, errors)) {
     var error = new Error('Cannot read public key. ' +
       'ASN.1 object does not contain an RSAPublicKey.');
     error.errors = errors;
@@ -15323,11 +15302,11 @@ pki$1.publicKeyFromAsn1 = function(obj) {
   }
 
   // FIXME: inefficient, get a BigInteger that uses byte strings
-  var n = forge$2.util.createBuffer(capture.publicKeyModulus).toHex();
-  var e = forge$2.util.createBuffer(capture.publicKeyExponent).toHex();
+  var n = forge.util.createBuffer(capture.publicKeyModulus).toHex();
+  var e = forge.util.createBuffer(capture.publicKeyExponent).toHex();
 
   // set public key
-  return pki$1.setRsaPublicKey(
+  return pki.setRsaPublicKey(
     new BigInteger$1(n, 16),
     new BigInteger$1(e, 16));
 };
@@ -15339,20 +15318,20 @@ pki$1.publicKeyFromAsn1 = function(obj) {
  *
  * @return the asn1 representation of a SubjectPublicKeyInfo.
  */
-pki$1.publicKeyToAsn1 = pki$1.publicKeyToSubjectPublicKeyInfo = function(key) {
+pki.publicKeyToAsn1 = pki.publicKeyToSubjectPublicKeyInfo = function(key) {
   // SubjectPublicKeyInfo
-  return asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+  return asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
     // AlgorithmIdentifier
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
       // algorithm
-      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
-        asn1$1.oidToDer(pki$1.oids.rsaEncryption).getBytes()),
+      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
+        asn1.oidToDer(pki.oids.rsaEncryption).getBytes()),
       // parameters (null)
-      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.NULL, false, '')
+      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.NULL, false, '')
     ]),
     // subjectPublicKey
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.BITSTRING, false, [
-      pki$1.publicKeyToRSAPublicKey(key)
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.BITSTRING, false, [
+      pki.publicKeyToRSAPublicKey(key)
     ])
   ]);
 };
@@ -15364,14 +15343,14 @@ pki$1.publicKeyToAsn1 = pki$1.publicKeyToSubjectPublicKeyInfo = function(key) {
  *
  * @return the asn1 representation of a RSAPublicKey.
  */
-pki$1.publicKeyToRSAPublicKey = function(key) {
+pki.publicKeyToRSAPublicKey = function(key) {
   // RSAPublicKey
-  return asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+  return asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
     // modulus (n)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.n)),
     // publicExponent (e)
-    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
       _bnToBytes(key.e))
   ]);
 };
@@ -15387,7 +15366,7 @@ pki$1.publicKeyToRSAPublicKey = function(key) {
  * @return the padded byte buffer.
  */
 function _encodePkcs1_v1_5(m, key, bt) {
-  var eb = forge$2.util.createBuffer();
+  var eb = forge.util.createBuffer();
 
   // get the length of the modulus in bytes
   var k = Math.ceil(key.n.bitLength() / 8);
@@ -15434,7 +15413,7 @@ function _encodePkcs1_v1_5(m, key, bt) {
     // pad with random non-zero values
     while(padNum > 0) {
       var numZeros = 0;
-      var padBytes = forge$2.random.getBytes(padNum);
+      var padBytes = forge.random.getBytes(padNum);
       for(var i = 0; i < padNum; ++i) {
         padByte = padBytes.charCodeAt(i);
         if(padByte === 0) {
@@ -15479,7 +15458,7 @@ function _decodePkcs1_v1_5(em, key, pub, ml) {
    */
 
   // parse the encryption block
-  var eb = forge$2.util.createBuffer(em);
+  var eb = forge.util.createBuffer(em);
   var first = eb.getByte();
   var bt = eb.getByte();
   if(first !== 0x00 ||
@@ -15581,7 +15560,7 @@ function _generateKeyPair(state, options, callback) {
   }
 
   function getPrime(bits, callback) {
-    forge$2.prime.generateProbablePrime(bits, opts, callback);
+    forge.prime.generateProbablePrime(bits, opts, callback);
   }
 
   function finish(err, num) {
@@ -15640,11 +15619,11 @@ function _generateKeyPair(state, options, callback) {
     // set keys
     var d = state.e.modInverse(state.phi);
     state.keys = {
-      privateKey: pki$1.rsa.setPrivateKey(
+      privateKey: pki.rsa.setPrivateKey(
         state.n, state.e, d, state.p, state.q,
         d.mod(state.p1), d.mod(state.q1),
         state.q.modInverse(state.p)),
-      publicKey: pki$1.rsa.setPublicKey(state.n, state.e)
+      publicKey: pki.rsa.setPublicKey(state.n, state.e)
     };
 
     callback(null, state.keys);
@@ -15664,7 +15643,7 @@ function _bnToBytes(b) {
   if(hex[0] >= '8') {
     hex = '00' + hex;
   }
-  var bytes = forge$2.util.hexToBytes(hex);
+  var bytes = forge.util.hexToBytes(hex);
 
   // ensure integer is minimally-encoded
   if(bytes.length > 1 &&
@@ -15735,7 +15714,7 @@ function _detectSubtleMsCrypto(fn) {
 }
 
 function _intToUint8Array(x) {
-  var bytes = forge$2.util.hexToBytes(x.toString(16));
+  var bytes = forge.util.hexToBytes(x.toString(16));
   var buffer = new Uint8Array(bytes.length);
   for(var i = 0; i < bytes.length; ++i) {
     buffer[i] = bytes.charCodeAt(i);
@@ -15743,44 +15722,80 @@ function _intToUint8Array(x) {
   return buffer;
 }
 
+/**
+ * Password-based encryption functions.
+ *
+ * @author Dave Longley
+ * @author Stefan Siegl <stesie@brokenpipe.de>
+ *
+ * Copyright (c) 2010-2013 Digital Bazaar, Inc.
+ * Copyright (c) 2012 Stefan Siegl <stesie@brokenpipe.de>
+ *
+ * An EncryptedPrivateKeyInfo:
+ *
+ * EncryptedPrivateKeyInfo ::= SEQUENCE {
+ *   encryptionAlgorithm  EncryptionAlgorithmIdentifier,
+ *   encryptedData        EncryptedData }
+ *
+ * EncryptionAlgorithmIdentifier ::= AlgorithmIdentifier
+ *
+ * EncryptedData ::= OCTET STRING
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+if(typeof BigInteger$2 === 'undefined') {
+  var BigInteger$2 = forge.jsbn.BigInteger;
+}
+
 // shortcut for asn.1 API
-var asn1 = forge$2.asn1;
+var asn1$1 = forge.asn1;
 
 /* Password-based encryption implementation. */
-var pki = forge$2.pki = forge$2.pki || {};
-var pbe = pki.pbe = forge$2.pbe = forge$2.pbe || {};
-var oids = pki.oids;
+var pki$1 = forge.pki = forge.pki || {};
+var pbe = pki$1.pbe = forge.pbe = forge.pbe || {};
+var oids = pki$1.oids;
 
 // validator for an EncryptedPrivateKeyInfo structure
 // Note: Currently only works w/algorithm params
 var encryptedPrivateKeyValidator = {
   name: 'EncryptedPrivateKeyInfo',
-  tagClass: asn1.Class.UNIVERSAL,
-  type: asn1.Type.SEQUENCE,
+  tagClass: asn1$1.Class.UNIVERSAL,
+  type: asn1$1.Type.SEQUENCE,
   constructed: true,
   value: [{
     name: 'EncryptedPrivateKeyInfo.encryptionAlgorithm',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.SEQUENCE,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.SEQUENCE,
     constructed: true,
     value: [{
       name: 'AlgorithmIdentifier.algorithm',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.OID,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.OID,
       constructed: false,
       capture: 'encryptionOid'
     }, {
       name: 'AlgorithmIdentifier.parameters',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.SEQUENCE,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.SEQUENCE,
       constructed: true,
       captureAsn1: 'encryptionParams'
     }]
   }, {
     // encryptedData
     name: 'EncryptedPrivateKeyInfo.encryptedData',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.OCTETSTRING,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.OCTETSTRING,
     constructed: false,
     capture: 'encryptedData'
   }]
@@ -15790,55 +15805,55 @@ var encryptedPrivateKeyValidator = {
 // Note: Currently only works w/PBKDF2 + AES encryption schemes
 var PBES2AlgorithmsValidator = {
   name: 'PBES2Algorithms',
-  tagClass: asn1.Class.UNIVERSAL,
-  type: asn1.Type.SEQUENCE,
+  tagClass: asn1$1.Class.UNIVERSAL,
+  type: asn1$1.Type.SEQUENCE,
   constructed: true,
   value: [{
     name: 'PBES2Algorithms.keyDerivationFunc',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.SEQUENCE,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.SEQUENCE,
     constructed: true,
     value: [{
       name: 'PBES2Algorithms.keyDerivationFunc.oid',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.OID,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.OID,
       constructed: false,
       capture: 'kdfOid'
     }, {
       name: 'PBES2Algorithms.params',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.SEQUENCE,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.SEQUENCE,
       constructed: true,
       value: [{
         name: 'PBES2Algorithms.params.salt',
-        tagClass: asn1.Class.UNIVERSAL,
-        type: asn1.Type.OCTETSTRING,
+        tagClass: asn1$1.Class.UNIVERSAL,
+        type: asn1$1.Type.OCTETSTRING,
         constructed: false,
         capture: 'kdfSalt'
       }, {
         name: 'PBES2Algorithms.params.iterationCount',
-        tagClass: asn1.Class.UNIVERSAL,
-        type: asn1.Type.INTEGER,
+        tagClass: asn1$1.Class.UNIVERSAL,
+        type: asn1$1.Type.INTEGER,
         constructed: false,
         capture: 'kdfIterationCount'
       }, {
         name: 'PBES2Algorithms.params.keyLength',
-        tagClass: asn1.Class.UNIVERSAL,
-        type: asn1.Type.INTEGER,
+        tagClass: asn1$1.Class.UNIVERSAL,
+        type: asn1$1.Type.INTEGER,
         constructed: false,
         optional: true,
         capture: 'keyLength'
       }, {
         // prf
         name: 'PBES2Algorithms.params.prf',
-        tagClass: asn1.Class.UNIVERSAL,
-        type: asn1.Type.SEQUENCE,
+        tagClass: asn1$1.Class.UNIVERSAL,
+        type: asn1$1.Type.SEQUENCE,
         constructed: true,
         optional: true,
         value: [{
           name: 'PBES2Algorithms.params.prf.algorithm',
-          tagClass: asn1.Class.UNIVERSAL,
-          type: asn1.Type.OID,
+          tagClass: asn1$1.Class.UNIVERSAL,
+          type: asn1$1.Type.OID,
           constructed: false,
           capture: 'prfOid'
         }]
@@ -15846,19 +15861,19 @@ var PBES2AlgorithmsValidator = {
     }]
   }, {
     name: 'PBES2Algorithms.encryptionScheme',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.SEQUENCE,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.SEQUENCE,
     constructed: true,
     value: [{
       name: 'PBES2Algorithms.encryptionScheme.oid',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.OID,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.OID,
       constructed: false,
       capture: 'encOid'
     }, {
       name: 'PBES2Algorithms.encryptionScheme.iv',
-      tagClass: asn1.Class.UNIVERSAL,
-      type: asn1.Type.OCTETSTRING,
+      tagClass: asn1$1.Class.UNIVERSAL,
+      type: asn1$1.Type.OCTETSTRING,
       constructed: false,
       capture: 'encIv'
     }]
@@ -15867,19 +15882,19 @@ var PBES2AlgorithmsValidator = {
 
 var pkcs12PbeParamsValidator = {
   name: 'pkcs-12PbeParams',
-  tagClass: asn1.Class.UNIVERSAL,
-  type: asn1.Type.SEQUENCE,
+  tagClass: asn1$1.Class.UNIVERSAL,
+  type: asn1$1.Type.SEQUENCE,
   constructed: true,
   value: [{
     name: 'pkcs-12PbeParams.salt',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.OCTETSTRING,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.OCTETSTRING,
     constructed: false,
     capture: 'salt'
   }, {
     name: 'pkcs-12PbeParams.iterations',
-    tagClass: asn1.Class.UNIVERSAL,
-    type: asn1.Type.INTEGER,
+    tagClass: asn1$1.Class.UNIVERSAL,
+    type: asn1$1.Type.INTEGER,
     constructed: false,
     capture: 'iterations'
   }]
@@ -15925,7 +15940,7 @@ var pkcs12PbeParamsValidator = {
  *
  * @return the ASN.1 EncryptedPrivateKeyInfo.
  */
-pki.encryptPrivateKeyInfo = function(obj, password, options) {
+pki$1.encryptPrivateKeyInfo = function(obj, password, options) {
   // set default options
   options = options || {};
   options.saltSize = options.saltSize || 8;
@@ -15934,9 +15949,9 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
   options.prfAlgorithm = options.prfAlgorithm || 'sha1';
 
   // generate PBE params
-  var salt = forge$2.random.getBytesSync(options.saltSize);
+  var salt = forge.random.getBytesSync(options.saltSize);
   var count = options.count;
-  var countBytes = asn1.integerToDer(count);
+  var countBytes = asn1$1.integerToDer(count);
   var dkLen;
   var encryptionAlgorithm;
   var encryptedData;
@@ -15948,25 +15963,25 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
       dkLen = 16;
       ivLen = 16;
       encOid = oids['aes128-CBC'];
-      cipherFn = forge$2.aes.createEncryptionCipher;
+      cipherFn = forge.aes.createEncryptionCipher;
       break;
     case 'aes192':
       dkLen = 24;
       ivLen = 16;
       encOid = oids['aes192-CBC'];
-      cipherFn = forge$2.aes.createEncryptionCipher;
+      cipherFn = forge.aes.createEncryptionCipher;
       break;
     case 'aes256':
       dkLen = 32;
       ivLen = 16;
       encOid = oids['aes256-CBC'];
-      cipherFn = forge$2.aes.createEncryptionCipher;
+      cipherFn = forge.aes.createEncryptionCipher;
       break;
     case 'des':
       dkLen = 8;
       ivLen = 8;
       encOid = oids['desCBC'];
-      cipherFn = forge$2.des.createEncryptionCipher;
+      cipherFn = forge.des.createEncryptionCipher;
       break;
     default:
       var error = new Error('Cannot encrypt private key. Unknown encryption algorithm.');
@@ -15979,36 +15994,36 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
     var md = prfAlgorithmToMessageDigest(prfAlgorithm);
 
     // encrypt private key using pbe SHA-1 and AES/DES
-    var dk = forge$2.pkcs5.pbkdf2(password, salt, count, dkLen, md);
-    var iv = forge$2.random.getBytesSync(ivLen);
+    var dk = forge.pkcs5.pbkdf2(password, salt, count, dkLen, md);
+    var iv = forge.random.getBytesSync(ivLen);
     var cipher = cipherFn(dk);
     cipher.start(iv);
-    cipher.update(asn1.toDer(obj));
+    cipher.update(asn1$1.toDer(obj));
     cipher.finish();
     encryptedData = cipher.output.getBytes();
 
     // get PBKDF2-params
     var params = createPbkdf2Params(salt, countBytes, dkLen, prfAlgorithm);
 
-    encryptionAlgorithm = asn1.create(
-      asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-        asn1.oidToDer(oids['pkcs5PBES2']).getBytes()),
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+    encryptionAlgorithm = asn1$1.create(
+      asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
+        asn1$1.oidToDer(oids['pkcs5PBES2']).getBytes()),
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
         // keyDerivationFunc
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
-          asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-            asn1.oidToDer(oids['pkcs5PBKDF2']).getBytes()),
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+          asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
+            asn1$1.oidToDer(oids['pkcs5PBKDF2']).getBytes()),
           // PBKDF2-params
           params
         ]),
         // encryptionScheme
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
-          asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-            asn1.oidToDer(encOid).getBytes()),
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+          asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
+            asn1$1.oidToDer(encOid).getBytes()),
           // iv
-          asn1.create(
-            asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false, iv)
+          asn1$1.create(
+            asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING, false, iv)
         ])
       ])
     ]);
@@ -16016,25 +16031,25 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
     // Do PKCS12 PBE
     dkLen = 24;
 
-    var saltBytes = new forge$2.util.ByteBuffer(salt);
-    var dk = pki.pbe.generatePkcs12Key(password, saltBytes, 1, count, dkLen);
-    var iv = pki.pbe.generatePkcs12Key(password, saltBytes, 2, count, dkLen);
-    var cipher = forge$2.des.createEncryptionCipher(dk);
+    var saltBytes = new forge.util.ByteBuffer(salt);
+    var dk = pki$1.pbe.generatePkcs12Key(password, saltBytes, 1, count, dkLen);
+    var iv = pki$1.pbe.generatePkcs12Key(password, saltBytes, 2, count, dkLen);
+    var cipher = forge.des.createEncryptionCipher(dk);
     cipher.start(iv);
-    cipher.update(asn1.toDer(obj));
+    cipher.update(asn1$1.toDer(obj));
     cipher.finish();
     encryptedData = cipher.output.getBytes();
 
-    encryptionAlgorithm = asn1.create(
-      asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-        asn1.oidToDer(oids['pbeWithSHAAnd3-KeyTripleDES-CBC']).getBytes()),
+    encryptionAlgorithm = asn1$1.create(
+      asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
+        asn1$1.oidToDer(oids['pbeWithSHAAnd3-KeyTripleDES-CBC']).getBytes()),
       // pkcs-12PbeParams
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
         // salt
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false, salt),
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING, false, salt),
         // iteration count
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
           countBytes.getBytes())
       ])
     ]);
@@ -16045,12 +16060,12 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
   }
 
   // EncryptedPrivateKeyInfo
-  var rval = asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+  var rval = asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
     // encryptionAlgorithm
     encryptionAlgorithm,
     // encryptedData
-    asn1.create(
-      asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false, encryptedData)
+    asn1$1.create(
+      asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING, false, encryptedData)
   ]);
   return rval;
 };
@@ -16063,13 +16078,13 @@ pki.encryptPrivateKeyInfo = function(obj, password, options) {
  *
  * @return the ASN.1 PrivateKeyInfo on success, null on failure.
  */
-pki.decryptPrivateKeyInfo = function(obj, password) {
+pki$1.decryptPrivateKeyInfo = function(obj, password) {
   var rval = null;
 
   // get PBE params
   var capture = {};
   var errors = [];
-  if(!asn1.validate(obj, encryptedPrivateKeyValidator, capture, errors)) {
+  if(!asn1$1.validate(obj, encryptedPrivateKeyValidator, capture, errors)) {
     var error = new Error('Cannot read encrypted private key. ' +
       'ASN.1 object is not a supported EncryptedPrivateKeyInfo.');
     error.errors = errors;
@@ -16077,15 +16092,15 @@ pki.decryptPrivateKeyInfo = function(obj, password) {
   }
 
   // get cipher
-  var oid = asn1.derToOid(capture.encryptionOid);
-  var cipher = pki.pbe.getCipher(oid, capture.encryptionParams, password);
+  var oid = asn1$1.derToOid(capture.encryptionOid);
+  var cipher = pki$1.pbe.getCipher(oid, capture.encryptionParams, password);
 
   // get encrypted data
-  var encrypted = forge$2.util.createBuffer(capture.encryptedData);
+  var encrypted = forge.util.createBuffer(capture.encryptedData);
 
   cipher.update(encrypted);
   if(cipher.finish()) {
-    rval = asn1.fromDer(cipher.output);
+    rval = asn1$1.fromDer(cipher.output);
   }
 
   return rval;
@@ -16099,13 +16114,13 @@ pki.decryptPrivateKeyInfo = function(obj, password) {
  *
  * @return the PEM-formatted encrypted private key.
  */
-pki.encryptedPrivateKeyToPem = function(epki, maxline) {
+pki$1.encryptedPrivateKeyToPem = function(epki, maxline) {
   // convert to DER, then PEM-encode
   var msg = {
     type: 'ENCRYPTED PRIVATE KEY',
-    body: asn1.toDer(epki).getBytes()
+    body: asn1$1.toDer(epki).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -16116,8 +16131,8 @@ pki.encryptedPrivateKeyToPem = function(epki, maxline) {
  *
  * @return the ASN.1 EncryptedPrivateKeyInfo.
  */
-pki.encryptedPrivateKeyFromPem = function(pem) {
-  var msg = forge$2.pem.decode(pem)[0];
+pki$1.encryptedPrivateKeyFromPem = function(pem) {
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'ENCRYPTED PRIVATE KEY') {
     var error = new Error('Could not convert encrypted private key from PEM; ' +
@@ -16131,7 +16146,7 @@ pki.encryptedPrivateKeyFromPem = function(pem) {
   }
 
   // convert DER to ASN.1 object
-  return asn1.fromDer(msg.body);
+  return asn1$1.fromDer(msg.body);
 };
 
 /**
@@ -16160,14 +16175,14 @@ pki.encryptedPrivateKeyFromPem = function(pem) {
  *
  * @return the PEM-encoded ASN.1 EncryptedPrivateKeyInfo.
  */
-pki.encryptRsaPrivateKey = function(rsaKey, password, options) {
+pki$1.encryptRsaPrivateKey = function(rsaKey, password, options) {
   // standard PKCS#8
   options = options || {};
   if(!options.legacy) {
     // encrypt PrivateKeyInfo
-    var rval = pki.wrapRsaPrivateKey(pki.privateKeyToAsn1(rsaKey));
-    rval = pki.encryptPrivateKeyInfo(rval, password, options);
-    return pki.encryptedPrivateKeyToPem(rval);
+    var rval = pki$1.wrapRsaPrivateKey(pki$1.privateKeyToAsn1(rsaKey));
+    rval = pki$1.encryptPrivateKeyInfo(rval, password, options);
+    return pki$1.encryptedPrivateKeyToPem(rval);
   }
 
   // legacy non-PKCS#8
@@ -16179,32 +16194,32 @@ pki.encryptRsaPrivateKey = function(rsaKey, password, options) {
   case 'aes128':
     algorithm = 'AES-128-CBC';
     dkLen = 16;
-    iv = forge$2.random.getBytesSync(16);
-    cipherFn = forge$2.aes.createEncryptionCipher;
+    iv = forge.random.getBytesSync(16);
+    cipherFn = forge.aes.createEncryptionCipher;
     break;
   case 'aes192':
     algorithm = 'AES-192-CBC';
     dkLen = 24;
-    iv = forge$2.random.getBytesSync(16);
-    cipherFn = forge$2.aes.createEncryptionCipher;
+    iv = forge.random.getBytesSync(16);
+    cipherFn = forge.aes.createEncryptionCipher;
     break;
   case 'aes256':
     algorithm = 'AES-256-CBC';
     dkLen = 32;
-    iv = forge$2.random.getBytesSync(16);
-    cipherFn = forge$2.aes.createEncryptionCipher;
+    iv = forge.random.getBytesSync(16);
+    cipherFn = forge.aes.createEncryptionCipher;
     break;
   case '3des':
     algorithm = 'DES-EDE3-CBC';
     dkLen = 24;
-    iv = forge$2.random.getBytesSync(8);
-    cipherFn = forge$2.des.createEncryptionCipher;
+    iv = forge.random.getBytesSync(8);
+    cipherFn = forge.des.createEncryptionCipher;
     break;
   case 'des':
     algorithm = 'DES-CBC';
     dkLen = 8;
-    iv = forge$2.random.getBytesSync(8);
-    cipherFn = forge$2.des.createEncryptionCipher;
+    iv = forge.random.getBytesSync(8);
+    cipherFn = forge.des.createEncryptionCipher;
     break;
   default:
     var error = new Error('Could not encrypt RSA private key; unsupported ' +
@@ -16214,10 +16229,10 @@ pki.encryptRsaPrivateKey = function(rsaKey, password, options) {
   }
 
   // encrypt private key using OpenSSL legacy key derivation
-  var dk = forge$2.pbe.opensslDeriveBytes(password, iv.substr(0, 8), dkLen);
+  var dk = forge.pbe.opensslDeriveBytes(password, iv.substr(0, 8), dkLen);
   var cipher = cipherFn(dk);
   cipher.start(iv);
-  cipher.update(asn1.toDer(pki.privateKeyToAsn1(rsaKey)));
+  cipher.update(asn1$1.toDer(pki$1.privateKeyToAsn1(rsaKey)));
   cipher.finish();
 
   var msg = {
@@ -16228,11 +16243,11 @@ pki.encryptRsaPrivateKey = function(rsaKey, password, options) {
     },
     dekInfo: {
       algorithm: algorithm,
-      parameters: forge$2.util.bytesToHex(iv).toUpperCase()
+      parameters: forge.util.bytesToHex(iv).toUpperCase()
     },
     body: cipher.output.getBytes()
   };
-  return forge$2.pem.encode(msg);
+  return forge.pem.encode(msg);
 };
 
 /**
@@ -16243,10 +16258,10 @@ pki.encryptRsaPrivateKey = function(rsaKey, password, options) {
  *
  * @return the RSA key on success, null on failure.
  */
-pki.decryptRsaPrivateKey = function(pem, password) {
+pki$1.decryptRsaPrivateKey = function(pem, password) {
   var rval = null;
 
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'ENCRYPTED PRIVATE KEY' &&
     msg.type !== 'PRIVATE KEY' &&
@@ -16263,40 +16278,40 @@ pki.decryptRsaPrivateKey = function(pem, password) {
     switch(msg.dekInfo.algorithm) {
     case 'DES-CBC':
       dkLen = 8;
-      cipherFn = forge$2.des.createDecryptionCipher;
+      cipherFn = forge.des.createDecryptionCipher;
       break;
     case 'DES-EDE3-CBC':
       dkLen = 24;
-      cipherFn = forge$2.des.createDecryptionCipher;
+      cipherFn = forge.des.createDecryptionCipher;
       break;
     case 'AES-128-CBC':
       dkLen = 16;
-      cipherFn = forge$2.aes.createDecryptionCipher;
+      cipherFn = forge.aes.createDecryptionCipher;
       break;
     case 'AES-192-CBC':
       dkLen = 24;
-      cipherFn = forge$2.aes.createDecryptionCipher;
+      cipherFn = forge.aes.createDecryptionCipher;
       break;
     case 'AES-256-CBC':
       dkLen = 32;
-      cipherFn = forge$2.aes.createDecryptionCipher;
+      cipherFn = forge.aes.createDecryptionCipher;
       break;
     case 'RC2-40-CBC':
       dkLen = 5;
       cipherFn = function(key) {
-        return forge$2.rc2.createDecryptionCipher(key, 40);
+        return forge.rc2.createDecryptionCipher(key, 40);
       };
       break;
     case 'RC2-64-CBC':
       dkLen = 8;
       cipherFn = function(key) {
-        return forge$2.rc2.createDecryptionCipher(key, 64);
+        return forge.rc2.createDecryptionCipher(key, 64);
       };
       break;
     case 'RC2-128-CBC':
       dkLen = 16;
       cipherFn = function(key) {
-        return forge$2.rc2.createDecryptionCipher(key, 128);
+        return forge.rc2.createDecryptionCipher(key, 128);
       };
       break;
     default:
@@ -16307,11 +16322,11 @@ pki.decryptRsaPrivateKey = function(pem, password) {
     }
 
     // use OpenSSL legacy key derivation
-    var iv = forge$2.util.hexToBytes(msg.dekInfo.parameters);
-    var dk = forge$2.pbe.opensslDeriveBytes(password, iv.substr(0, 8), dkLen);
+    var iv = forge.util.hexToBytes(msg.dekInfo.parameters);
+    var dk = forge.pbe.opensslDeriveBytes(password, iv.substr(0, 8), dkLen);
     var cipher = cipherFn(dk);
     cipher.start(iv);
-    cipher.update(forge$2.util.createBuffer(msg.body));
+    cipher.update(forge.util.createBuffer(msg.body));
     if(cipher.finish()) {
       rval = cipher.output.getBytes();
     } else {
@@ -16322,14 +16337,14 @@ pki.decryptRsaPrivateKey = function(pem, password) {
   }
 
   if(msg.type === 'ENCRYPTED PRIVATE KEY') {
-    rval = pki.decryptPrivateKeyInfo(asn1.fromDer(rval), password);
+    rval = pki$1.decryptPrivateKeyInfo(asn1$1.fromDer(rval), password);
   } else {
     // decryption already performed above
-    rval = asn1.fromDer(rval);
+    rval = asn1$1.fromDer(rval);
   }
 
   if(rval !== null) {
-    rval = pki.privateKeyFromAsn1(rval);
+    rval = pki$1.privateKeyFromAsn1(rval);
   }
 
   return rval;
@@ -16348,22 +16363,22 @@ pki.decryptRsaPrivateKey = function(pem, password) {
  *
  * @return a ByteBuffer with the bytes derived from the password.
  */
-pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
+pki$1.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
   var j, l;
 
   if(typeof md === 'undefined' || md === null) {
-    if(!('sha1' in forge$2.md)) {
+    if(!('sha1' in forge.md)) {
       throw new Error('"sha1" hash algorithm unavailable.');
     }
-    md = forge$2.md.sha1.create();
+    md = forge.md.sha1.create();
   }
 
   var u = md.digestLength;
   var v = md.blockLength;
-  var result = new forge$2.util.ByteBuffer();
+  var result = new forge.util.ByteBuffer();
 
   /* Convert password to Unicode byte buffer + trailing 0-byte. */
-  var passBuf = new forge$2.util.ByteBuffer();
+  var passBuf = new forge.util.ByteBuffer();
   if(password !== null && password !== undefined) {
     for(l = 0; l < password.length; l++) {
       passBuf.putInt16(password.charCodeAt(l));
@@ -16377,7 +16392,7 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
 
   /* 1. Construct a string, D (the "diversifier"), by concatenating
         v copies of ID. */
-  var D = new forge$2.util.ByteBuffer();
+  var D = new forge.util.ByteBuffer();
   D.fillWithByte(id, v);
 
   /* 2. Concatenate copies of the salt together to create a string S of length
@@ -16385,7 +16400,7 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
         to create S).
         Note that if the salt is the empty string, then so is S. */
   var Slen = v * Math.ceil(s / v);
-  var S = new forge$2.util.ByteBuffer();
+  var S = new forge.util.ByteBuffer();
   for(l = 0; l < Slen; l++) {
     S.putByte(salt.at(l % s));
   }
@@ -16395,7 +16410,7 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
         truncated to create P).
         Note that if the password is the empty string, then so is P. */
   var Plen = v * Math.ceil(p / v);
-  var P = new forge$2.util.ByteBuffer();
+  var P = new forge.util.ByteBuffer();
   for(l = 0; l < Plen; l++) {
     P.putByte(passBuf.at(l % p));
   }
@@ -16410,7 +16425,7 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
   /* 6. For i=1, 2, ..., c, do the following: */
   for(var i = 1; i <= c; i++) {
     /* a) Set Ai=H^r(D||I). (l.e. the rth hash of D||I, H(H(H(...H(D||I)))) */
-    var buf = new forge$2.util.ByteBuffer();
+    var buf = new forge.util.ByteBuffer();
     buf.putBytes(D.bytes());
     buf.putBytes(I.bytes());
     for(var round = 0; round < iter; round++) {
@@ -16421,7 +16436,7 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
 
     /* b) Concatenate copies of Ai to create a string B of length v bytes (the
           final copy of Ai may be truncated to create B). */
-    var B = new forge$2.util.ByteBuffer();
+    var B = new forge.util.ByteBuffer();
     for(l = 0; l < v; l++) {
       B.putByte(buf.at(l % u));
     }
@@ -16430,9 +16445,9 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
           where k=ceil(s / v) + ceil(p / v), modify I by setting
           Ij=(Ij+B+1) mod 2v for each j.  */
     var k = Math.ceil(s / v) + Math.ceil(p / v);
-    var Inew = new forge$2.util.ByteBuffer();
+    var Inew = new forge.util.ByteBuffer();
     for(j = 0; j < k; j++) {
-      var chunk = new forge$2.util.ByteBuffer(I.getBytes(v));
+      var chunk = new forge.util.ByteBuffer(I.getBytes(v));
       var x = 0x1ff;
       for(l = B.length() - 1; l >= 0; l--) {
         x = x >> 8;
@@ -16460,14 +16475,14 @@ pki.pbe.generatePkcs12Key = function(password, salt, id, iter, n, md) {
  *
  * @return new cipher object instance.
  */
-pki.pbe.getCipher = function(oid, params, password) {
+pki$1.pbe.getCipher = function(oid, params, password) {
   switch(oid) {
-  case pki.oids['pkcs5PBES2']:
-    return pki.pbe.getCipherForPBES2(oid, params, password);
+  case pki$1.oids['pkcs5PBES2']:
+    return pki$1.pbe.getCipherForPBES2(oid, params, password);
 
-  case pki.oids['pbeWithSHAAnd3-KeyTripleDES-CBC']:
-  case pki.oids['pbewithSHAAnd40BitRC2-CBC']:
-    return pki.pbe.getCipherForPKCS12PBE(oid, params, password);
+  case pki$1.oids['pbeWithSHAAnd3-KeyTripleDES-CBC']:
+  case pki$1.oids['pbewithSHAAnd40BitRC2-CBC']:
+    return pki$1.pbe.getCipherForPKCS12PBE(oid, params, password);
 
   default:
     var error = new Error('Cannot read encrypted PBE data block. Unsupported OID.');
@@ -16493,11 +16508,11 @@ pki.pbe.getCipher = function(oid, params, password) {
  *
  * @return new cipher object instance.
  */
-pki.pbe.getCipherForPBES2 = function(oid, params, password) {
+pki$1.pbe.getCipherForPBES2 = function(oid, params, password) {
   // get PBE params
   var capture = {};
   var errors = [];
-  if(!asn1.validate(params, PBES2AlgorithmsValidator, capture, errors)) {
+  if(!asn1$1.validate(params, PBES2AlgorithmsValidator, capture, errors)) {
     var error = new Error('Cannot read password-based-encryption algorithm ' +
       'parameters. ASN.1 object is not a supported EncryptedPrivateKeyInfo.');
     error.errors = errors;
@@ -16505,20 +16520,20 @@ pki.pbe.getCipherForPBES2 = function(oid, params, password) {
   }
 
   // check oids
-  oid = asn1.derToOid(capture.kdfOid);
-  if(oid !== pki.oids['pkcs5PBKDF2']) {
+  oid = asn1$1.derToOid(capture.kdfOid);
+  if(oid !== pki$1.oids['pkcs5PBKDF2']) {
     var error = new Error('Cannot read encrypted private key. ' +
       'Unsupported key derivation function OID.');
     error.oid = oid;
     error.supportedOids = ['pkcs5PBKDF2'];
     throw error;
   }
-  oid = asn1.derToOid(capture.encOid);
-  if(oid !== pki.oids['aes128-CBC'] &&
-    oid !== pki.oids['aes192-CBC'] &&
-    oid !== pki.oids['aes256-CBC'] &&
-    oid !== pki.oids['des-EDE3-CBC'] &&
-    oid !== pki.oids['desCBC']) {
+  oid = asn1$1.derToOid(capture.encOid);
+  if(oid !== pki$1.oids['aes128-CBC'] &&
+    oid !== pki$1.oids['aes192-CBC'] &&
+    oid !== pki$1.oids['aes256-CBC'] &&
+    oid !== pki$1.oids['des-EDE3-CBC'] &&
+    oid !== pki$1.oids['desCBC']) {
     var error = new Error('Cannot read encrypted private key. ' +
       'Unsupported encryption scheme OID.');
     error.oid = oid;
@@ -16529,30 +16544,30 @@ pki.pbe.getCipherForPBES2 = function(oid, params, password) {
 
   // set PBE params
   var salt = capture.kdfSalt;
-  var count = forge$2.util.createBuffer(capture.kdfIterationCount);
+  var count = forge.util.createBuffer(capture.kdfIterationCount);
   count = count.getInt(count.length() << 3);
   var dkLen;
   var cipherFn;
-  switch(pki.oids[oid]) {
+  switch(pki$1.oids[oid]) {
   case 'aes128-CBC':
     dkLen = 16;
-    cipherFn = forge$2.aes.createDecryptionCipher;
+    cipherFn = forge.aes.createDecryptionCipher;
     break;
   case 'aes192-CBC':
     dkLen = 24;
-    cipherFn = forge$2.aes.createDecryptionCipher;
+    cipherFn = forge.aes.createDecryptionCipher;
     break;
   case 'aes256-CBC':
     dkLen = 32;
-    cipherFn = forge$2.aes.createDecryptionCipher;
+    cipherFn = forge.aes.createDecryptionCipher;
     break;
   case 'des-EDE3-CBC':
     dkLen = 24;
-    cipherFn = forge$2.des.createDecryptionCipher;
+    cipherFn = forge.des.createDecryptionCipher;
     break;
   case 'desCBC':
     dkLen = 8;
-    cipherFn = forge$2.des.createDecryptionCipher;
+    cipherFn = forge.des.createDecryptionCipher;
     break;
   }
 
@@ -16560,7 +16575,7 @@ pki.pbe.getCipherForPBES2 = function(oid, params, password) {
   var md = prfOidToMessageDigest(capture.prfOid);
 
   // decrypt private key using pbe with chosen PRF and AES/DES
-  var dk = forge$2.pkcs5.pbkdf2(password, salt, count, dkLen, md);
+  var dk = forge.pkcs5.pbkdf2(password, salt, count, dkLen, md);
   var iv = capture.encIv;
   var cipher = cipherFn(dk);
   cipher.start(iv);
@@ -16580,34 +16595,34 @@ pki.pbe.getCipherForPBES2 = function(oid, params, password) {
  *
  * @return the new cipher object instance.
  */
-pki.pbe.getCipherForPKCS12PBE = function(oid, params, password) {
+pki$1.pbe.getCipherForPKCS12PBE = function(oid, params, password) {
   // get PBE params
   var capture = {};
   var errors = [];
-  if(!asn1.validate(params, pkcs12PbeParamsValidator, capture, errors)) {
+  if(!asn1$1.validate(params, pkcs12PbeParamsValidator, capture, errors)) {
     var error = new Error('Cannot read password-based-encryption algorithm ' +
       'parameters. ASN.1 object is not a supported EncryptedPrivateKeyInfo.');
     error.errors = errors;
     throw error;
   }
 
-  var salt = forge$2.util.createBuffer(capture.salt);
-  var count = forge$2.util.createBuffer(capture.iterations);
+  var salt = forge.util.createBuffer(capture.salt);
+  var count = forge.util.createBuffer(capture.iterations);
   count = count.getInt(count.length() << 3);
 
   var dkLen, dIvLen, cipherFn;
   switch(oid) {
-    case pki.oids['pbeWithSHAAnd3-KeyTripleDES-CBC']:
+    case pki$1.oids['pbeWithSHAAnd3-KeyTripleDES-CBC']:
       dkLen = 24;
       dIvLen = 8;
-      cipherFn = forge$2.des.startDecrypting;
+      cipherFn = forge.des.startDecrypting;
       break;
 
-    case pki.oids['pbewithSHAAnd40BitRC2-CBC']:
+    case pki$1.oids['pbewithSHAAnd40BitRC2-CBC']:
       dkLen = 5;
       dIvLen = 8;
       cipherFn = function(key, iv) {
-        var cipher = forge$2.rc2.createDecryptionCipher(key, 40);
+        var cipher = forge.rc2.createDecryptionCipher(key, 40);
         cipher.start(iv, null);
         return cipher;
       };
@@ -16621,9 +16636,9 @@ pki.pbe.getCipherForPKCS12PBE = function(oid, params, password) {
 
   // get PRF message digest
   var md = prfOidToMessageDigest(capture.prfOid);
-  var key = pki.pbe.generatePkcs12Key(password, salt, 1, count, dkLen, md);
+  var key = pki$1.pbe.generatePkcs12Key(password, salt, 1, count, dkLen, md);
   md.start();
-  var iv = pki.pbe.generatePkcs12Key(password, salt, 2, count, dIvLen, md);
+  var iv = pki$1.pbe.generatePkcs12Key(password, salt, 2, count, dIvLen, md);
 
   return cipherFn(key, iv);
 };
@@ -16639,12 +16654,12 @@ pki.pbe.getCipherForPKCS12PBE = function(oid, params, password) {
  * @param [options] the options to use:
  *          [md] an optional message digest object to use.
  */
-pki.pbe.opensslDeriveBytes = function(password, salt, dkLen, md) {
+pki$1.pbe.opensslDeriveBytes = function(password, salt, dkLen, md) {
   if(typeof md === 'undefined' || md === null) {
-    if(!('md5' in forge$2.md)) {
+    if(!('md5' in forge.md)) {
       throw new Error('"md5" hash algorithm unavailable.');
     }
-    md = forge$2.md.md5.create();
+    md = forge.md.md5.create();
   }
   if(salt === null) {
     salt = '';
@@ -16666,7 +16681,7 @@ function prfOidToMessageDigest(prfOid) {
   if(!prfOid) {
     prfAlgorithm = 'hmacWithSHA1';
   } else {
-    prfAlgorithm = pki.oids[asn1.derToOid(prfOid)];
+    prfAlgorithm = pki$1.oids[asn1$1.derToOid(prfOid)];
     if(!prfAlgorithm) {
       var error = new Error('Unsupported PRF OID.');
       error.oid = prfOid;
@@ -16680,10 +16695,10 @@ function prfOidToMessageDigest(prfOid) {
 }
 
 function prfAlgorithmToMessageDigest(prfAlgorithm) {
-  var factory = forge$2.md;
+  var factory = forge.md;
   switch(prfAlgorithm) {
   case 'hmacWithSHA224':
-    factory = forge$2.md.sha512;
+    factory = forge.md.sha512;
   case 'hmacWithSHA1':
   case 'hmacWithSHA256':
   case 'hmacWithSHA384':
@@ -16705,27 +16720,27 @@ function prfAlgorithmToMessageDigest(prfAlgorithm) {
 }
 
 function createPbkdf2Params(salt, countBytes, dkLen, prfAlgorithm) {
-  var params = asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+  var params = asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
     // salt
-    asn1.create(
-      asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false, salt),
+    asn1$1.create(
+      asn1$1.Class.UNIVERSAL, asn1$1.Type.OCTETSTRING, false, salt),
     // iteration count
-    asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
+    asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
       countBytes.getBytes())
   ]);
   // when PRF algorithm is not SHA-1 default, add key length and PRF algorithm
   if(prfAlgorithm !== 'hmacWithSHA1') {
     params.value.push(
       // key length
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
-        forge$2.util.hexToBytes(dkLen.toString(16))),
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.INTEGER, false,
+        forge.util.hexToBytes(dkLen.toString(16))),
       // AlgorithmIdentifier
-      asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
+      asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.SEQUENCE, true, [
         // algorithm
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-          asn1.oidToDer(pki.oids[prfAlgorithm]).getBytes()),
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.OID, false,
+          asn1$1.oidToDer(pki$1.oids[prfAlgorithm]).getBytes()),
         // parameters (null)
-        asn1.create(asn1.Class.UNIVERSAL, asn1.Type.NULL, false, '')
+        asn1$1.create(asn1$1.Class.UNIVERSAL, asn1$1.Type.NULL, false, '')
       ]));
   }
   return params;
@@ -16846,12 +16861,12 @@ var pkcs7asn1 = createCommonjsModule(function (module) {
 
 
 // shortcut for ASN.1 API
-var asn1 = forge$2.asn1;
+var asn1 = forge.asn1;
 
 // shortcut for PKCS#7 API
-var p7v = module.exports = forge$2.pkcs7asn1 = forge$2.pkcs7asn1 || {};
-forge$2.pkcs7 = forge$2.pkcs7 || {};
-forge$2.pkcs7.asn1 = p7v;
+var p7v = module.exports = forge.pkcs7asn1 = forge.pkcs7asn1 || {};
+forge.pkcs7 = forge.pkcs7 || {};
+forge.pkcs7.asn1 = p7v;
 
 var contentInfoValidator = {
   name: 'ContentInfo',
@@ -17156,8 +17171,8 @@ var mgf1_1 = createCommonjsModule(function (module) {
 
 
 
-forge$2.mgf = forge$2.mgf || {};
-var mgf1 = module.exports = forge$2.mgf.mgf1 = forge$2.mgf1 = forge$2.mgf1 || {};
+forge.mgf = forge.mgf || {};
+var mgf1 = module.exports = forge.mgf.mgf1 = forge.mgf1 = forge.mgf1 || {};
 
 /**
  * Creates a MGF1 mask generation function object.
@@ -17177,13 +17192,13 @@ mgf1.create = function(md) {
      */
     generate: function(seed, maskLen) {
       /* 2. Let T be the empty octet string. */
-      var t = new forge$2.util.ByteBuffer();
+      var t = new forge.util.ByteBuffer();
 
       /* 3. For counter from 0 to ceil(maskLen / hLen), do the following: */
       var len = Math.ceil(maskLen / md.digestLength);
       for(var i = 0; i < len; i++) {
         /* a. Convert counter to an octet string C of length 4 octets */
-        var c = new forge$2.util.ByteBuffer();
+        var c = new forge.util.ByteBuffer();
         c.putInt32(i);
 
         /* b. Concatenate the hash of the seed mgfSeed and C to the octet
@@ -17213,8 +17228,8 @@ mgf1.create = function(md) {
 
 
 
-var mgf = forge$2.mgf = forge$2.mgf || {};
-forge$2.mgf.mgf1 = forge$2.mgf1;
+var mgf = forge.mgf = forge.mgf || {};
+forge.mgf.mgf1 = forge.mgf1;
 
 var pss_1 = createCommonjsModule(function (module) {
 /**
@@ -17229,7 +17244,7 @@ var pss_1 = createCommonjsModule(function (module) {
 
 
 // shortcut for PSS API
-var pss = module.exports = forge$2.pss = forge$2.pss || {};
+var pss = module.exports = forge.pss = forge.pss || {};
 
 /**
  * Creates a PSS signature scheme object.
@@ -17267,7 +17282,7 @@ pss.create = function(options) {
   var salt_ = options.salt || null;
   if(typeof salt_ === 'string') {
     // assume binary-encoded string
-    salt_ = forge$2.util.createBuffer(salt_);
+    salt_ = forge.util.createBuffer(salt_);
   }
 
   var sLen;
@@ -17283,7 +17298,7 @@ pss.create = function(options) {
     throw new Error('Given salt length does not match length of given salt.');
   }
 
-  var prng = options.prng || forge$2.random;
+  var prng = options.prng || forge.random;
 
   var pssobj = {};
 
@@ -17321,7 +17336,7 @@ pss.create = function(options) {
     }
 
     /* 5. Let M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt; */
-    var m_ = new forge$2.util.ByteBuffer();
+    var m_ = new forge.util.ByteBuffer();
     m_.fillWithByte(0, 8);
     m_.putBytes(mHash);
     m_.putBytes(salt);
@@ -17333,7 +17348,7 @@ pss.create = function(options) {
 
     /* 7. Generate an octet string PS consisting of emLen - sLen - hLen - 2
      *    zero octets.  The length of PS may be 0. */
-    var ps = new forge$2.util.ByteBuffer();
+    var ps = new forge.util.ByteBuffer();
     ps.fillWithByte(0, emLen - sLen - hLen - 2);
 
     /* 8. Let DB = PS || 0x01 || salt; DB is an octet string of length
@@ -17442,7 +17457,7 @@ pss.create = function(options) {
     var salt = db.substr(-sLen);
 
     /* 12.  Let M' = (0x)00 00 00 00 00 00 00 00 || mHash || salt */
-    var m_ = new forge$2.util.ByteBuffer();
+    var m_ = new forge.util.ByteBuffer();
     m_.fillWithByte(0, 8);
     m_.putBytes(mHash);
     m_.putBytes(salt);
@@ -17583,10 +17598,10 @@ var x509 = createCommonjsModule(function (module) {
 
 
 // shortcut for asn.1 API
-var asn1 = forge$2.asn1;
+var asn1 = forge.asn1;
 
 /* Public Key Infrastructure (PKI) implementation. */
-var pki = module.exports = forge$2.pki = forge$2.pki || {};
+var pki = module.exports = forge.pki = forge.pki || {};
 var oids = pki.oids;
 
 // short name OID mappings
@@ -17608,7 +17623,7 @@ _shortNames['emailAddress'] = 'E';
 
 // validator for an SubjectPublicKeyInfo structure
 // Note: Currently only works with an RSA public key
-var publicKeyValidator = forge$2.pki.rsa.publicKeyValidator;
+var publicKeyValidator = forge.pki.rsa.publicKeyValidator;
 
 // validator for an X.509v3 certificate
 var x509CertificateValidator = {
@@ -18167,7 +18182,7 @@ var _readSignatureParameters = function(oid, obj, fillDefaults) {
  * @return the certificate.
  */
 pki.certificateFromPem = function(pem, computeHash, strict) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'CERTIFICATE' &&
     msg.type !== 'X509 CERTIFICATE' &&
@@ -18201,7 +18216,7 @@ pki.certificateToPem = function(cert, maxline) {
     type: 'CERTIFICATE',
     body: asn1.toDer(pki.certificateToAsn1(cert)).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -18212,7 +18227,7 @@ pki.certificateToPem = function(cert, maxline) {
  * @return the public key.
  */
 pki.publicKeyFromPem = function(pem) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'PUBLIC KEY' && msg.type !== 'RSA PUBLIC KEY') {
     var error = new Error('Could not convert public key from PEM; PEM header ' +
@@ -18244,7 +18259,7 @@ pki.publicKeyToPem = function(key, maxline) {
     type: 'PUBLIC KEY',
     body: asn1.toDer(pki.publicKeyToAsn1(key)).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -18261,7 +18276,7 @@ pki.publicKeyToRSAPublicKeyPem = function(key, maxline) {
     type: 'RSA PUBLIC KEY',
     body: asn1.toDer(pki.publicKeyToRSAPublicKey(key)).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -18280,7 +18295,7 @@ pki.publicKeyToRSAPublicKeyPem = function(key, maxline) {
  */
 pki.getPublicKeyFingerprint = function(key, options) {
   options = options || {};
-  var md = options.md || forge$2.md.sha1.create();
+  var md = options.md || forge.md.sha1.create();
   var type = options.type || 'RSAPublicKey';
 
   var bytes;
@@ -18329,7 +18344,7 @@ pki.getPublicKeyFingerprint = function(key, options) {
  * @return the certification request (CSR).
  */
 pki.certificationRequestFromPem = function(pem, computeHash, strict) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'CERTIFICATE REQUEST') {
     var error = new Error('Could not convert certification request from PEM; ' +
@@ -18362,7 +18377,7 @@ pki.certificationRequestToPem = function(csr, maxline) {
     type: 'CERTIFICATE REQUEST',
     body: asn1.toDer(pki.certificationRequestToAsn1(csr)).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -18492,7 +18507,7 @@ pki.createCertificate = function() {
    */
   cert.sign = function(key, md) {
     // TODO: get signature OID from private key
-    cert.md = md || forge$2.md.sha1.create();
+    cert.md = md || forge.md.sha1.create();
     var algorithmOid = oids[cert.md.algorithm + 'WithRSAEncryption'];
     if(!algorithmOid) {
       var error = new Error('Could not compute certificate digest. ' +
@@ -18540,19 +18555,19 @@ pki.createCertificate = function() {
         var oid = oids[child.signatureOid];
         switch(oid) {
         case 'sha1WithRSAEncryption':
-          md = forge$2.md.sha1.create();
+          md = forge.md.sha1.create();
           break;
         case 'md5WithRSAEncryption':
-          md = forge$2.md.md5.create();
+          md = forge.md.md5.create();
           break;
         case 'sha256WithRSAEncryption':
-          md = forge$2.md.sha256.create();
+          md = forge.md.sha256.create();
           break;
         case 'sha512WithRSAEncryption':
-          md = forge$2.md.sha512.create();
+          md = forge.md.sha512.create();
           break;
         case 'RSASSA-PSS':
-          md = forge$2.md.sha256.create();
+          md = forge.md.sha256.create();
           break;
         }
       }
@@ -18581,7 +18596,7 @@ pki.createCertificate = function() {
 
         /* initialize mgf */
         hash = oids[child.signatureParameters.mgf.hash.algorithmOid];
-        if(hash === undefined || forge$2.md[hash] === undefined) {
+        if(hash === undefined || forge.md[hash] === undefined) {
           var error = new Error('Unsupported MGF hash function.');
           error.oid = child.signatureParameters.mgf.hash.algorithmOid;
           error.name = hash;
@@ -18589,18 +18604,18 @@ pki.createCertificate = function() {
         }
 
         mgf = oids[child.signatureParameters.mgf.algorithmOid];
-        if(mgf === undefined || forge$2.mgf[mgf] === undefined) {
+        if(mgf === undefined || forge.mgf[mgf] === undefined) {
           var error = new Error('Unsupported MGF function.');
           error.oid = child.signatureParameters.mgf.algorithmOid;
           error.name = mgf;
           throw error;
         }
 
-        mgf = forge$2.mgf[mgf].create(forge$2.md[hash].create());
+        mgf = forge.mgf[mgf].create(forge.md[hash].create());
 
         /* initialize hash function */
         hash = oids[child.signatureParameters.hash.algorithmOid];
-        if(hash === undefined || forge$2.md[hash] === undefined) {
+        if(hash === undefined || forge.md[hash] === undefined) {
           throw {
             message: 'Unsupported RSASSA-PSS hash function.',
             oid: child.signatureParameters.hash.algorithmOid,
@@ -18608,7 +18623,7 @@ pki.createCertificate = function() {
           };
         }
 
-        scheme = forge$2.pss.create(forge$2.md[hash].create(), mgf,
+        scheme = forge.pss.create(forge.md[hash].create(), mgf,
           child.signatureParameters.saltLength);
         break;
       }
@@ -18706,7 +18721,7 @@ pki.createCertificate = function() {
       var ext = cert.extensions[i];
       if(ext.id === oid) {
         var ski = cert.generateSubjectKeyIdentifier().getBytes();
-        return (forge$2.util.hexToBytes(ext.subjectKeyIdentifier) === ski);
+        return (forge.util.hexToBytes(ext.subjectKeyIdentifier) === ski);
       }
     }
     return false;
@@ -18749,12 +18764,12 @@ pki.certificateFromAsn1 = function(obj, computeHash) {
   var cert = pki.createCertificate();
   cert.version = capture.certVersion ?
     capture.certVersion.charCodeAt(0) : 0;
-  var serial = forge$2.util.createBuffer(capture.certSerialNumber);
+  var serial = forge.util.createBuffer(capture.certSerialNumber);
   cert.serialNumber = serial.toHex();
-  cert.signatureOid = forge$2.asn1.derToOid(capture.certSignatureOid);
+  cert.signatureOid = forge.asn1.derToOid(capture.certSignatureOid);
   cert.signatureParameters = _readSignatureParameters(
     cert.signatureOid, capture.certSignatureParams, true);
-  cert.siginfo.algorithmOid = forge$2.asn1.derToOid(capture.certinfoSignatureOid);
+  cert.siginfo.algorithmOid = forge.asn1.derToOid(capture.certinfoSignatureOid);
   cert.siginfo.parameters = _readSignatureParameters(cert.siginfo.algorithmOid,
     capture.certinfoSignatureParams, false);
   cert.signature = capture.certSignature;
@@ -18795,19 +18810,19 @@ pki.certificateFromAsn1 = function(obj, computeHash) {
       var oid = oids[cert.signatureOid];
       switch(oid) {
       case 'sha1WithRSAEncryption':
-        cert.md = forge$2.md.sha1.create();
+        cert.md = forge.md.sha1.create();
         break;
       case 'md5WithRSAEncryption':
-        cert.md = forge$2.md.md5.create();
+        cert.md = forge.md.md5.create();
         break;
       case 'sha256WithRSAEncryption':
-        cert.md = forge$2.md.sha256.create();
+        cert.md = forge.md.sha256.create();
         break;
       case 'sha512WithRSAEncryption':
-        cert.md = forge$2.md.sha512.create();
+        cert.md = forge.md.sha512.create();
         break;
       case 'RSASSA-PSS':
-        cert.md = forge$2.md.sha256.create();
+        cert.md = forge.md.sha256.create();
         break;
       }
     }
@@ -18824,7 +18839,7 @@ pki.certificateFromAsn1 = function(obj, computeHash) {
   }
 
   // handle issuer, build issuer message digest
-  var imd = forge$2.md.sha1.create();
+  var imd = forge.md.sha1.create();
   cert.issuer.getField = function(sn) {
     return _getAttribute(cert.issuer, sn);
   };
@@ -18839,7 +18854,7 @@ pki.certificateFromAsn1 = function(obj, computeHash) {
   cert.issuer.hash = imd.digest().toHex();
 
   // handle subject, build subject message digest
-  var smd = forge$2.md.sha1.create();
+  var smd = forge.md.sha1.create();
   cert.subject.getField = function(sn) {
     return _getAttribute(cert.subject, sn);
   };
@@ -19065,7 +19080,7 @@ pki.certificateExtensionFromAsn1 = function(ext) {
         // IPAddress
         case 7:
           // convert to IPv4/IPv6 string representation
-          altName.ip = forge$2.util.bytesToIP(gn.value);
+          altName.ip = forge.util.bytesToIP(gn.value);
           break;
         // registeredID
         case 8:
@@ -19079,7 +19094,7 @@ pki.certificateExtensionFromAsn1 = function(ext) {
       // value is an OCTETSTRING w/the hash of the key-type specific
       // public key structure (eg: RSAPublicKey)
       var ev = asn1.fromDer(e.value);
-      e.subjectKeyIdentifier = forge$2.util.bytesToHex(ev.value);
+      e.subjectKeyIdentifier = forge.util.bytesToHex(ev.value);
     }
   }
   return e;
@@ -19118,10 +19133,10 @@ pki.certificationRequestFromAsn1 = function(obj, computeHash) {
   // create certification request
   var csr = pki.createCertificationRequest();
   csr.version = capture.csrVersion ? capture.csrVersion.charCodeAt(0) : 0;
-  csr.signatureOid = forge$2.asn1.derToOid(capture.csrSignatureOid);
+  csr.signatureOid = forge.asn1.derToOid(capture.csrSignatureOid);
   csr.signatureParameters = _readSignatureParameters(
     csr.signatureOid, capture.csrSignatureParams, true);
-  csr.siginfo.algorithmOid = forge$2.asn1.derToOid(capture.csrSignatureOid);
+  csr.siginfo.algorithmOid = forge.asn1.derToOid(capture.csrSignatureOid);
   csr.siginfo.parameters = _readSignatureParameters(
     csr.siginfo.algorithmOid, capture.csrSignatureParams, false);
   csr.signature = capture.csrSignature;
@@ -19136,19 +19151,19 @@ pki.certificationRequestFromAsn1 = function(obj, computeHash) {
       var oid = oids[csr.signatureOid];
       switch(oid) {
       case 'sha1WithRSAEncryption':
-        csr.md = forge$2.md.sha1.create();
+        csr.md = forge.md.sha1.create();
         break;
       case 'md5WithRSAEncryption':
-        csr.md = forge$2.md.md5.create();
+        csr.md = forge.md.md5.create();
         break;
       case 'sha256WithRSAEncryption':
-        csr.md = forge$2.md.sha256.create();
+        csr.md = forge.md.sha256.create();
         break;
       case 'sha512WithRSAEncryption':
-        csr.md = forge$2.md.sha512.create();
+        csr.md = forge.md.sha512.create();
         break;
       case 'RSASSA-PSS':
-        csr.md = forge$2.md.sha256.create();
+        csr.md = forge.md.sha256.create();
         break;
       }
     }
@@ -19165,7 +19180,7 @@ pki.certificationRequestFromAsn1 = function(obj, computeHash) {
   }
 
   // handle subject, build subject message digest
-  var smd = forge$2.md.sha1.create();
+  var smd = forge.md.sha1.create();
   csr.subject.getField = function(sn) {
     return _getAttribute(csr.subject, sn);
   };
@@ -19262,7 +19277,7 @@ pki.createCertificationRequest = function() {
    */
   csr.sign = function(key, md) {
     // TODO: get signature OID from private key
-    csr.md = md || forge$2.md.sha1.create();
+    csr.md = md || forge.md.sha1.create();
     var algorithmOid = oids[csr.md.algorithm + 'WithRSAEncryption'];
     if(!algorithmOid) {
       var error = new Error('Could not compute certification request digest. ' +
@@ -19303,19 +19318,19 @@ pki.createCertificationRequest = function() {
         var oid = oids[csr.signatureOid];
         switch(oid) {
         case 'sha1WithRSAEncryption':
-          md = forge$2.md.sha1.create();
+          md = forge.md.sha1.create();
           break;
         case 'md5WithRSAEncryption':
-          md = forge$2.md.md5.create();
+          md = forge.md.md5.create();
           break;
         case 'sha256WithRSAEncryption':
-          md = forge$2.md.sha256.create();
+          md = forge.md.sha256.create();
           break;
         case 'sha512WithRSAEncryption':
-          md = forge$2.md.sha512.create();
+          md = forge.md.sha512.create();
           break;
         case 'RSASSA-PSS':
-          md = forge$2.md.sha256.create();
+          md = forge.md.sha256.create();
           break;
         }
       }
@@ -19345,7 +19360,7 @@ pki.createCertificationRequest = function() {
 
         /* initialize mgf */
         hash = oids[csr.signatureParameters.mgf.hash.algorithmOid];
-        if(hash === undefined || forge$2.md[hash] === undefined) {
+        if(hash === undefined || forge.md[hash] === undefined) {
           var error = new Error('Unsupported MGF hash function.');
           error.oid = csr.signatureParameters.mgf.hash.algorithmOid;
           error.name = hash;
@@ -19353,25 +19368,25 @@ pki.createCertificationRequest = function() {
         }
 
         mgf = oids[csr.signatureParameters.mgf.algorithmOid];
-        if(mgf === undefined || forge$2.mgf[mgf] === undefined) {
+        if(mgf === undefined || forge.mgf[mgf] === undefined) {
           var error = new Error('Unsupported MGF function.');
           error.oid = csr.signatureParameters.mgf.algorithmOid;
           error.name = mgf;
           throw error;
         }
 
-        mgf = forge$2.mgf[mgf].create(forge$2.md[hash].create());
+        mgf = forge.mgf[mgf].create(forge.md[hash].create());
 
         /* initialize hash function */
         hash = oids[csr.signatureParameters.hash.algorithmOid];
-        if(hash === undefined || forge$2.md[hash] === undefined) {
+        if(hash === undefined || forge.md[hash] === undefined) {
           var error = new Error('Unsupported RSASSA-PSS hash function.');
           error.oid = csr.signatureParameters.hash.algorithmOid;
           error.name = hash;
           throw error;
         }
 
-        scheme = forge$2.pss.create(forge$2.md[hash].create(), mgf,
+        scheme = forge.pss.create(forge.md[hash].create(), mgf,
           csr.signatureParameters.saltLength);
         break;
       }
@@ -19412,7 +19427,7 @@ function _dnToAsn1(obj) {
       valueTagClass = attr.valueTagClass;
 
       if(valueTagClass === asn1.Type.UTF8) {
-        value = forge$2.util.encodeUtf8(value);
+        value = forge.util.encodeUtf8(value);
       }
       // FIXME: handle more encodings
     }
@@ -19436,12 +19451,9 @@ function _dnToAsn1(obj) {
 }
 
 /**
- * Gets all printable attributes (typically of an issuer or subject) in a
- * simplified JSON format for display.
+ * Fills in missing fields in attributes.
  *
- * @param attrs the attributes.
- *
- * @return the JSON for display.
+ * @param attrs the attributes to fill missing fields in.
  */
 function _fillMissingFields(attrs) {
   var attr;
@@ -19674,7 +19686,7 @@ function _fillMissingExtensionFields(e, options) {
       var value = altName.value;
       // handle IP
       if(altName.type === 7 && altName.ip) {
-        value = forge$2.util.bytesFromIP(altName.ip);
+        value = forge.util.bytesFromIP(altName.ip);
         if(value === null) {
           var error = new Error(
             'Extension "ip" value is not a valid IPv4 or IPv6 address.');
@@ -19725,7 +19737,7 @@ function _fillMissingExtensionFields(e, options) {
     }
 
     if(e.serialNumber) {
-      var serialNumber = forge$2.util.hexToBytes(e.serialNumber === true ?
+      var serialNumber = forge.util.hexToBytes(e.serialNumber === true ?
         options.cert.serialNumber : e.serialNumber);
       seq.push(
         asn1.create(asn1.Class.CONTEXT_SPECIFIC, 2, false, serialNumber));
@@ -19745,7 +19757,7 @@ function _fillMissingExtensionFields(e, options) {
       var value = altName.value;
       // handle IP
       if(altName.type === 7 && altName.ip) {
-        value = forge$2.util.bytesFromIP(altName.ip);
+        value = forge.util.bytesFromIP(altName.ip);
         if(value === null) {
           var error = new Error(
             'Extension "ip" value is not a valid IPv4 or IPv6 address.');
@@ -19860,7 +19872,7 @@ function _CRIAttributesToAsn1(csr) {
       valueTagClass = attr.valueTagClass;
     }
     if(valueTagClass === asn1.Type.UTF8) {
-      value = forge$2.util.encodeUtf8(value);
+      value = forge.util.encodeUtf8(value);
     }
     var valueConstructed = false;
     if('valueConstructed' in attr) {
@@ -19905,7 +19917,7 @@ pki.getTBSCertificate = function(cert) {
     ]),
     // serialNumber
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
-      forge$2.util.hexToBytes(cert.serialNumber)),
+      forge.util.hexToBytes(cert.serialNumber)),
     // signature
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
       // algorithm
@@ -20166,7 +20178,7 @@ pki.createCaStore = function(certs) {
   caStore.addCertificate = function(cert) {
     // convert from pem if necessary
     if(typeof cert === 'string') {
-      cert = forge$2.pki.certificateFromPem(cert);
+      cert = forge.pki.certificateFromPem(cert);
     }
 
     ensureSubjectHasHash(cert.subject);
@@ -20175,7 +20187,7 @@ pki.createCaStore = function(certs) {
       if(cert.subject.hash in caStore.certs) {
         // subject hash already exists, append to array
         var tmp = caStore.certs[cert.subject.hash];
-        if(!forge$2.util.isArray(tmp)) {
+        if(!forge.util.isArray(tmp)) {
           tmp = [tmp];
         }
         tmp.push(cert);
@@ -20197,14 +20209,14 @@ pki.createCaStore = function(certs) {
   caStore.hasCertificate = function(cert) {
     // convert from pem if necessary
     if(typeof cert === 'string') {
-      cert = forge$2.pki.certificateFromPem(cert);
+      cert = forge.pki.certificateFromPem(cert);
     }
 
     var match = getBySubject(cert.subject);
     if(!match) {
       return false;
     }
-    if(!forge$2.util.isArray(match)) {
+    if(!forge.util.isArray(match)) {
       match = [match];
     }
     // compare DER-encoding of certificates
@@ -20229,7 +20241,7 @@ pki.createCaStore = function(certs) {
     for(var hash in caStore.certs) {
       if(caStore.certs.hasOwnProperty(hash)) {
         var value = caStore.certs[hash];
-        if(!forge$2.util.isArray(value)) {
+        if(!forge.util.isArray(value)) {
           certList.push(value);
         } else {
           for(var i = 0; i < value.length; ++i) {
@@ -20256,7 +20268,7 @@ pki.createCaStore = function(certs) {
 
     // convert from pem if necessary
     if(typeof cert === 'string') {
-      cert = forge$2.pki.certificateFromPem(cert);
+      cert = forge.pki.certificateFromPem(cert);
     }
     ensureSubjectHasHash(cert.subject);
     if(!caStore.hasCertificate(cert)) {
@@ -20265,7 +20277,7 @@ pki.createCaStore = function(certs) {
 
     var match = getBySubject(cert.subject);
 
-    if(!forge$2.util.isArray(match)) {
+    if(!forge.util.isArray(match)) {
       result = caStore.certs[cert.subject.hash];
       delete caStore.certs[cert.subject.hash];
       return result;
@@ -20295,7 +20307,7 @@ pki.createCaStore = function(certs) {
   function ensureSubjectHasHash(subject) {
     // produce subject hash if it doesn't exist
     if(!subject.hash) {
-      var md = forge$2.md.sha1.create();
+      var md = forge.md.sha1.create();
       subject.attributes =  pki.RDNAttributesAsArray(_dnToAsn1(subject), md);
       subject.hash = md.digest().toHex();
     }
@@ -20528,7 +20540,7 @@ pki.verifyCertificateChain = function(caStore, chain, verify) {
         // but none of the parents actually verify ... but the intermediate
         // is in the CA and it should pass this check; needs investigation
         var parents = parent;
-        if(!forge$2.util.isArray(parents)) {
+        if(!forge.util.isArray(parents)) {
           parents = [parents];
         }
 
@@ -20667,7 +20679,7 @@ pki.verifyCertificateChain = function(caStore, chain, verify) {
       // check for custom error info
       if(ret || ret === 0) {
         // set custom message and error
-        if(typeof ret === 'object' && !forge$2.util.isArray(ret)) {
+        if(typeof ret === 'object' && !forge.util.isArray(ret)) {
           if(ret.message) {
              error.message = ret.message;
           }
@@ -20802,11 +20814,11 @@ var pkcs12 = createCommonjsModule(function (module) {
 
 
 // shortcut for asn.1 & PKI API
-var asn1 = forge$2.asn1;
-var pki = forge$2.pki;
+var asn1 = forge.asn1;
+var pki = forge.pki;
 
 // shortcut for PKCS#12 API
-var p12 = module.exports = forge$2.pkcs12 = forge$2.pkcs12 || {};
+var p12 = module.exports = forge.pkcs12 = forge.pkcs12 || {};
 
 var contentInfoValidator = {
   name: 'ContentInfo',
@@ -21052,7 +21064,7 @@ p12.pkcs12FromAsn1 = function(obj, strict, password) {
       if('localKeyId' in filter) {
         localKeyId = filter.localKeyId;
       } else if('localKeyIdHex' in filter) {
-        localKeyId = forge$2.util.hexToBytes(filter.localKeyIdHex);
+        localKeyId = forge.util.hexToBytes(filter.localKeyIdHex);
       }
 
       // filter on bagType only
@@ -21133,23 +21145,23 @@ p12.pkcs12FromAsn1 = function(obj, strict, password) {
     var macAlgorithm = asn1.derToOid(capture.macAlgorithm);
     switch(macAlgorithm) {
     case pki.oids.sha1:
-      md = forge$2.md.sha1.create();
+      md = forge.md.sha1.create();
       macKeyBytes = 20;
       break;
     case pki.oids.sha256:
-      md = forge$2.md.sha256.create();
+      md = forge.md.sha256.create();
       macKeyBytes = 32;
       break;
     case pki.oids.sha384:
-      md = forge$2.md.sha384.create();
+      md = forge.md.sha384.create();
       macKeyBytes = 48;
       break;
     case pki.oids.sha512:
-      md = forge$2.md.sha512.create();
+      md = forge.md.sha512.create();
       macKeyBytes = 64;
       break;
     case pki.oids.md5:
-      md = forge$2.md.md5.create();
+      md = forge.md.md5.create();
       macKeyBytes = 16;
       break;
     }
@@ -21158,12 +21170,12 @@ p12.pkcs12FromAsn1 = function(obj, strict, password) {
     }
 
     // verify MAC (iterations default to 1)
-    var macSalt = new forge$2.util.ByteBuffer(capture.macSalt);
+    var macSalt = new forge.util.ByteBuffer(capture.macSalt);
     var macIterations = (('macIterations' in capture) ?
-      parseInt(forge$2.util.bytesToHex(capture.macIterations), 16) : 1);
+      parseInt(forge.util.bytesToHex(capture.macIterations), 16) : 1);
     var macKey = p12.generateKey(
       password, macSalt, 3, macIterations, macKeyBytes, md);
-    var mac = forge$2.hmac.create();
+    var mac = forge.hmac.create();
     mac.start(md, macKey);
     mac.update(data.value);
     var macValue = mac.getMac();
@@ -21192,7 +21204,7 @@ function _decodePkcs7Data(data) {
   // handle special case of "chunked" data content: an octet string composed
   // of other octet strings
   if(data.composed || data.constructed) {
-    var value = forge$2.util.createBuffer();
+    var value = forge.util.createBuffer();
     for(var i = 0; i < data.value.length; ++i) {
       value.putBytes(data.value[i].value);
     }
@@ -21274,7 +21286,7 @@ function _decryptSafeContents(data, password) {
   var capture = {};
   var errors = [];
   if(!asn1.validate(
-    data, forge$2.pkcs7.asn1.encryptedDataValidator, capture, errors)) {
+    data, forge.pkcs7.asn1.encryptedDataValidator, capture, errors)) {
     var error = new Error('Cannot read EncryptedContentInfo.');
     error.errors = errors;
     throw error;
@@ -21294,7 +21306,7 @@ function _decryptSafeContents(data, password) {
 
   // get encrypted data
   var encryptedContentAsn1 = _decodePkcs7Data(capture.encryptedContentAsn1);
-  var encrypted = forge$2.util.createBuffer(encryptedContentAsn1.value);
+  var encrypted = forge.util.createBuffer(encryptedContentAsn1.value);
 
   cipher.update(encrypted);
   if(!cipher.finish()) {
@@ -21508,22 +21520,22 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
   var localKeyId = options.localKeyId;
   var bagAttrs;
   if(localKeyId !== null) {
-    localKeyId = forge$2.util.hexToBytes(localKeyId);
+    localKeyId = forge.util.hexToBytes(localKeyId);
   } else if(options.generateLocalKeyId) {
     // use SHA-1 of paired cert, if available
     if(cert) {
-      var pairedCert = forge$2.util.isArray(cert) ? cert[0] : cert;
+      var pairedCert = forge.util.isArray(cert) ? cert[0] : cert;
       if(typeof pairedCert === 'string') {
         pairedCert = pki.certificateFromPem(pairedCert);
       }
-      var sha1 = forge$2.md.sha1.create();
+      var sha1 = forge.md.sha1.create();
       sha1.update(asn1.toDer(pki.certificateToAsn1(pairedCert)).getBytes());
       localKeyId = sha1.digest().getBytes();
     } else {
       // FIXME: consider using SHA-1 of public key (which can be generated
       // from private key components), see: cert.generateSubjectKeyIdentifier
       // generate random bytes
-      localKeyId = forge$2.random.getBytes(20);
+      localKeyId = forge.random.getBytes(20);
     }
   }
 
@@ -21567,7 +21579,7 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
   // create safe bag(s) for certificate chain
   var chain = [];
   if(cert !== null) {
-    if(forge$2.util.isArray(cert)) {
+    if(forge.util.isArray(cert)) {
       chain = cert;
     } else {
       chain = [cert];
@@ -21696,13 +21708,13 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
   var macData;
   if(options.useMac) {
     // MacData
-    var sha1 = forge$2.md.sha1.create();
-    var macSalt = new forge$2.util.ByteBuffer(
-      forge$2.random.getBytes(options.saltSize));
+    var sha1 = forge.md.sha1.create();
+    var macSalt = new forge.util.ByteBuffer(
+      forge.random.getBytes(options.saltSize));
     var count = options.count;
     // 160-bit key
     var key = p12.generateKey(password, macSalt, 3, count, 20);
-    var mac = forge$2.hmac.create();
+    var mac = forge.hmac.create();
     mac.start(sha1, key);
     mac.update(asn1.toDer(safe).getBytes());
     var macValue = mac.getMac();
@@ -21767,7 +21779,7 @@ p12.toPkcs12Asn1 = function(key, cert, password, options) {
  *
  * @return a ByteBuffer with the bytes derived from the password.
  */
-p12.generateKey = forge$2.pbe.generatePkcs12Key;
+p12.generateKey = forge.pbe.generatePkcs12Key;
 });
 
 var pki_1 = createCommonjsModule(function (module) {
@@ -21792,10 +21804,10 @@ var pki_1 = createCommonjsModule(function (module) {
 
 
 // shortcut for asn.1 API
-var asn1 = forge$2.asn1;
+var asn1 = forge.asn1;
 
 /* Public Key Infrastructure (PKI) implementation. */
-var pki = module.exports = forge$2.pki = forge$2.pki || {};
+var pki = module.exports = forge.pki = forge.pki || {};
 
 /**
  * NOTE: THIS METHOD IS DEPRECATED. Use pem.decode() instead.
@@ -21807,11 +21819,11 @@ var pki = module.exports = forge$2.pki = forge$2.pki || {};
  * @return the DER-formatted data.
  */
 pki.pemToDer = function(pem) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
   if(msg.procType && msg.procType.type === 'ENCRYPTED') {
     throw new Error('Could not convert PEM to DER; PEM is encrypted.');
   }
-  return forge$2.util.createBuffer(msg.body);
+  return forge.util.createBuffer(msg.body);
 };
 
 /**
@@ -21822,7 +21834,7 @@ pki.pemToDer = function(pem) {
  * @return the private key.
  */
 pki.privateKeyFromPem = function(pem) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'PRIVATE KEY' && msg.type !== 'RSA PRIVATE KEY') {
     var error = new Error('Could not convert private key from PEM; PEM ' +
@@ -21854,7 +21866,7 @@ pki.privateKeyToPem = function(key, maxline) {
     type: 'RSA PRIVATE KEY',
     body: asn1.toDer(pki.privateKeyToAsn1(key)).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 
 /**
@@ -21871,7 +21883,7 @@ pki.privateKeyInfoToPem = function(pki, maxline) {
     type: 'PRIVATE KEY',
     body: asn1.toDer(pki).getBytes()
   };
-  return forge$2.pem.encode(msg, {maxline: maxline});
+  return forge.pem.encode(msg, {maxline: maxline});
 };
 });
 
@@ -22165,7 +22177,7 @@ pki.privateKeyInfoToPem = function(pki, maxline) {
  * @return the pseudo random bytes in a byte buffer.
  */
 var prf_TLS1 = function(secret, label, seed, length) {
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
 
   /* For TLS 1.0, the secret is split in half, into two secrets of equal
     length. If the secret has an odd length then the last byte of the first
@@ -22175,8 +22187,8 @@ var prf_TLS1 = function(secret, label, seed, length) {
   var slen = idx + (secret.length & 1);
   var s1 = secret.substr(0, slen);
   var s2 = secret.substr(idx, slen);
-  var ai = forge$2.util.createBuffer();
-  var hmac = forge$2.hmac.create();
+  var ai = forge.util.createBuffer();
+  var hmac = forge.hmac.create();
   seed = label + seed;
 
   // determine the number of iterations that must be performed to generate
@@ -22186,7 +22198,7 @@ var prf_TLS1 = function(secret, label, seed, length) {
 
   // do md5 iterations
   hmac.start('MD5', s1);
-  var md5bytes = forge$2.util.createBuffer();
+  var md5bytes = forge.util.createBuffer();
   ai.putBytes(seed);
   for(var i = 0; i < md5itr; ++i) {
     // HMAC_hash(secret, A(i-1))
@@ -22202,7 +22214,7 @@ var prf_TLS1 = function(secret, label, seed, length) {
 
   // do sha1 iterations
   hmac.start('SHA1', s2);
-  var sha1bytes = forge$2.util.createBuffer();
+  var sha1bytes = forge.util.createBuffer();
   ai.clear();
   ai.putBytes(seed);
   for(var i = 0; i < sha1itr; ++i) {
@@ -22218,7 +22230,7 @@ var prf_TLS1 = function(secret, label, seed, length) {
   }
 
   // XOR the md5 bytes with the sha1 bytes
-  rval.putBytes(forge$2.util.xorBytes(
+  rval.putBytes(forge.util.xorBytes(
     md5bytes.getBytes(), sha1bytes.getBytes(), length));
 
   return rval;
@@ -22242,9 +22254,9 @@ var hmac_sha1 = function(key, seqNum, record) {
       TLSCompressed.length +
       TLSCompressed.fragment)
   */
-  var hmac = forge$2.hmac.create();
+  var hmac = forge.hmac.create();
   hmac.start('SHA1', key);
-  var b = forge$2.util.createBuffer();
+  var b = forge.util.createBuffer();
   b.putInt32(seqNum[0]);
   b.putInt32(seqNum[1]);
   b.putByte(record.type);
@@ -22271,7 +22283,7 @@ var deflate = function(c, record, s) {
 
   try {
     var bytes = c.deflate(record.fragment.getBytes());
-    record.fragment = forge$2.util.createBuffer(bytes);
+    record.fragment = forge.util.createBuffer(bytes);
     record.length = bytes.length;
     rval = true;
   } catch(ex) {
@@ -22296,7 +22308,7 @@ var inflate = function(c, record, s) {
 
   try {
     var bytes = c.inflate(record.fragment.getBytes());
-    record.fragment = forge$2.util.createBuffer(bytes);
+    record.fragment = forge.util.createBuffer(bytes);
     record.length = bytes.length;
     rval = true;
   } catch(ex) {
@@ -22340,7 +22352,7 @@ var readVector = function(b, lenBytes) {
   }
 
   // read vector bytes into a new buffer
-  return forge$2.util.createBuffer(b.getBytes(len));
+  return forge.util.createBuffer(b.getBytes(len));
 };
 
 /**
@@ -22668,7 +22680,7 @@ tls.parseHelloMessage = function(c, record, length) {
         major: b.getByte(),
         minor: b.getByte()
       },
-      random: forge$2.util.createBuffer(b.getBytes(32)),
+      random: forge.util.createBuffer(b.getBytes(32)),
       session_id: readVector(b, 1),
       extensions: []
     };
@@ -22742,7 +22754,7 @@ tls.parseHelloMessage = function(c, record, length) {
     } else {
       // get a supported preferred (ClientHello) cipher suite
       // choose the first supported cipher suite
-      var tmp = forge$2.util.createBuffer(msg.cipher_suites.bytes());
+      var tmp = forge.util.createBuffer(msg.cipher_suites.bytes());
       while(tmp.length() > 0) {
         // FIXME: should be checking configured acceptable suites
         // cipher suites take up 2 bytes
@@ -22762,7 +22774,7 @@ tls.parseHelloMessage = function(c, record, length) {
           level: tls.Alert.Level.fatal,
           description: tls.Alert.Description.handshake_failure
         },
-        cipherSuite: forge$2.util.bytesToHex(msg.cipher_suite)
+        cipherSuite: forge.util.bytesToHex(msg.cipher_suite)
       });
     }
 
@@ -22936,7 +22948,7 @@ tls.handleClientHello = function(c, record, length) {
 
   // no session found to resume, generate a new session ID
   if(sessionId.length === 0) {
-    sessionId = forge$2.random.getBytes(32);
+    sessionId = forge.random.getBytes(32);
   }
 
   // update session
@@ -23095,8 +23107,8 @@ tls.handleCertificate = function(c, record, length) {
     while(msg.certificate_list.length() > 0) {
       // each entry in msg.certificate_list is a vector with 3 len bytes
       cert = readVector(msg.certificate_list, 3);
-      asn1 = forge$2.asn1.fromDer(cert);
-      cert = forge$2.pki.certificateFromAsn1(asn1, true);
+      asn1 = forge.asn1.fromDer(cert);
+      cert = forge.pki.certificateFromAsn1(asn1, true);
       certs.push(cert);
     }
   } catch(ex) {
@@ -23253,7 +23265,7 @@ tls.handleClientKeyExchange = function(c, record, length) {
   if(c.getPrivateKey) {
     try {
       privateKey = c.getPrivateKey(c, c.session.serverCertificate);
-      privateKey = forge$2.pki.privateKeyFromPem(privateKey);
+      privateKey = forge.pki.privateKeyFromPem(privateKey);
     } catch(ex) {
       c.error(c, {
         message: 'Could not get private key.',
@@ -23295,7 +23307,7 @@ tls.handleClientKeyExchange = function(c, record, length) {
       TLS server which is using PKCS#1 encoded RSA, so instead of
       failing here, we generate 48 random bytes and use that as
       the pre-master secret. */
-    sp.pre_master_secret = forge$2.random.getBytes(48);
+    sp.pre_master_secret = forge.random.getBytes(48);
   }
 
   // expect a CertificateVerify message if a Certificate was received that
@@ -23404,7 +23416,7 @@ tls.handleCertificateVerify = function(c, record, length) {
   // TODO: add support for DSA
 
   // generate data to verify
-  var verify = forge$2.util.createBuffer();
+  var verify = forge.util.createBuffer();
   verify.putBuffer(c.session.md5.digest());
   verify.putBuffer(c.session.sha1.digest());
   verify = verify.getBytes();
@@ -23493,7 +23505,7 @@ tls.handleServerHelloDone = function(c, record, length) {
       // check for custom alert info
       if(ret || ret === 0) {
         // set custom message and alert description
-        if(typeof ret === 'object' && !forge$2.util.isArray(ret)) {
+        if(typeof ret === 'object' && !forge.util.isArray(ret)) {
           if(ret.message) {
             error.message = ret.message;
           }
@@ -23675,7 +23687,7 @@ tls.handleFinished = function(c, record, length) {
   var vd = record.fragment.getBytes();
 
   // ensure verify data is correct
-  b = forge$2.util.createBuffer();
+  b = forge.util.createBuffer();
   b.putBuffer(c.session.md5.digest());
   b.putBuffer(c.session.sha1.digest());
 
@@ -23871,7 +23883,7 @@ tls.handleHandshake = function(c, record) {
     // cache the record, clear its fragment, and reset the buffer read
     // pointer before the type and length were read
     c.fragmented = record;
-    record.fragment = forge$2.util.createBuffer();
+    record.fragment = forge.util.createBuffer();
     b.read -= 4;
 
     // continue
@@ -23906,8 +23918,8 @@ tls.handleHandshake = function(c, record) {
         compressionMethod: null,
         serverCertificate: null,
         clientCertificate: null,
-        md5: forge$2.md.md5.create(),
-        sha1: forge$2.md.sha1.create()
+        md5: forge.md.md5.create(),
+        sha1: forge.md.sha1.create()
       };
     }
 
@@ -23981,7 +23993,7 @@ tls.handleHeartbeat = function(c, record) {
 
     // notify that a valid heartbeat was received
     if(c.heartbeatReceived) {
-      c.heartbeatReceived(c, forge$2.util.createBuffer(payload));
+      c.heartbeatReceived(c, forge.util.createBuffer(payload));
     }
   }
 
@@ -24062,6 +24074,7 @@ var CCV = 3; // rcv certificate verify
 var CCC = 4; // rcv change cipher spec
 var CFI = 5; // rcv finished
 var CAD = 6; // rcv application data
+
 // map client current expect state and content type to function
 var __ = tls.handleUnexpected;
 var R0 = tls.handleChangeCipherSpec;
@@ -24447,9 +24460,9 @@ tls.createRandom = function() {
   // get UTC milliseconds
   var d = new Date();
   var utc = +d + d.getTimezoneOffset() * 60000;
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putInt32(utc);
-  rval.putBytes(forge$2.random.getBytes(28));
+  rval.putBytes(forge.random.getBytes(28));
   return rval;
 };
 
@@ -24490,7 +24503,7 @@ tls.createRecord = function(c, options) {
  * @return the created alert record.
  */
 tls.createAlert = function(c, alert) {
-  var b = forge$2.util.createBuffer();
+  var b = forge.util.createBuffer();
   b.putByte(alert.level);
   b.putByte(alert.description);
   return tls.createRecord(c, {
@@ -24573,7 +24586,7 @@ tls.createClientHello = function(c) {
   };
 
   // create supported cipher suites
-  var cipherSuites = forge$2.util.createBuffer();
+  var cipherSuites = forge.util.createBuffer();
   for(var i = 0; i < c.cipherSuites.length; ++i) {
     var cs = c.cipherSuites[i];
     cipherSuites.putByte(cs.id[0]);
@@ -24583,7 +24596,7 @@ tls.createClientHello = function(c) {
 
   // create supported compression methods, null always supported, but
   // also support deflate if connection has inflate and deflate methods
-  var compressionMethods = forge$2.util.createBuffer();
+  var compressionMethods = forge.util.createBuffer();
   compressionMethods.putByte(tls.CompressionMethod.none);
   // FIXME: deflate support disabled until issues with raw deflate data
   // without zlib headers are resolved
@@ -24596,10 +24609,10 @@ tls.createClientHello = function(c) {
 
   // create TLS SNI (server name indication) extension if virtual host
   // has been specified, see RFC 3546
-  var extensions = forge$2.util.createBuffer();
+  var extensions = forge.util.createBuffer();
   if(c.virtualHost) {
     // create extension struct
-    var ext = forge$2.util.createBuffer();
+    var ext = forge.util.createBuffer();
     ext.putByte(0x00); // type server_name (ExtensionType is 2 bytes)
     ext.putByte(0x00);
 
@@ -24625,12 +24638,12 @@ tls.createClientHello = function(c) {
      *   ServerName server_name_list<1..2^16-1>
      * } ServerNameList;
      */
-    var serverName = forge$2.util.createBuffer();
+    var serverName = forge.util.createBuffer();
     serverName.putByte(0x00); // type host_name
-    writeVector(serverName, 2, forge$2.util.createBuffer(c.virtualHost));
+    writeVector(serverName, 2, forge.util.createBuffer(c.virtualHost));
 
     // ServerNameList is in extension_data
-    var snList = forge$2.util.createBuffer();
+    var snList = forge.util.createBuffer();
     writeVector(snList, 2, serverName);
     writeVector(ext, 2, snList);
     extensions.putBuffer(ext);
@@ -24654,13 +24667,13 @@ tls.createClientHello = function(c) {
     extLength;             // extensions vector
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.client_hello);
   rval.putInt24(length);                     // handshake length
   rval.putByte(c.version.major);             // major version
   rval.putByte(c.version.minor);             // minor version
   rval.putBytes(c.session.sp.client_random); // random time + bytes
-  writeVector(rval, 1, forge$2.util.createBuffer(sessionId));
+  writeVector(rval, 1, forge.util.createBuffer(sessionId));
   writeVector(rval, 2, cipherSuites);
   writeVector(rval, 1, compressionMethods);
   if(extLength > 0) {
@@ -24687,13 +24700,13 @@ tls.createServerHello = function(c) {
     1;                     // chosen compression method
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.server_hello);
   rval.putInt24(length);                     // handshake length
   rval.putByte(c.version.major);             // major version
   rval.putByte(c.version.minor);             // minor version
   rval.putBytes(c.session.sp.server_random); // random time + bytes
-  writeVector(rval, 1, forge$2.util.createBuffer(sessionId));
+  writeVector(rval, 1, forge.util.createBuffer(sessionId));
   rval.putByte(c.session.cipherSuite.id[0]);
   rval.putByte(c.session.cipherSuite.id[1]);
   rval.putByte(c.session.compressionMethod);
@@ -24739,16 +24752,16 @@ tls.createCertificate = function(c) {
   }
 
   // buffer to hold certificate list
-  var certList = forge$2.util.createBuffer();
+  var certList = forge.util.createBuffer();
   if(cert !== null) {
     try {
       // normalize cert to a chain of certificates
-      if(!forge$2.util.isArray(cert)) {
+      if(!forge.util.isArray(cert)) {
         cert = [cert];
       }
       var asn1 = null;
       for(var i = 0; i < cert.length; ++i) {
-        var msg = forge$2.pem.decode(cert[i])[0];
+        var msg = forge.pem.decode(cert[i])[0];
         if(msg.type !== 'CERTIFICATE' &&
           msg.type !== 'X509 CERTIFICATE' &&
           msg.type !== 'TRUSTED CERTIFICATE') {
@@ -24762,13 +24775,13 @@ tls.createCertificate = function(c) {
           throw new Error('Could not convert certificate from PEM; PEM is encrypted.');
         }
 
-        var der = forge$2.util.createBuffer(msg.body);
+        var der = forge.util.createBuffer(msg.body);
         if(asn1 === null) {
-          asn1 = forge$2.asn1.fromDer(der.bytes(), false);
+          asn1 = forge.asn1.fromDer(der.bytes(), false);
         }
 
         // certificate entry is itself a vector with 3 length bytes
-        var certBuffer = forge$2.util.createBuffer();
+        var certBuffer = forge.util.createBuffer();
         writeVector(certBuffer, 3, der);
 
         // add cert vector to cert list vector
@@ -24776,7 +24789,7 @@ tls.createCertificate = function(c) {
       }
 
       // save certificate
-      cert = forge$2.pki.certificateFromAsn1(asn1);
+      cert = forge.pki.certificateFromAsn1(asn1);
       if(client) {
         c.session.clientCertificate = cert;
       } else {
@@ -24799,7 +24812,7 @@ tls.createCertificate = function(c) {
   var length = 3 + certList.length(); // cert list vector
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.certificate);
   rval.putInt24(length);
   writeVector(rval, 3, certList);
@@ -24857,7 +24870,7 @@ tls.createCertificate = function(c) {
  */
 tls.createClientKeyExchange = function(c) {
   // create buffer to encrypt
-  var b = forge$2.util.createBuffer();
+  var b = forge.util.createBuffer();
 
   // add highest client-supported protocol to help server avoid version
   // rollback attacks
@@ -24865,7 +24878,7 @@ tls.createClientKeyExchange = function(c) {
   b.putByte(c.session.clientHelloVersion.minor);
 
   // generate and add 46 random bytes
-  b.putBytes(forge$2.random.getBytes(46));
+  b.putBytes(forge.random.getBytes(46));
 
   // save pre-master secret
   var sp = c.session.sp;
@@ -24884,7 +24897,7 @@ tls.createClientKeyExchange = function(c) {
   var length = b.length + 2;
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.client_key_exchange);
   rval.putInt24(length);
   // add vector length bytes
@@ -24908,7 +24921,7 @@ tls.createServerKeyExchange = function(c) {
   var length = 0;
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   if(length > 0) {
     rval.putByte(tls.HandshakeType.server_key_exchange);
     rval.putInt24(length);
@@ -24925,7 +24938,7 @@ tls.createServerKeyExchange = function(c) {
  */
 tls.getClientSignature = function(c, callback) {
   // generate data to RSA encrypt
-  var b = forge$2.util.createBuffer();
+  var b = forge.util.createBuffer();
   b.putBuffer(c.session.md5.digest());
   b.putBuffer(c.session.sha1.digest());
   b = b.getBytes();
@@ -24937,7 +24950,7 @@ tls.getClientSignature = function(c, callback) {
     if(c.getPrivateKey) {
       try {
         privateKey = c.getPrivateKey(c, c.session.clientCertificate);
-        privateKey = forge$2.pki.privateKeyFromPem(privateKey);
+        privateKey = forge.pki.privateKeyFromPem(privateKey);
       } catch(ex) {
         c.error(c, {
           message: 'Could not get private key.',
@@ -25041,7 +25054,7 @@ tls.createCertificateVerify = function(c, signature) {
   var length = signature.length + 2;
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.certificate_verify);
   rval.putInt24(length);
   // add vector length bytes
@@ -25059,17 +25072,17 @@ tls.createCertificateVerify = function(c, signature) {
  */
 tls.createCertificateRequest = function(c) {
   // TODO: support other certificate types
-  var certTypes = forge$2.util.createBuffer();
+  var certTypes = forge.util.createBuffer();
 
   // common RSA certificate type
   certTypes.putByte(0x01);
 
   // add distinguished names from CA store
-  var cAs = forge$2.util.createBuffer();
+  var cAs = forge.util.createBuffer();
   for(var key in c.caStore.certs) {
     var cert = c.caStore.certs[key];
-    var dn = forge$2.pki.distinguishedNameToAsn1(cert.subject);
-    var byteBuffer = forge$2.asn1.toDer(dn);
+    var dn = forge.pki.distinguishedNameToAsn1(cert.subject);
+    var byteBuffer = forge.asn1.toDer(dn);
     cAs.putInt16(byteBuffer.length());
     cAs.putBuffer(byteBuffer);
   }
@@ -25082,7 +25095,7 @@ tls.createCertificateRequest = function(c) {
     2 + cAs.length();
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.certificate_request);
   rval.putInt24(length);
   writeVector(rval, 1, certTypes);
@@ -25099,7 +25112,7 @@ tls.createCertificateRequest = function(c) {
  */
 tls.createServerHelloDone = function(c) {
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.server_hello_done);
   rval.putInt24(0);
   return rval;
@@ -25120,7 +25133,7 @@ tls.createServerHelloDone = function(c) {
  * @return the ChangeCipherSpec byte buffer.
  */
 tls.createChangeCipherSpec = function() {
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(0x01);
   return rval;
 };
@@ -25154,7 +25167,7 @@ tls.createChangeCipherSpec = function() {
  */
 tls.createFinished = function(c) {
   // generate verify_data
-  var b = forge$2.util.createBuffer();
+  var b = forge.util.createBuffer();
   b.putBuffer(c.session.md5.digest());
   b.putBuffer(c.session.sha1.digest());
 
@@ -25167,7 +25180,7 @@ tls.createFinished = function(c) {
   b = prf(sp.master_secret, label, b.getBytes(), vdl);
 
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(tls.HandshakeType.finished);
   rval.putInt24(b.length());
   rval.putBuffer(b);
@@ -25222,14 +25235,14 @@ tls.createHeartbeat = function(type, payload, payloadLength) {
     payloadLength = payload.length;
   }
   // build record fragment
-  var rval = forge$2.util.createBuffer();
+  var rval = forge.util.createBuffer();
   rval.putByte(type);               // heartbeat message type
   rval.putInt16(payloadLength);     // payload length
   rval.putBytes(payload);           // payload
   // padding
   var plaintextLength = rval.length();
   var paddingLength = Math.max(16, plaintextLength - payloadLength - 3);
-  rval.putBytes(forge$2.random.getBytes(paddingLength));
+  rval.putBytes(forge.random.getBytes(paddingLength));
   return rval;
 };
 
@@ -25273,7 +25286,7 @@ tls.queue = function(c, record) {
     while(data.length > tls.MaxFragment) {
       records.push(tls.createRecord(c, {
         type: record.type,
-        data: forge$2.util.createBuffer(data.slice(0, tls.MaxFragment))
+        data: forge.util.createBuffer(data.slice(0, tls.MaxFragment))
       }));
       data = data.slice(tls.MaxFragment);
     }
@@ -25281,7 +25294,7 @@ tls.queue = function(c, record) {
     if(data.length > 0) {
       records.push(tls.createRecord(c, {
         type: record.type,
-        data: forge$2.util.createBuffer(data)
+        data: forge.util.createBuffer(data)
       }));
     }
   }
@@ -25332,17 +25345,17 @@ var _certErrorToAlertDesc = function(error) {
   switch(error) {
   case true:
     return true;
-  case forge$2.pki.certificateError.bad_certificate:
+  case forge.pki.certificateError.bad_certificate:
     return tls.Alert.Description.bad_certificate;
-  case forge$2.pki.certificateError.unsupported_certificate:
+  case forge.pki.certificateError.unsupported_certificate:
     return tls.Alert.Description.unsupported_certificate;
-  case forge$2.pki.certificateError.certificate_revoked:
+  case forge.pki.certificateError.certificate_revoked:
     return tls.Alert.Description.certificate_revoked;
-  case forge$2.pki.certificateError.certificate_expired:
+  case forge.pki.certificateError.certificate_expired:
     return tls.Alert.Description.certificate_expired;
-  case forge$2.pki.certificateError.certificate_unknown:
+  case forge.pki.certificateError.certificate_unknown:
     return tls.Alert.Description.certificate_unknown;
-  case forge$2.pki.certificateError.unknown_ca:
+  case forge.pki.certificateError.unknown_ca:
     return tls.Alert.Description.unknown_ca;
   default:
     return tls.Alert.Description.bad_certificate;
@@ -25361,19 +25374,19 @@ var _alertDescToCertError = function(desc) {
   case true:
     return true;
   case tls.Alert.Description.bad_certificate:
-    return forge$2.pki.certificateError.bad_certificate;
+    return forge.pki.certificateError.bad_certificate;
   case tls.Alert.Description.unsupported_certificate:
-    return forge$2.pki.certificateError.unsupported_certificate;
+    return forge.pki.certificateError.unsupported_certificate;
   case tls.Alert.Description.certificate_revoked:
-    return forge$2.pki.certificateError.certificate_revoked;
+    return forge.pki.certificateError.certificate_revoked;
   case tls.Alert.Description.certificate_expired:
-    return forge$2.pki.certificateError.certificate_expired;
+    return forge.pki.certificateError.certificate_expired;
   case tls.Alert.Description.certificate_unknown:
-    return forge$2.pki.certificateError.certificate_unknown;
+    return forge.pki.certificateError.certificate_unknown;
   case tls.Alert.Description.unknown_ca:
-    return forge$2.pki.certificateError.unknown_ca;
+    return forge.pki.certificateError.unknown_ca;
   default:
-    return forge$2.pki.certificateError.bad_certificate;
+    return forge.pki.certificateError.bad_certificate;
   }
 };
 
@@ -25390,7 +25403,7 @@ var _alertDescToCertError = function(desc) {
 tls.verifyCertificateChain = function(c, chain) {
   try {
     // verify chain
-    forge$2.pki.verifyCertificateChain(c.caStore, chain,
+    forge.pki.verifyCertificateChain(c.caStore, chain,
       function verify(vfd, depth, chain) {
         // convert pki.certificateError to tls alert description
         var desc = _certErrorToAlertDesc(vfd);
@@ -25398,7 +25411,7 @@ tls.verifyCertificateChain = function(c, chain) {
         // call application callback
         var ret = c.verify(c, vfd, depth, chain);
         if(ret !== true) {
-          if(typeof ret === 'object' && !forge$2.util.isArray(ret)) {
+          if(typeof ret === 'object' && !forge.util.isArray(ret)) {
             // throw custom error
             var error = new Error('The application rejected the certificate.');
             error.send = true;
@@ -25426,7 +25439,7 @@ tls.verifyCertificateChain = function(c, chain) {
   } catch(ex) {
     // build tls error if not already customized
     var err = ex;
-    if(typeof err !== 'object' || forge$2.util.isArray(err)) {
+    if(typeof err !== 'object' || forge.util.isArray(err)) {
       err = {
         send: true,
         alert: {
@@ -25489,7 +25502,7 @@ tls.createSessionCache = function(cache, capacity) {
 
       // if session ID provided, use it
       if(sessionId) {
-        key = forge$2.util.bytesToHex(sessionId);
+        key = forge.util.bytesToHex(sessionId);
       } else if(rval.order.length > 0) {
         // get first session from cache
         key = rval.order[0];
@@ -25518,7 +25531,7 @@ tls.createSessionCache = function(cache, capacity) {
         delete rval.cache[key];
       }
       // add session to cache
-      var key = forge$2.util.bytesToHex(sessionId);
+      var key = forge.util.bytesToHex(sessionId);
       rval.order.push(key);
       rval.cache[key] = session;
     };
@@ -25540,14 +25553,14 @@ tls.createConnection = function(options) {
   var caStore = null;
   if(options.caStore) {
     // if CA store is an array, convert it to a CA store object
-    if(forge$2.util.isArray(options.caStore)) {
-      caStore = forge$2.pki.createCaStore(options.caStore);
+    if(forge.util.isArray(options.caStore)) {
+      caStore = forge.pki.createCaStore(options.caStore);
     } else {
       caStore = options.caStore;
     }
   } else {
     // create empty CA store
-    caStore = forge$2.pki.createCaStore();
+    caStore = forge.pki.createCaStore();
   }
 
   // setup default cipher suites
@@ -25582,9 +25595,9 @@ tls.createConnection = function(options) {
     getCertificate: options.getCertificate || null,
     getPrivateKey: options.getPrivateKey || null,
     getSignature: options.getSignature || null,
-    input: forge$2.util.createBuffer(),
-    tlsData: forge$2.util.createBuffer(),
-    data: forge$2.util.createBuffer(),
+    input: forge.util.createBuffer(),
+    tlsData: forge.util.createBuffer(),
+    data: forge.util.createBuffer(),
     tlsDataReady: options.tlsDataReady,
     dataReady: options.dataReady,
     heartbeatReceived: options.heartbeatReceived,
@@ -25697,7 +25710,7 @@ tls.createConnection = function(options) {
           minor: b.getByte()
         },
         length: b.getInt16(),
-        fragment: forge$2.util.createBuffer(),
+        fragment: forge.util.createBuffer(),
         ready: false
       };
 
@@ -25844,8 +25857,8 @@ tls.createConnection = function(options) {
         certificateRequest: null,
         clientCertificate: null,
         sp: {},
-        md5: forge$2.md.md5.create(),
-        sha1: forge$2.md.sha1.create()
+        md5: forge.md.md5.create(),
+        sha1: forge.md.sha1.create()
       };
 
       // use existing session information
@@ -25929,7 +25942,7 @@ tls.createConnection = function(options) {
   c.prepare = function(data) {
     tls.queue(c, tls.createRecord(c, {
       type: tls.ContentType.application_data,
-      data: forge$2.util.createBuffer(data)
+      data: forge.util.createBuffer(data)
     }));
     return tls.flush(c);
   };
@@ -25950,7 +25963,7 @@ tls.createConnection = function(options) {
    * @return true on success, false on failure.
    */
   c.prepareHeartbeatRequest = function(payload, payloadLength) {
-    if(payload instanceof forge$2.util.ByteBuffer) {
+    if(payload instanceof forge.util.ByteBuffer) {
       payload = payload.bytes();
     }
     if(typeof payloadLength === 'undefined') {
@@ -26012,23 +26025,23 @@ tls.createConnection = function(options) {
 };
 
 /* TLS API */
-var tls_1 = forge$2.tls = forge$2.tls || {};
+var tls_1 = forge.tls = forge.tls || {};
 
 // expose non-functions
 for(var key in tls) {
   if(typeof tls[key] !== 'function') {
-    forge$2.tls[key] = tls[key];
+    forge.tls[key] = tls[key];
   }
 }
 
 // expose prf_tls1 for testing
-forge$2.tls.prf_tls1 = prf_TLS1;
+forge.tls.prf_tls1 = prf_TLS1;
 
 // expose sha1 hmac method
-forge$2.tls.hmac_sha1 = hmac_sha1;
+forge.tls.hmac_sha1 = hmac_sha1;
 
 // expose session cache creation
-forge$2.tls.createSessionCache = tls.createSessionCache;
+forge.tls.createSessionCache = tls.createSessionCache;
 
 /**
  * Creates a new TLS connection. This does not make any assumptions about the
@@ -26127,7 +26140,7 @@ forge$2.tls.createSessionCache = tls.createSessionCache;
  *
  * @return the new TLS connection.
  */
-forge$2.tls.createConnection = tls.createConnection;
+forge.tls.createConnection = tls.createConnection;
 
 var aesCipherSuites = createCommonjsModule(function (module) {
 /**
@@ -26142,7 +26155,7 @@ var aesCipherSuites = createCommonjsModule(function (module) {
 
 
 
-var tls = module.exports = forge$2.tls;
+var tls = module.exports = forge.tls;
 
 /**
  * Supported cipher suites.
@@ -26181,18 +26194,18 @@ tls.CipherSuites['TLS_RSA_WITH_AES_256_CBC_SHA'] = {
 };
 
 function initConnectionState(state, c, sp) {
-  var client = (c.entity === forge$2.tls.ConnectionEnd.client);
+  var client = (c.entity === forge.tls.ConnectionEnd.client);
 
   // cipher setup
   state.read.cipherState = {
     init: false,
-    cipher: forge$2.cipher.createDecipher('AES-CBC', client ?
+    cipher: forge.cipher.createDecipher('AES-CBC', client ?
       sp.keys.server_write_key : sp.keys.client_write_key),
     iv: client ? sp.keys.server_write_IV : sp.keys.client_write_IV
   };
   state.write.cipherState = {
     init: false,
-    cipher: forge$2.cipher.createCipher('AES-CBC', client ?
+    cipher: forge.cipher.createCipher('AES-CBC', client ?
       sp.keys.client_write_key : sp.keys.server_write_key),
     iv: client ? sp.keys.client_write_IV : sp.keys.server_write_IV
   };
@@ -26228,7 +26241,7 @@ function encrypt_aes_cbc_sha1(record, s) {
     // the residue from the previous encryption
     iv = s.cipherState.init ? null : s.cipherState.iv;
   } else {
-    iv = forge$2.random.getBytesSync(16);
+    iv = forge.random.getBytesSync(16);
   }
 
   s.cipherState.init = true;
@@ -26321,18 +26334,9 @@ function decrypt_aes_cbc_sha1_padding(blockSize, output, decrypt) {
   }
   return rval;
 }
-
-/**
- * Decrypts a TLSCipherText record into a TLSCompressed record using
- * AES in CBC mode.
- *
- * @param record the TLSCipherText record to decrypt.
- * @param s the ConnectionState to use.
- *
- * @return true on success, false on failure.
- */
 function decrypt_aes_cbc_sha1(record, s) {
   var rval = false;
+
   var iv;
   if(record.version.minor === tls.Versions.TLS_1_0.minor) {
     // use pre-generated IV when initializing for TLS 1.0, otherwise use the
@@ -26363,7 +26367,7 @@ function decrypt_aes_cbc_sha1(record, s) {
 
   // create a random MAC to check against should the mac length check fail
   // Note: do this regardless of the failure to keep timing consistent
-  var mac = forge$2.random.getBytesSync(macLen);
+  var mac = forge.random.getBytesSync(macLen);
 
   // get fragment and mac
   var len = cipher.output.length();
@@ -26374,7 +26378,7 @@ function decrypt_aes_cbc_sha1(record, s) {
     // bad data, but get bytes anyway to try to keep timing consistent
     record.fragment = cipher.output.getBytes();
   }
-  record.fragment = forge$2.util.createBuffer(record.fragment);
+  record.fragment = forge.util.createBuffer(record.fragment);
   record.length = record.fragment.length();
 
   // see if data integrity checks out, update sequence number
@@ -26399,7 +26403,7 @@ function decrypt_aes_cbc_sha1(record, s) {
  * @return true if the MACs are the same, false if not.
  */
 function compareMacs(key, mac1, mac2) {
-  var hmac = forge$2.hmac.create();
+  var hmac = forge.hmac.create();
 
   hmac.start('SHA1', key);
   hmac.update(mac1);
@@ -26423,7 +26427,7 @@ function compareMacs(key, mac1, mac2) {
 
 
 /* DEBUG API */
-var debug = forge$2.debug = forge$2.debug || {};
+var debug = forge.debug = forge.debug || {};
 
 // Private storage for debugging.
 // Useful to expose data that is otherwise unviewable behind closures.
@@ -26435,7 +26439,7 @@ var debug = forge$2.debug = forge$2.debug || {};
 //   var sState = {...}; // local state
 //   forge.debug.set(cat, 'sState', sState);
 // })();
-forge$2.debug.storage = {};
+forge.debug.storage = {};
 
 /**
  * Gets debug data. Omit name for all cat data  Omit name and cat for
@@ -26445,15 +26449,15 @@ forge$2.debug.storage = {};
  * @param name name of data to get (optional).
  * @return object with requested debug data or undefined.
  */
-forge$2.debug.get = function(cat, name) {
+forge.debug.get = function(cat, name) {
   var rval;
   if(typeof(cat) === 'undefined') {
-    rval = forge$2.debug.storage;
-  } else if(cat in forge$2.debug.storage) {
+    rval = forge.debug.storage;
+  } else if(cat in forge.debug.storage) {
     if(typeof(name) === 'undefined') {
-      rval = forge$2.debug.storage[cat];
+      rval = forge.debug.storage[cat];
     } else {
-      rval = forge$2.debug.storage[cat][name];
+      rval = forge.debug.storage[cat][name];
     }
   }
   return rval;
@@ -26466,11 +26470,11 @@ forge$2.debug.get = function(cat, name) {
  * @param name name of data to set.
  * @param data data to set.
  */
-forge$2.debug.set = function(cat, name, data) {
-  if(!(cat in forge$2.debug.storage)) {
-    forge$2.debug.storage[cat] = {};
+forge.debug.set = function(cat, name, data) {
+  if(!(cat in forge.debug.storage)) {
+    forge.debug.storage[cat] = {};
   }
-  forge$2.debug.storage[cat][name] = data;
+  forge.debug.storage[cat][name] = data;
 };
 
 /**
@@ -26480,14 +26484,14 @@ forge$2.debug.set = function(cat, name, data) {
  * @param cat name of debugging category.
  * @param name name of data to clear or omit to clear entire category.
  */
-forge$2.debug.clear = function(cat, name) {
+forge.debug.clear = function(cat, name) {
   if(typeof(cat) === 'undefined') {
-    forge$2.debug.storage = {};
-  } else if(cat in forge$2.debug.storage) {
+    forge.debug.storage = {};
+  } else if(cat in forge.debug.storage) {
     if(typeof(name) === 'undefined') {
-      delete forge$2.debug.storage[cat];
+      delete forge.debug.storage[cat];
     } else {
-      delete forge$2.debug.storage[cat][name];
+      delete forge.debug.storage[cat][name];
     }
   }
 };
@@ -26506,14 +26510,14 @@ forge$2.debug.clear = function(cat, name) {
 
 
 
-var kem = forge$2.kem = forge$2.kem || {};
+var kem = forge.kem = forge.kem || {};
 
-var BigInteger$3 = forge$2.jsbn.BigInteger;
+var BigInteger$3 = forge.jsbn.BigInteger;
 
 /**
  * The API for the RSA Key Encapsulation Mechanism (RSA-KEM) from ISO 18033-2.
  */
-forge$2.kem.rsa = {};
+forge.kem.rsa = {};
 
 /**
  * Creates an RSA KEM API object for generating a secret asymmetric key.
@@ -26529,9 +26533,9 @@ forge$2.kem.rsa = {};
  *          [prng] a custom crypto-secure pseudo-random number generator to use,
  *            that must define "getBytesSync".
  */
-forge$2.kem.rsa.create = function(kdf, options) {
+forge.kem.rsa.create = function(kdf, options) {
   options = options || {};
-  var prng = options.prng || forge$2.random;
+  var prng = options.prng || forge.random;
 
   var kem = {};
 
@@ -26552,15 +26556,15 @@ forge$2.kem.rsa.create = function(kdf, options) {
     var r;
     do {
       r = new BigInteger$3(
-        forge$2.util.bytesToHex(prng.getBytesSync(byteLength)),
+        forge.util.bytesToHex(prng.getBytesSync(byteLength)),
         16).mod(publicKey.n);
     } while(r.equals(BigInteger$3.ZERO));
 
     // prepend r with zeros
-    r = forge$2.util.hexToBytes(r.toString(16));
+    r = forge.util.hexToBytes(r.toString(16));
     var zeros = byteLength - r.length;
     if(zeros > 0) {
-      r = forge$2.util.fillString(String.fromCharCode(0), zeros) + r;
+      r = forge.util.fillString(String.fromCharCode(0), zeros) + r;
     }
 
     // encrypt the random
@@ -26602,7 +26606,7 @@ forge$2.kem.rsa.create = function(kdf, options) {
  *
  * @return a KDF1 API object.
  */
-forge$2.kem.kdf1 = function(md, digestLength) {
+forge.kem.kdf1 = function(md, digestLength) {
   _createKDF(this, md, 0, digestLength || md.digestLength);
 };
 
@@ -26615,7 +26619,7 @@ forge$2.kem.kdf1 = function(md, digestLength) {
  *
  * @return a KDF2 API object.
  */
-forge$2.kem.kdf2 = function(md, digestLength) {
+forge.kem.kdf2 = function(md, digestLength) {
   _createKDF(this, md, 1, digestLength || md.digestLength);
 };
 
@@ -26638,12 +26642,12 @@ function _createKDF(kdf, md, counterStart, digestLength) {
    * @return the key as a binary-encoded string.
    */
   kdf.generate = function(x, length) {
-    var key = new forge$2.util.ByteBuffer();
+    var key = new forge.util.ByteBuffer();
 
     // run counter from counterStart to ceil(length / Hash.len)
     var k = Math.ceil(length / digestLength) + counterStart;
 
-    var c = new forge$2.util.ByteBuffer();
+    var c = new forge.util.ByteBuffer();
     for(var i = counterStart; i < k; ++i) {
       // I2OSP(i, 4): convert counter to an octet string of 4 octets
       c.putInt32(i);
@@ -26672,7 +26676,7 @@ function _createKDF(kdf, md, counterStart, digestLength) {
 
 
 /* LOG API */
-var log = forge$2.log = forge$2.log || {};
+var log = forge.log = forge.log || {};
 
 /**
  * Application logging system.
@@ -26687,7 +26691,7 @@ var log = forge$2.log = forge$2.log || {};
  * the setCategoryEnabled() function.
  */
 // list of known levels
-forge$2.log.levels = [
+forge.log.levels = [
   'none', 'error', 'warning', 'info', 'debug', 'verbose', 'max'];
 // info on the levels indexed by name:
 //   index: level index
@@ -26707,13 +26711,13 @@ var sConsoleLogger = null;
  * set the level such that only critical messages are seen but more verbose
  * messages are needed for debugging or other purposes.
  */
-forge$2.log.LEVEL_LOCKED = (1 << 1);
+forge.log.LEVEL_LOCKED = (1 << 1);
 /**
  * Always call log function. By default, the logging system will check the
  * message level against logger.level before calling the log function. This
  * flag allows the function to do its own check.
  */
-forge$2.log.NO_LEVEL_CHECK = (1 << 2);
+forge.log.NO_LEVEL_CHECK = (1 << 2);
 /**
  * Perform message interpolation with the passed arguments. "%" style
  * fields in log messages will be replaced by arguments as needed. Some
@@ -26721,11 +26725,11 @@ forge$2.log.NO_LEVEL_CHECK = (1 << 2);
  * message will be available as 'message' and the interpolated version will
  * be available as 'fullMessage'.
  */
-forge$2.log.INTERPOLATE = (1 << 3);
+forge.log.INTERPOLATE = (1 << 3);
 
 // setup each log level
-for(var i = 0; i < forge$2.log.levels.length; ++i) {
-  var level = forge$2.log.levels[i];
+for(var i = 0; i < forge.log.levels.length; ++i) {
+  var level = forge.log.levels[i];
   sLevelInfo[level] = {
     index: i,
     name: level.toUpperCase()
@@ -26737,11 +26741,11 @@ for(var i = 0; i < forge$2.log.levels.length; ++i) {
  *
  * @param message message object
  */
-forge$2.log.logMessage = function(message) {
+forge.log.logMessage = function(message) {
   var messageLevelIndex = sLevelInfo[message.level].index;
   for(var i = 0; i < sLoggers.length; ++i) {
     var logger = sLoggers[i];
-    if(logger.flags & forge$2.log.NO_LEVEL_CHECK) {
+    if(logger.flags & forge.log.NO_LEVEL_CHECK) {
       logger.f(message);
     } else {
       // get logger level
@@ -26761,7 +26765,7 @@ forge$2.log.logMessage = function(message) {
  *
  * @param message a message log object
  */
-forge$2.log.prepareStandard = function(message) {
+forge.log.prepareStandard = function(message) {
   if(!('standard' in message)) {
     message.standard =
       sLevelInfo[message.level].name +
@@ -26777,13 +26781,13 @@ forge$2.log.prepareStandard = function(message) {
  *
  * @param message a message log object.
  */
-forge$2.log.prepareFull = function(message) {
+forge.log.prepareFull = function(message) {
   if(!('full' in message)) {
     // copy args and insert message at the front
     var args = [message.message];
     args = args.concat([] || message['arguments']);
     // format the message
-    message.full = forge$2.util.format.apply(this, args);
+    message.full = forge.util.format.apply(this, args);
   }
 };
 
@@ -26793,10 +26797,10 @@ forge$2.log.prepareFull = function(message) {
  *
  * @param message a message log object.
  */
-forge$2.log.prepareStandardFull = function(message) {
+forge.log.prepareStandardFull = function(message) {
   if(!('standardFull' in message)) {
     // FIXME implement 'standardFull' logging
-    forge$2.log.prepareStandard(message);
+    forge.log.prepareStandard(message);
     message.standardFull = message.standard;
   }
 };
@@ -26809,7 +26813,7 @@ forge$2.log.prepareStandardFull = function(message) {
     // wrap in a function to ensure proper level var is passed
     (function(level) {
       // create function for this level
-      forge$2.log[level] = function(category, message/*, args...*/) {
+      forge.log[level] = function(category, message/*, args...*/) {
         // convert arguments to real array, remove category and message
         var args = Array.prototype.slice.call(arguments).slice(2);
         // create message object
@@ -26825,7 +26829,7 @@ forge$2.log.prepareStandardFull = function(message) {
           /*fullMessage*/
         };
         // process this message
-        forge$2.log.logMessage(msg);
+        forge.log.logMessage(msg);
       };
     })(levels[i]);
   }
@@ -26849,12 +26853,12 @@ forge$2.log.prepareStandardFull = function(message) {
  *
  * @return a logger object.
  */
-forge$2.log.makeLogger = function(logFunction) {
+forge.log.makeLogger = function(logFunction) {
   var logger = {
     flags: 0,
     f: logFunction
   };
-  forge$2.log.setLevel(logger, 'none');
+  forge.log.setLevel(logger, 'none');
   return logger;
 };
 
@@ -26866,11 +26870,11 @@ forge$2.log.makeLogger = function(logFunction) {
  *
  * @return true if set, false if not.
  */
-forge$2.log.setLevel = function(logger, level) {
+forge.log.setLevel = function(logger, level) {
   var rval = false;
-  if(logger && !(logger.flags & forge$2.log.LEVEL_LOCKED)) {
-    for(var i = 0; i < forge$2.log.levels.length; ++i) {
-      var aValidLevel = forge$2.log.levels[i];
+  if(logger && !(logger.flags & forge.log.LEVEL_LOCKED)) {
+    for(var i = 0; i < forge.log.levels.length; ++i) {
+      var aValidLevel = forge.log.levels[i];
       if(level == aValidLevel) {
         // set level
         logger.level = level;
@@ -26889,11 +26893,11 @@ forge$2.log.setLevel = function(logger, level) {
  * @param logger the target logger.
  * @param lock boolean lock value, default to true.
  */
-forge$2.log.lock = function(logger, lock) {
+forge.log.lock = function(logger, lock) {
   if(typeof lock === 'undefined' || lock) {
-    logger.flags |= forge$2.log.LEVEL_LOCKED;
+    logger.flags |= forge.log.LEVEL_LOCKED;
   } else {
-    logger.flags &= ~forge$2.log.LEVEL_LOCKED;
+    logger.flags &= ~forge.log.LEVEL_LOCKED;
   }
 };
 
@@ -26902,7 +26906,7 @@ forge$2.log.lock = function(logger, lock) {
  *
  * @param logger the logger object.
  */
-forge$2.log.addLogger = function(logger) {
+forge.log.addLogger = function(logger) {
   sLoggers.push(logger);
 };
 
@@ -26920,7 +26924,7 @@ if(typeof(console) !== 'undefined' && 'log' in console) {
       verbose: console.debug
     };
     var f = function(logger, message) {
-      forge$2.log.prepareStandard(message);
+      forge.log.prepareStandard(message);
       var handler = levelHandlers[message.level];
       // prepend standard message and concat args
       var args = [message.standard];
@@ -26928,17 +26932,17 @@ if(typeof(console) !== 'undefined' && 'log' in console) {
       // apply to low-level console function
       handler.apply(console, args);
     };
-    logger = forge$2.log.makeLogger(f);
+    logger = forge.log.makeLogger(f);
   } else {
     // only appear to have basic console.log
     var f = function(logger, message) {
-      forge$2.log.prepareStandardFull(message);
+      forge.log.prepareStandardFull(message);
       console.log(message.standardFull);
     };
-    logger = forge$2.log.makeLogger(f);
+    logger = forge.log.makeLogger(f);
   }
-  forge$2.log.setLevel(logger, 'debug');
-  forge$2.log.addLogger(logger);
+  forge.log.setLevel(logger, 'debug');
+  forge.log.addLogger(logger);
   sConsoleLogger = logger;
 } else {
   // define fake console.log to avoid potential script errors on
@@ -26961,23 +26965,23 @@ if(typeof(console) !== 'undefined' && 'log' in console) {
  * that could otherwise be limited by a user config.
  */
 if(sConsoleLogger !== null) {
-  var query = forge$2.util.getQueryVariables();
+  var query = forge.util.getQueryVariables();
   if('console.level' in query) {
     // set with last value
-    forge$2.log.setLevel(
+    forge.log.setLevel(
       sConsoleLogger, query['console.level'].slice(-1)[0]);
   }
   if('console.lock' in query) {
     // set with last value
     var lock = query['console.lock'].slice(-1)[0];
     if(lock == 'true') {
-      forge$2.log.lock(sConsoleLogger);
+      forge.log.lock(sConsoleLogger);
     }
   }
 }
 
 // provide public access to console logger
-forge$2.log.consoleLogger = sConsoleLogger;
+forge.log.consoleLogger = sConsoleLogger;
 
 var sha512_1 = createCommonjsModule(function (module) {
 /**
@@ -26996,35 +27000,35 @@ var sha512_1 = createCommonjsModule(function (module) {
 
 
 
-var sha512 = module.exports = forge$2.sha512 = forge$2.sha512 || {};
+var sha512 = module.exports = forge.sha512 = forge.sha512 || {};
 
 // SHA-512
-forge$2.md.sha512 = forge$2.md.algorithms.sha512 = sha512;
+forge.md.sha512 = forge.md.algorithms.sha512 = sha512;
 
 // SHA-384
-var sha384 = forge$2.sha384 = forge$2.sha512.sha384 = forge$2.sha512.sha384 || {};
+var sha384 = forge.sha384 = forge.sha512.sha384 = forge.sha512.sha384 || {};
 sha384.create = function() {
   return sha512.create('SHA-384');
 };
-forge$2.md.sha384 = forge$2.md.algorithms.sha384 = sha384;
+forge.md.sha384 = forge.md.algorithms.sha384 = sha384;
 
 // SHA-512/256
-forge$2.sha512.sha256 = forge$2.sha512.sha256 || {
+forge.sha512.sha256 = forge.sha512.sha256 || {
   create: function() {
     return sha512.create('SHA-512/256');
   }
 };
-forge$2.md['sha512/256'] = forge$2.md.algorithms['sha512/256'] =
-  forge$2.sha512.sha256;
+forge.md['sha512/256'] = forge.md.algorithms['sha512/256'] =
+  forge.sha512.sha256;
 
 // SHA-512/224
-forge$2.sha512.sha224 = forge$2.sha512.sha224 || {
+forge.sha512.sha224 = forge.sha512.sha224 || {
   create: function() {
     return sha512.create('SHA-512/224');
   }
 };
-forge$2.md['sha512/224'] = forge$2.md.algorithms['sha512/224'] =
-  forge$2.sha512.sha224;
+forge.md['sha512/224'] = forge.md.algorithms['sha512/224'] =
+  forge.sha512.sha224;
 
 /**
  * Creates a SHA-2 message digest object.
@@ -27053,7 +27057,7 @@ sha512.create = function(algorithm) {
   var _h = null;
 
   // input buffer
-  var _input = forge$2.util.createBuffer();
+  var _input = forge.util.createBuffer();
 
   // used for 64-bit word storage
   var _w = new Array(80);
@@ -27104,7 +27108,7 @@ sha512.create = function(algorithm) {
     for(var i = 0; i < int32s; ++i) {
       md.fullMessageLength.push(0);
     }
-    _input = forge$2.util.createBuffer();
+    _input = forge.util.createBuffer();
     _h = new Array(_state.length);
     for(var i = 0; i < _state.length; ++i) {
       _h[i] = _state[i].slice(0);
@@ -27126,7 +27130,7 @@ sha512.create = function(algorithm) {
    */
   md.update = function(msg, encoding) {
     if(encoding === 'utf8') {
-      msg = forge$2.util.encodeUtf8(msg);
+      msg = forge.util.encodeUtf8(msg);
     }
 
     // update message length
@@ -27180,7 +27184,7 @@ sha512.create = function(algorithm) {
     must *always* be present, so if the message length is already
     congruent to 896 mod 1024, then 1024 padding bits must be added. */
 
-    var finalBlock = forge$2.util.createBuffer();
+    var finalBlock = forge.util.createBuffer();
     finalBlock.putBytes(_input.bytes());
 
     // compute remaining size to be digested (include message length size)
@@ -27212,7 +27216,7 @@ sha512.create = function(algorithm) {
       h[i] = _h[i].slice(0);
     }
     _update(h, _w, finalBlock);
-    var rval = forge$2.util.createBuffer();
+    var rval = forge.util.createBuffer();
     var hlen;
     if(algorithm === 'SHA-512') {
       hlen = h.length;
@@ -27249,7 +27253,7 @@ var _states = null;
 function _init() {
   // create padding
   _padding = String.fromCharCode(128);
-  _padding += forge$2.util.fillString(String.fromCharCode(0x00), 128);
+  _padding += forge.util.fillString(String.fromCharCode(0x00), 128);
 
   // create K table for SHA-512
   _k = [
@@ -27574,10 +27578,10 @@ var pkcs7 = createCommonjsModule(function (module) {
 
 
 // shortcut for ASN.1 API
-var asn1 = forge$2.asn1;
+var asn1 = forge.asn1;
 
 // shortcut for PKCS#7 API
-var p7 = module.exports = forge$2.pkcs7 = forge$2.pkcs7 || {};
+var p7 = module.exports = forge.pkcs7 = forge.pkcs7 || {};
 
 /**
  * Converts a PKCS#7 message from PEM format.
@@ -27587,7 +27591,7 @@ var p7 = module.exports = forge$2.pkcs7 = forge$2.pkcs7 || {};
  * @return the PKCS#7 message.
  */
 p7.messageFromPem = function(pem) {
-  var msg = forge$2.pem.decode(pem)[0];
+  var msg = forge.pem.decode(pem)[0];
 
   if(msg.type !== 'PKCS7') {
     var error = new Error('Could not convert PKCS#7 message from PEM; PEM ' +
@@ -27619,7 +27623,7 @@ p7.messageToPem = function(msg, maxline) {
     type: 'PKCS7',
     body: asn1.toDer(msg.toAsn1()).getBytes()
   };
-  return forge$2.pem.encode(pemObj, {maxline: maxline});
+  return forge.pem.encode(pemObj, {maxline: maxline});
 };
 
 /**
@@ -27644,15 +27648,15 @@ p7.messageFromAsn1 = function(obj) {
   var msg;
 
   switch(contentType) {
-    case forge$2.pki.oids.envelopedData:
+    case forge.pki.oids.envelopedData:
       msg = p7.createEnvelopedData();
       break;
 
-    case forge$2.pki.oids.encryptedData:
+    case forge.pki.oids.encryptedData:
       msg = p7.createEncryptedData();
       break;
 
-    case forge$2.pki.oids.signedData:
+    case forge.pki.oids.signedData:
       msg = p7.createSignedData();
       break;
 
@@ -27668,7 +27672,7 @@ p7.messageFromAsn1 = function(obj) {
 p7.createSignedData = function() {
   var msg = null;
   msg = {
-    type: forge$2.pki.oids.signedData,
+    type: forge.pki.oids.signedData,
     version: 1,
     certificates: [],
     crls: [],
@@ -27690,7 +27694,7 @@ p7.createSignedData = function() {
 
       var certs = msg.rawCapture.certificates.value;
       for(var i = 0; i < certs.length; ++i) {
-        msg.certificates.push(forge$2.pki.certificateFromAsn1(certs[i]));
+        msg.certificates.push(forge.pki.certificateFromAsn1(certs[i]));
       }
 
       // TODO: parse crls
@@ -27704,7 +27708,7 @@ p7.createSignedData = function() {
 
       var certs = [];
       for(var i = 0; i < msg.certificates.length; ++i) {
-        certs.push(forge$2.pki.certificateToAsn1(msg.certificates[i]));
+        certs.push(forge.pki.certificateToAsn1(msg.certificates[i]));
       }
 
       var crls = [];
@@ -27796,7 +27800,7 @@ p7.createSignedData = function() {
       if(signer.certificate) {
         var cert = signer.certificate;
         if(typeof cert === 'string') {
-          cert = forge$2.pki.certificateFromPem(cert);
+          cert = forge.pki.certificateFromPem(cert);
         }
         issuer = cert.issuer.attributes;
         serialNumber = cert.serialNumber;
@@ -27807,17 +27811,17 @@ p7.createSignedData = function() {
           'Could not add PKCS#7 signer; no private key specified.');
       }
       if(typeof key === 'string') {
-        key = forge$2.pki.privateKeyFromPem(key);
+        key = forge.pki.privateKeyFromPem(key);
       }
 
       // ensure OID known for digest algorithm
-      var digestAlgorithm = signer.digestAlgorithm || forge$2.pki.oids.sha1;
+      var digestAlgorithm = signer.digestAlgorithm || forge.pki.oids.sha1;
       switch(digestAlgorithm) {
-      case forge$2.pki.oids.sha1:
-      case forge$2.pki.oids.sha256:
-      case forge$2.pki.oids.sha384:
-      case forge$2.pki.oids.sha512:
-      case forge$2.pki.oids.md5:
+      case forge.pki.oids.sha1:
+      case forge.pki.oids.sha256:
+      case forge.pki.oids.sha384:
+      case forge.pki.oids.sha512:
+      case forge.pki.oids.md5:
         break;
       default:
         throw new Error(
@@ -27833,14 +27837,14 @@ p7.createSignedData = function() {
         var messageDigest = false;
         for(var i = 0; i < authenticatedAttributes.length; ++i) {
           var attr = authenticatedAttributes[i];
-          if(!contentType && attr.type === forge$2.pki.oids.contentType) {
+          if(!contentType && attr.type === forge.pki.oids.contentType) {
             contentType = true;
             if(messageDigest) {
               break;
             }
             continue;
           }
-          if(!messageDigest && attr.type === forge$2.pki.oids.messageDigest) {
+          if(!messageDigest && attr.type === forge.pki.oids.messageDigest) {
             messageDigest = true;
             if(contentType) {
               break;
@@ -27863,7 +27867,7 @@ p7.createSignedData = function() {
         issuer: issuer,
         serialNumber: serialNumber,
         digestAlgorithm: digestAlgorithm,
-        signatureAlgorithm: forge$2.pki.oids.rsaEncryption,
+        signatureAlgorithm: forge.pki.oids.rsaEncryption,
         signature: null,
         authenticatedAttributes: authenticatedAttributes,
         unauthenticatedAttributes: []
@@ -27881,16 +27885,16 @@ p7.createSignedData = function() {
           asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
             // ContentType
             asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-              asn1.oidToDer(forge$2.pki.oids.data).getBytes())
+              asn1.oidToDer(forge.pki.oids.data).getBytes())
           ]);
 
         // add actual content, if present
         if('content' in msg) {
           var content;
-          if(msg.content instanceof forge$2.util.ByteBuffer) {
+          if(msg.content instanceof forge.util.ByteBuffer) {
             content = msg.content.bytes();
           } else if(typeof msg.content === 'string') {
-            content = forge$2.util.encodeUtf8(msg.content);
+            content = forge.util.encodeUtf8(msg.content);
           }
 
           msg.contentInfo.value.push(
@@ -27926,7 +27930,7 @@ p7.createSignedData = function() {
     addCertificate: function(cert) {
       // convert from PEM
       if(typeof cert === 'string') {
-        cert = forge$2.pki.certificateFromPem(cert);
+        cert = forge.pki.certificateFromPem(cert);
       }
       msg.certificates.push(cert);
     },
@@ -27950,7 +27954,7 @@ p7.createSignedData = function() {
       var oid = signer.digestAlgorithm;
       if(!(oid in mds)) {
         // content digest
-        mds[oid] = forge$2.md[forge$2.pki.oids[oid]].create();
+        mds[oid] = forge.md[forge.pki.oids[oid]].create();
       }
       if(signer.authenticatedAttributes.length === 0) {
         // no custom attributes to digest; use content message digest
@@ -27959,7 +27963,7 @@ p7.createSignedData = function() {
         // custom attributes to be digested; use own message digest
         // TODO: optimize to just copy message digest state if that
         // feature is ever supported with message digests
-        signer.md = forge$2.md[forge$2.pki.oids[oid]].create();
+        signer.md = forge.md[forge.pki.oids[oid]].create();
       }
     }
 
@@ -28020,7 +28024,7 @@ p7.createSignedData = function() {
       if(signer.authenticatedAttributes.length === 0) {
         // if ContentInfo content type is not "Data", then
         // authenticatedAttributes must be present per RFC 2315
-        if(contentType !== forge$2.pki.oids.data) {
+        if(contentType !== forge.pki.oids.data) {
           throw new Error(
             'Invalid signer; authenticatedAttributes must be present ' +
             'when the ContentInfo content type is not PKCS#7 Data.');
@@ -28038,10 +28042,10 @@ p7.createSignedData = function() {
 
         for(var ai = 0; ai < signer.authenticatedAttributes.length; ++ai) {
           var attr = signer.authenticatedAttributes[ai];
-          if(attr.type === forge$2.pki.oids.messageDigest) {
+          if(attr.type === forge.pki.oids.messageDigest) {
             // use content message digest as value
             attr.value = mds[signer.digestAlgorithm].digest();
-          } else if(attr.type === forge$2.pki.oids.signingTime) {
+          } else if(attr.type === forge.pki.oids.signingTime) {
             // auto-populate signing time if not already set
             if(!attr.value) {
               attr.value = signingTime;
@@ -28077,10 +28081,10 @@ p7.createSignedData = function() {
 p7.createEncryptedData = function() {
   var msg = null;
   msg = {
-    type: forge$2.pki.oids.encryptedData,
+    type: forge.pki.oids.encryptedData,
     version: 0,
     encryptedContent: {
-      algorithm: forge$2.pki.oids['aes256-CBC']
+      algorithm: forge.pki.oids['aes256-CBC']
     },
 
     /**
@@ -28116,11 +28120,11 @@ p7.createEncryptedData = function() {
 p7.createEnvelopedData = function() {
   var msg = null;
   msg = {
-    type: forge$2.pki.oids.envelopedData,
+    type: forge.pki.oids.envelopedData,
     version: 0,
     recipients: [],
     encryptedContent: {
-      algorithm: forge$2.pki.oids['aes256-CBC']
+      algorithm: forge.pki.oids['aes256-CBC']
     },
 
     /**
@@ -28206,10 +28210,10 @@ p7.createEnvelopedData = function() {
       if(msg.encryptedContent.key === undefined && recipient !== undefined &&
         privKey !== undefined) {
         switch(recipient.encryptedContent.algorithm) {
-          case forge$2.pki.oids.rsaEncryption:
-          case forge$2.pki.oids.desCBC:
+          case forge.pki.oids.rsaEncryption:
+          case forge.pki.oids.desCBC:
             var key = privKey.decrypt(recipient.encryptedContent.content);
-            msg.encryptedContent.key = forge$2.util.createBuffer(key);
+            msg.encryptedContent.key = forge.util.createBuffer(key);
             break;
 
           default:
@@ -28235,7 +28239,7 @@ p7.createEnvelopedData = function() {
           // We simply assume rsaEncryption here, since forge.pki only
           // supports RSA so far.  If the PKI module supports other
           // ciphers one day, we need to modify this one as well.
-          algorithm: forge$2.pki.oids.rsaEncryption,
+          algorithm: forge.pki.oids.rsaEncryption,
           key: cert.publicKey
         }
       });
@@ -28262,28 +28266,28 @@ p7.createEnvelopedData = function() {
 
         var keyLen, ivLen, ciphFn;
         switch(cipher) {
-          case forge$2.pki.oids['aes128-CBC']:
+          case forge.pki.oids['aes128-CBC']:
             keyLen = 16;
             ivLen = 16;
-            ciphFn = forge$2.aes.createEncryptionCipher;
+            ciphFn = forge.aes.createEncryptionCipher;
             break;
 
-          case forge$2.pki.oids['aes192-CBC']:
+          case forge.pki.oids['aes192-CBC']:
             keyLen = 24;
             ivLen = 16;
-            ciphFn = forge$2.aes.createEncryptionCipher;
+            ciphFn = forge.aes.createEncryptionCipher;
             break;
 
-          case forge$2.pki.oids['aes256-CBC']:
+          case forge.pki.oids['aes256-CBC']:
             keyLen = 32;
             ivLen = 16;
-            ciphFn = forge$2.aes.createEncryptionCipher;
+            ciphFn = forge.aes.createEncryptionCipher;
             break;
 
-          case forge$2.pki.oids['des-EDE3-CBC']:
+          case forge.pki.oids['des-EDE3-CBC']:
             keyLen = 24;
             ivLen = 8;
-            ciphFn = forge$2.des.createEncryptionCipher;
+            ciphFn = forge.des.createEncryptionCipher;
             break;
 
           default:
@@ -28291,7 +28295,7 @@ p7.createEnvelopedData = function() {
         }
 
         if(key === undefined) {
-          key = forge$2.util.createBuffer(forge$2.random.getBytes(keyLen));
+          key = forge.util.createBuffer(forge.random.getBytes(keyLen));
         } else if(key.length() != keyLen) {
           throw new Error('Symmetric key has wrong length; ' +
             'got ' + key.length() + ' bytes, expected ' + keyLen + '.');
@@ -28301,8 +28305,8 @@ p7.createEnvelopedData = function() {
         // use it for whatever reason.
         msg.encryptedContent.algorithm = cipher;
         msg.encryptedContent.key = key;
-        msg.encryptedContent.parameter = forge$2.util.createBuffer(
-          forge$2.random.getBytes(ivLen));
+        msg.encryptedContent.parameter = forge.util.createBuffer(
+          forge.random.getBytes(ivLen));
 
         var ciph = ciphFn(key);
         ciph.start(msg.encryptedContent.parameter.copy());
@@ -28327,7 +28331,7 @@ p7.createEnvelopedData = function() {
         }
 
         switch(recipient.encryptedContent.algorithm) {
-          case forge$2.pki.oids.rsaEncryption:
+          case forge.pki.oids.rsaEncryption:
             recipient.encryptedContent.content =
               recipient.encryptedContent.key.encrypt(
                 msg.encryptedContent.key.data);
@@ -28363,8 +28367,8 @@ function _recipientFromAsn1(obj) {
 
   return {
     version: capture.version.charCodeAt(0),
-    issuer: forge$2.pki.RDNAttributesAsArray(capture.issuer),
-    serialNumber: forge$2.util.createBuffer(capture.serial).toHex(),
+    issuer: forge.pki.RDNAttributesAsArray(capture.issuer),
+    serialNumber: forge.util.createBuffer(capture.serial).toHex(),
     encryptedContent: {
       algorithm: asn1.derToOid(capture.encAlgorithm),
       parameter: capture.encParameter.value,
@@ -28388,10 +28392,10 @@ function _recipientToAsn1(obj) {
     // IssuerAndSerialNumber
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
       // Name
-      forge$2.pki.distinguishedNameToAsn1({attributes: obj.issuer}),
+      forge.pki.distinguishedNameToAsn1({attributes: obj.issuer}),
       // Serial
       asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
-        forge$2.util.hexToBytes(obj.serialNumber))
+        forge.util.hexToBytes(obj.serialNumber))
     ]),
     // KeyEncryptionAlgorithmIdentifier
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
@@ -28438,11 +28442,11 @@ function _recipientsToAsn1(recipients) {
 }
 
 /**
- * Converts a single signer from an ASN.1 object.
+ * Converts a single signerInfo object to an ASN.1 object.
  *
- * @param obj the ASN.1 representation of a SignerInfo.
+ * @param obj the signerInfo object.
  *
- * @return the signer object.
+ * @return the ASN.1 representation of a SignerInfo.
  */
 function _signerToAsn1(obj) {
   // SignerInfo
@@ -28453,10 +28457,10 @@ function _signerToAsn1(obj) {
     // issuerAndSerialNumber
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
       // name
-      forge$2.pki.distinguishedNameToAsn1({attributes: obj.issuer}),
+      forge.pki.distinguishedNameToAsn1({attributes: obj.issuer}),
       // serial
       asn1.create(asn1.Class.UNIVERSAL, asn1.Type.INTEGER, false,
-        forge$2.util.hexToBytes(obj.serialNumber))
+        forge.util.hexToBytes(obj.serialNumber))
     ]),
     // digestAlgorithm
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
@@ -28502,11 +28506,11 @@ function _signerToAsn1(obj) {
 }
 
 /**
- * Map a set of SignerInfo ASN.1 objects to an array of signer objects.
+ * Map an array of signer objects to ASN.1 objects.
  *
- * @param signerInfoAsn1s an array of ASN.1 SignerInfos (i.e. SET OF).
+ * @param signers an array of signer objects.
  *
- * @return an array of signers objects.
+ * @return an array of ASN.1 SignerInfos.
  */
 function _signersToAsn1(signers) {
   var ret = [];
@@ -28527,13 +28531,13 @@ function _attributeToAsn1(attr) {
   var value;
 
   // TODO: generalize to support more attributes
-  if(attr.type === forge$2.pki.oids.contentType) {
+  if(attr.type === forge.pki.oids.contentType) {
     value = asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
       asn1.oidToDer(attr.value).getBytes());
-  } else if(attr.type === forge$2.pki.oids.messageDigest) {
+  } else if(attr.type === forge.pki.oids.messageDigest) {
     value = asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OCTETSTRING, false,
       attr.value.bytes());
-  } else if(attr.type === forge$2.pki.oids.signingTime) {
+  } else if(attr.type === forge.pki.oids.signingTime) {
     /* Note per RFC 2985: Dates between 1 January 1950 and 31 December 2049
       (inclusive) MUST be encoded as UTCTime. Any dates with year values
       before 1950 or after 2049 MUST be encoded as GeneralizedTime. [Further,]
@@ -28596,7 +28600,7 @@ function _encryptedContentToAsn1(ec) {
   return [
     // ContentType, always Data for the moment
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.OID, false,
-      asn1.oidToDer(forge$2.pki.oids.data).getBytes()),
+      asn1.oidToDer(forge.pki.oids.data).getBytes()),
     // ContentEncryptionAlgorithmIdentifier
     asn1.create(asn1.Class.UNIVERSAL, asn1.Type.SEQUENCE, true, [
       // Algorithm
@@ -28643,14 +28647,14 @@ function _fromAsn1(msg, obj, validator) {
 
   // Check contentType, so far we only support (raw) Data.
   var contentType = asn1.derToOid(capture.contentType);
-  if(contentType !== forge$2.pki.oids.data) {
+  if(contentType !== forge.pki.oids.data) {
     throw new Error('Unsupported PKCS#7 message. ' +
       'Only wrapped ContentType Data supported.');
   }
 
   if(capture.encryptedContent) {
     var content = '';
-    if(forge$2.util.isArray(capture.encryptedContent)) {
+    if(forge.util.isArray(capture.encryptedContent)) {
       for(var i = 0; i < capture.encryptedContent.length; ++i) {
         if(capture.encryptedContent[i].type !== asn1.Type.OCTETSTRING) {
           throw new Error('Malformed PKCS#7 message, expecting encrypted ' +
@@ -28663,14 +28667,14 @@ function _fromAsn1(msg, obj, validator) {
     }
     msg.encryptedContent = {
       algorithm: asn1.derToOid(capture.encAlgorithm),
-      parameter: forge$2.util.createBuffer(capture.encParameter.value),
-      content: forge$2.util.createBuffer(content)
+      parameter: forge.util.createBuffer(capture.encParameter.value),
+      content: forge.util.createBuffer(content)
     };
   }
 
   if(capture.content) {
     var content = '';
-    if(forge$2.util.isArray(capture.content)) {
+    if(forge.util.isArray(capture.content)) {
       for(var i = 0; i < capture.content.length; ++i) {
         if(capture.content[i].type !== asn1.Type.OCTETSTRING) {
           throw new Error('Malformed PKCS#7 message, expecting ' +
@@ -28681,7 +28685,7 @@ function _fromAsn1(msg, obj, validator) {
     } else {
       content = capture.content;
     }
-    msg.content = forge$2.util.createBuffer(content);
+    msg.content = forge.util.createBuffer(content);
   }
 
   msg.version = capture.version.charCodeAt(0);
@@ -28709,15 +28713,15 @@ function _decryptContent(msg) {
     var ciph;
 
     switch(msg.encryptedContent.algorithm) {
-      case forge$2.pki.oids['aes128-CBC']:
-      case forge$2.pki.oids['aes192-CBC']:
-      case forge$2.pki.oids['aes256-CBC']:
-        ciph = forge$2.aes.createDecryptionCipher(msg.encryptedContent.key);
+      case forge.pki.oids['aes128-CBC']:
+      case forge.pki.oids['aes192-CBC']:
+      case forge.pki.oids['aes256-CBC']:
+        ciph = forge.aes.createDecryptionCipher(msg.encryptedContent.key);
         break;
 
-      case forge$2.pki.oids['desCBC']:
-      case forge$2.pki.oids['des-EDE3-CBC']:
-        ciph = forge$2.des.createDecryptionCipher(msg.encryptedContent.key);
+      case forge.pki.oids['desCBC']:
+      case forge.pki.oids['des-EDE3-CBC']:
+        ciph = forge.des.createDecryptionCipher(msg.encryptedContent.key);
         break;
 
       default:
@@ -28754,7 +28758,7 @@ var ssh_1 = createCommonjsModule(function (module) {
 
 
 
-var ssh = module.exports = forge$2.ssh = forge$2.ssh || {};
+var ssh = module.exports = forge.ssh = forge.ssh || {};
 
 /**
  * Encodes (and optionally encrypts) a private RSA key as a Putty PPK file.
@@ -28776,19 +28780,19 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
   ppk += 'Comment: ' + comment + '\r\n';
 
   // public key into buffer for ppk
-  var pubbuffer = forge$2.util.createBuffer();
+  var pubbuffer = forge.util.createBuffer();
   _addStringToBuffer(pubbuffer, algorithm);
   _addBigIntegerToBuffer(pubbuffer, privateKey.e);
   _addBigIntegerToBuffer(pubbuffer, privateKey.n);
 
   // write public key
-  var pub = forge$2.util.encode64(pubbuffer.bytes(), 64);
+  var pub = forge.util.encode64(pubbuffer.bytes(), 64);
   var length = Math.floor(pub.length / 66) + 1; // 66 = 64 + \r\n
   ppk += 'Public-Lines: ' + length + '\r\n';
   ppk += pub;
 
   // private key into a buffer
-  var privbuffer = forge$2.util.createBuffer();
+  var privbuffer = forge.util.createBuffer();
   _addBigIntegerToBuffer(privbuffer, privateKey.d);
   _addBigIntegerToBuffer(privbuffer, privateKey.p);
   _addBigIntegerToBuffer(privbuffer, privateKey.q);
@@ -28798,7 +28802,7 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
   var priv;
   if(!passphrase) {
     // use the unencrypted buffer
-    priv = forge$2.util.encode64(privbuffer.bytes(), 64);
+    priv = forge.util.encode64(privbuffer.bytes(), 64);
   } else {
     // encrypt RSA key using passphrase
     var encLen = privbuffer.length() + 16 - 1;
@@ -28810,14 +28814,14 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
     padding.truncate(padding.length() - encLen + privbuffer.length());
     privbuffer.putBuffer(padding);
 
-    var aeskey = forge$2.util.createBuffer();
+    var aeskey = forge.util.createBuffer();
     aeskey.putBuffer(_sha1('\x00\x00\x00\x00', passphrase));
     aeskey.putBuffer(_sha1('\x00\x00\x00\x01', passphrase));
 
     // encrypt some bytes using CBC mode
     // key is 40 bytes, so truncate *by* 8 bytes
-    var cipher = forge$2.aes.createEncryptionCipher(aeskey.truncate(8), 'CBC');
-    cipher.start(forge$2.util.createBuffer().fillWithByte(0, 16));
+    var cipher = forge.aes.createEncryptionCipher(aeskey.truncate(8), 'CBC');
+    cipher.start(forge.util.createBuffer().fillWithByte(0, 16));
     cipher.update(privbuffer.copy());
     cipher.finish();
     var encrypted = cipher.output;
@@ -28826,7 +28830,7 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
     // due to padding we finish as an exact multiple of 16
     encrypted.truncate(16); // all padding
 
-    priv = forge$2.util.encode64(encrypted.bytes(), 64);
+    priv = forge.util.encode64(encrypted.bytes(), 64);
   }
 
   // output private key
@@ -28837,7 +28841,7 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
   // MAC
   var mackey = _sha1('putty-private-key-file-mac-key', passphrase);
 
-  var macbuffer = forge$2.util.createBuffer();
+  var macbuffer = forge.util.createBuffer();
   _addStringToBuffer(macbuffer, algorithm);
   _addStringToBuffer(macbuffer, encryptionAlgorithm);
   _addStringToBuffer(macbuffer, comment);
@@ -28846,7 +28850,7 @@ ssh.privateKeyToPutty = function(privateKey, passphrase, comment) {
   macbuffer.putInt32(privbuffer.length());
   macbuffer.putBuffer(privbuffer);
 
-  var hmac = forge$2.hmac.create();
+  var hmac = forge.hmac.create();
   hmac.start('sha1', mackey);
   hmac.update(macbuffer.bytes());
 
@@ -28867,12 +28871,12 @@ ssh.publicKeyToOpenSSH = function(key, comment) {
   var type = 'ssh-rsa';
   comment = comment || '';
 
-  var buffer = forge$2.util.createBuffer();
+  var buffer = forge.util.createBuffer();
   _addStringToBuffer(buffer, type);
   _addBigIntegerToBuffer(buffer, key.e);
   _addBigIntegerToBuffer(buffer, key.n);
 
-  return type + ' ' + forge$2.util.encode64(buffer.bytes()) + ' ' + comment;
+  return type + ' ' + forge.util.encode64(buffer.bytes()) + ' ' + comment;
 };
 
 /**
@@ -28885,10 +28889,10 @@ ssh.publicKeyToOpenSSH = function(key, comment) {
  */
 ssh.privateKeyToOpenSSH = function(privateKey, passphrase) {
   if(!passphrase) {
-    return forge$2.pki.privateKeyToPem(privateKey);
+    return forge.pki.privateKeyToPem(privateKey);
   }
   // OpenSSH private key is just a legacy format, it seems
-  return forge$2.pki.encryptRsaPrivateKey(privateKey, passphrase,
+  return forge.pki.encryptRsaPrivateKey(privateKey, passphrase,
     {legacy: true, algorithm: 'aes128'});
 };
 
@@ -28906,10 +28910,10 @@ ssh.privateKeyToOpenSSH = function(privateKey, passphrase) {
  */
 ssh.getPublicKeyFingerprint = function(key, options) {
   options = options || {};
-  var md = options.md || forge$2.md.md5.create();
+  var md = options.md || forge.md.md5.create();
 
   var type = 'ssh-rsa';
-  var buffer = forge$2.util.createBuffer();
+  var buffer = forge.util.createBuffer();
   _addStringToBuffer(buffer, type);
   _addBigIntegerToBuffer(buffer, key.e);
   _addBigIntegerToBuffer(buffer, key.n);
@@ -28944,7 +28948,7 @@ function _addBigIntegerToBuffer(buffer, val) {
   if(hexVal[0] >= '8') {
     hexVal = '00' + hexVal;
   }
-  var bytes = forge$2.util.hexToBytes(hexVal);
+  var bytes = forge.util.hexToBytes(hexVal);
   buffer.putInt32(bytes.length);
   buffer.putBytes(bytes);
 }
@@ -28966,7 +28970,7 @@ function _addStringToBuffer(buffer, val) {
  * @return the sha1 hash of the provided arguments.
  */
 function _sha1() {
-  var sha = forge$2.md.sha1.create();
+  var sha = forge.md.sha1.create();
   var num = arguments.length;
   for (var i = 0; i < num; ++i) {
     sha.update(arguments[i]);
@@ -29005,12 +29009,12 @@ var sVL = 0;
 var sTasks = {};
 var sNextTaskId = 0;
 // debug access
-forge$2.debug.set(cat, 'tasks', sTasks);
+forge.debug.set(cat, 'tasks', sTasks);
 
 // a map of task type to task queue
 var sTaskQueues = {};
 // debug access
-forge$2.debug.set(cat, 'queues', sTaskQueues);
+forge.debug.set(cat, 'queues', sTaskQueues);
 
 // name for unnamed tasks
 var sNoTaskName = '?';
@@ -29174,7 +29178,7 @@ var Task = function(options) {
   this.id = sNextTaskId++;
   sTasks[this.id] = this;
   if(sVL >= 1) {
-    forge$2.log.verbose(cat, '[%s][%s] init', this.id, this.name, this);
+    forge.log.verbose(cat, '[%s][%s] init', this.id, this.name, this);
   }
 };
 
@@ -29183,7 +29187,7 @@ var Task = function(options) {
  */
 Task.prototype.debug = function(msg) {
   msg = msg || '';
-  forge$2.log.debug(cat, msg,
+  forge.log.debug(cat, msg,
     '[%s][%s] task:', this.id, this.name, this,
     'subtasks:', this.subtasks.length,
     'queue:', sTaskQueues);
@@ -29236,7 +29240,7 @@ Task.prototype.next = function(name, subrun) {
  */
 Task.prototype.parallel = function(name, subrun) {
   // juggle parameters if it looks like no name is given
-  if(forge$2.util.isArray(name)) {
+  if(forge.util.isArray(name)) {
     subrun = name;
 
     // inherit parent's name
@@ -29254,7 +29258,7 @@ Task.prototype.parallel = function(name, subrun) {
     // closure and changes as the loop changes -- causing i
     // to always be set to its highest value
     var startParallelTask = function(pname, pi) {
-      forge$2.task.start({
+      forge.task.start({
         type: pname,
         run: function(task) {
            subrun[pi](task);
@@ -29536,7 +29540,7 @@ var finish = function(task, suppressCallbacks) {
 
   delete sTasks[task.id];
   if(sVL >= 1) {
-    forge$2.log.verbose(cat, '[%s][%s] finish',
+    forge.log.verbose(cat, '[%s][%s] finish',
       task.id, task.name, task);
   }
 
@@ -29544,17 +29548,17 @@ var finish = function(task, suppressCallbacks) {
   if(task.parent === null) {
     // report error if queue is missing
     if(!(task.type in sTaskQueues)) {
-      forge$2.log.error(cat,
+      forge.log.error(cat,
         '[%s][%s] task queue missing [%s]',
         task.id, task.name, task.type);
     } else if(sTaskQueues[task.type].length === 0) {
       // report error if queue is empty
-      forge$2.log.error(cat,
+      forge.log.error(cat,
         '[%s][%s] task queue empty [%s]',
         task.id, task.name, task.type);
     } else if(sTaskQueues[task.type][0] !== task) {
       // report error if this task isn't the first in the queue
-      forge$2.log.error(cat,
+      forge.log.error(cat,
         '[%s][%s] task not first in queue [%s]',
         task.id, task.name, task.type);
     } else {
@@ -29563,7 +29567,7 @@ var finish = function(task, suppressCallbacks) {
       // clean up queue if it is empty
       if(sTaskQueues[task.type].length === 0) {
         if(sVL >= 1) {
-          forge$2.log.verbose(cat, '[%s][%s] delete queue [%s]',
+          forge.log.verbose(cat, '[%s][%s] delete queue [%s]',
             task.id, task.name, task.type);
         }
         /* Note: Only a task can delete a queue of its own type. This
@@ -29574,7 +29578,7 @@ var finish = function(task, suppressCallbacks) {
       } else {
         // dequeue the next task and start it
         if(sVL >= 1) {
-          forge$2.log.verbose(cat,
+          forge.log.verbose(cat,
             '[%s][%s] queue start next [%s] remain:%s',
             task.id, task.name, task.type,
             sTaskQueues[task.type].length);
@@ -29595,7 +29599,7 @@ var finish = function(task, suppressCallbacks) {
 };
 
 /* Tasks API */
-var task = forge$2.task = forge$2.task || {};
+var task = forge.task = forge.task || {};
 
 /**
  * Starts a new task that will run the passed function asynchronously.
@@ -29619,7 +29623,7 @@ var task = forge$2.task = forge$2.task || {};
  *
  * @param options the object as described above.
  */
-forge$2.task.start = function(options) {
+forge.task.start = function(options) {
   // create a new task
   var task = new Task({
     run: options.run,
@@ -29632,7 +29636,7 @@ forge$2.task.start = function(options) {
   // append the task onto the appropriate queue
   if(!(task.type in sTaskQueues)) {
     if(sVL >= 1) {
-      forge$2.log.verbose(cat, '[%s][%s] create queue [%s]',
+      forge.log.verbose(cat, '[%s][%s] create queue [%s]',
         task.id, task.name, task.type);
     }
     // create the queue with the new task
@@ -29650,7 +29654,7 @@ forge$2.task.start = function(options) {
  *
  * @param type the type of task to cancel.
  */
-forge$2.task.cancel = function(type) {
+forge.task.cancel = function(type) {
   // find the task queue
   if(type in sTaskQueues) {
     // empty all but the current task from the queue
@@ -29665,7 +29669,7 @@ forge$2.task.cancel = function(type) {
  *
  * @return the condition variable.
  */
-forge$2.task.createCondition = function() {
+forge.task.createCondition = function() {
   var cond = {
     // all tasks that are blocked
     tasks: {}
@@ -29708,11 +29712,11 @@ forge$2.task.createCondition = function() {
  *
  * Copyright 2011-2016 Digital Bazaar, Inc.
  */
-var lib = forge$2;
+var lib = forge;
 
-var forge = lib;
+var forge$3 = lib;
 
-return forge;
+return forge$3;
 
 }());
 

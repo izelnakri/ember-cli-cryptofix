@@ -9,10 +9,10 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     if (this.addonENV.enabled) {
-      app.import('vendor/shims/cryptofix/forge.js', { type: 'vendor', prepend: true });
-      app.import('vendor/shims/cryptofix/bip39.js', { type: 'vendor', prepend: true });
-      app.import('vendor/shims/cryptofix/ethereumjs-wallet.js', { type: 'vendor', prepend: true });
-      app.import('vendor/shims/cryptofix/scryptsy.js', { type: 'vendor', prepend: true });
+      app.import('vendor/shims/cryptofix/forge.js');
+      app.import('vendor/shims/cryptofix/bip39.js');
+      app.import('vendor/shims/cryptofix/ethereumjs-wallet.js');
+      app.import('vendor/shims/cryptofix/scryptsy.js');
     }
   }
 };

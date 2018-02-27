@@ -9,7 +9,7 @@ var _scryptsy = (function () {
 
 var global$1 = typeof global !== "undefined" ? global :
             typeof self !== "undefined" ? self :
-            typeof window !== "undefined" ? window : {};
+            typeof window !== "undefined" ? window : {}
 
 var lookup = [];
 var revLookup = [];
@@ -31,7 +31,7 @@ function toByteArray (b64) {
   if (!inited) {
     init();
   }
-  var i, j, l, tmp, placeHolders, arr;
+  var i, j, l, tmp, placeHolders, arr;;;;;;
   var len = b64.length;
 
   if (len % 4 > 0) {
@@ -122,7 +122,7 @@ function fromByteArray (uint8) {
 }
 
 function read (buffer, offset, isLE, mLen, nBytes) {
-  var e, m;
+  var e, m;;
   var eLen = nBytes * 8 - mLen - 1;
   var eMax = (1 << eLen) - 1;
   var eBias = eMax >> 1;
@@ -155,7 +155,7 @@ function read (buffer, offset, isLE, mLen, nBytes) {
 }
 
 function write (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c;
+  var e, m, c;;;
   var eLen = nBytes * 8 - mLen - 1;
   var eMax = (1 << eLen) - 1;
   var eBias = eMax >> 1;
@@ -212,15 +212,6 @@ var isArray = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
 
-/*!
- * The buffer module from node.js, for the browser.
- *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * @license  MIT
- */
-/* eslint-disable no-proto */
-
-
 var INSPECT_MAX_BYTES = 50;
 
 /**
@@ -251,10 +242,6 @@ Buffer.TYPED_ARRAY_SUPPORT = global$1.TYPED_ARRAY_SUPPORT !== undefined
   ? global$1.TYPED_ARRAY_SUPPORT
   : true;
 
-/*
- * Export kMaxLength after typed array support is determined.
- */
-var _kMaxLength = kMaxLength();
 function kMaxLength () {
   return Buffer.TYPED_ARRAY_SUPPORT
     ? 0x7fffffff
@@ -346,7 +333,6 @@ Buffer.from = function (value, encodingOrOffset, length) {
 if (Buffer.TYPED_ARRAY_SUPPORT) {
   Buffer.prototype.__proto__ = Uint8Array.prototype;
   Buffer.__proto__ = Uint8Array;
-  
 }
 
 function assertSize (size) {
@@ -507,8 +493,6 @@ function checked (length) {
   }
   return length | 0
 }
-
-
 Buffer.isBuffer = isBuffer;
 function internalIsBuffer (b) {
   return !!(b != null && b._isBuffer)
@@ -1112,7 +1096,7 @@ function utf8Slice (buf, start, end) {
       : 1;
 
     if (i + bytesPerSequence <= end) {
-      var secondByte, thirdByte, fourthByte, tempCodePoint;
+      var secondByte, thirdByte, fourthByte, tempCodePoint;;;;
 
       switch (bytesPerSequence) {
         case 1:
@@ -1939,7 +1923,7 @@ function asciiToBytes (str) {
 }
 
 function utf16leToBytes (str, units) {
-  var c, hi, lo;
+  var c, hi, lo;;;
   var byteArray = [];
   for (var i = 0; i < str.length; ++i) {
     if ((units -= 2) < 0) break

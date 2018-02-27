@@ -25,16 +25,14 @@ export default [
       'use strict';
 
       return {
-        'default': (function(){`,
-      footer: `
-          return _ethereumjswallet;
-        })(),
+        'default': (function(){ `,
+      footer: `})(),
             __esModule: true,
-          };
-        }
+      };
+    }
 
-        define('cryptofix/ethereumjs-wallet', [], vendorModule);
-        })();`
+    define('cryptofix/ethereumjs-wallet', [], vendorModule);
+    })();`
     },
     plugins: [
       resolve({ jsnext: true })
