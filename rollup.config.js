@@ -11,9 +11,32 @@ import json from 'rollup-plugin-json';
 const NPM_PATH = './node_modules';
 
 export default [
-  generateModuleShim('bip39'),
   generateModuleShim('scryptsy'),
   generateModuleShim('forge'),
+  {
+    input: `tmp/bip39.js`,
+    output: {
+      file: `vendor/shims/cryptofix/bip39.js`,
+      format: 'iife',
+      name: '_bip39',
+      banner: `(function() {
+    function vendorModule() {
+      'use strict';
+
+      return {
+        'default': (function(){ `,
+      footer: `})(),
+            __esModule: true,
+      };
+    }
+
+    define('cryptofix/bip39', [], vendorModule);
+    })();`
+    },
+    plugins: [
+      resolve({ jsnext: true })
+    ]
+  },
   {
     input: `tmp/ethereumjs-wallet.js`,
     output: {
