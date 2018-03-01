@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-cryptofix",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -16,10 +16,11 @@
     "build": "ember build",
     "lint:js": "eslint ./*.js addon addon-test-support app config lib server test-support tests",
     "start": "ember serve",
+    "build:scryptsy": "browserify node_modules/scryptsy/lib/scrypt.js -s Scrypt > vendor/scryptsy.js",
     "build:bip39": "browserify node_modules/bip39/index.js -s BIP39 > tmp/bip39.js",
     "build:forge": "cp node_modules/node-forge/dist/forge.all.min.js vendor/forge.js",
     "build:ethereumjs-wallet": "browserify node_modules/ethereumjs-wallet/index.js -s EthereumjsWallet > tmp/ethereumjs-wallet.js",
-    "prepublish": "npm run build:bip39 && npm run build:forge && npm run build:ethereumjs-wallet && rollup -c"
+    "prepublish": "npm run build:scryptsy && npm run build:bip39 && npm run build:forge && npm run build:ethereumjs-wallet && rollup -c"
   },
   "dependencies": {
     "ember-cli-babel": "^6.6.0"
@@ -51,9 +52,6 @@
     "eslint-plugin-ember": "^5.0.0",
     "eslint-plugin-node": "^5.2.1",
     "loader.js": "^4.2.3",
-    "rollup-plugin-commonjs": "^8.3.0",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.1.0",
     "rollup-plugin-node-resolve": "^3.0.3"
   },
   "engines": {

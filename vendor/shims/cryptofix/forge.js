@@ -3,10 +3,10 @@
     'use strict';
 
     return {
-      'default': forge,
+      'default': window.forge,
       __esModule: true,
     };
   }
-  debugger;
+
   define('cryptofix/forge', [], vendorModule);
 })();
