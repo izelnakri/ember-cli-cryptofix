@@ -13,7 +13,6 @@ const NPM_PATH = './node_modules';
 
 export default [
   generateModuleShim('scryptsy'),
-  generateBrowserifyShim('forge'),
   generateBrowserifyShim('bip39'),
   generateBrowserifyShim('ethereumjs-wallet')
 ];

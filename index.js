@@ -9,6 +9,7 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     if (this.addonENV.enabled) {
+      app.import('vendor/forge.js');
       app.import('vendor/shims/cryptofix/forge.js');
       app.import('vendor/shims/cryptofix/bip39.js');
       app.import('vendor/shims/cryptofix/ethereumjs-wallet.js');
