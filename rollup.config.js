@@ -6,8 +6,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import { camelize } from 'ember-cli-string-utils';
 
 export default [
-  generateBrowserifyShim('bip39'),
-  generateBrowserifyShim('ethereumjs-wallet')
+  generateBrowserifyShim('bip39')
 ];
 
 function generateBrowserifyShim(moduleName) {
